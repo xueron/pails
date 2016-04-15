@@ -52,11 +52,13 @@ class PailsApplication extends Application
     {
         parent::__construct('Pails', $version);
 
-        // hack default config file name
+        // For Phinx, set configuration file by default
         $this->getDefinition()->addOption(new InputOption('--configuration', '-c', InputOption::VALUE_REQUIRED, 'The configuration file to load'));
-        array_push($_SERVER['argv'], '--configuration=config.yml');
+        array_push($_SERVER['argv'], '--configuration=config/database.yml');
 
+        //
         $this->addCommands(array(
+            // Phinx migrations
             new PhinxCommand\Create(),
             new PhinxCommand\Migrate(),
             new PhinxCommand\Rollback(),
@@ -64,6 +66,8 @@ class PailsApplication extends Application
             new PhinxCommand\Test(),
             new PhinxCommand\SeedCreate(),
             new PhinxCommand\SeedRun(),
+
+            // Pails
             new PailsCommand\Create()
         ));
     }
