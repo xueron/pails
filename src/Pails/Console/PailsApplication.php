@@ -29,6 +29,7 @@
 namespace Pails\Console;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Pails\Console\Command as PailsCommand;
@@ -52,6 +53,7 @@ class PailsApplication extends Application
         parent::__construct('Pails', $version);
 
         // hack default config file name
+        $this->getDefinition()->addOption(new InputOption('--configuration', '-c', InputOption::VALUE_REQUIRED, 'The configuration file to load'));
         array_push($_SERVER['argv'], '--configuration=config.yml');
 
         $this->addCommands(array(
