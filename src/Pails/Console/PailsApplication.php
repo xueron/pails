@@ -52,7 +52,6 @@ class PailsApplication extends Application
         parent::__construct('Pails', $version);
 
         $this->addCommands(array(
-            new PhinxCommand\Init(),
             new PhinxCommand\Create(),
             new PhinxCommand\Migrate(),
             new PhinxCommand\Rollback(),
@@ -79,6 +78,9 @@ class PailsApplication extends Application
             $output->writeln($this->getLongVersion());
             $output->writeln('');
         }
+
+        // hack Phinx's default configfile, add Pails configurations
+        $input->setOption('configuration', 'config.yml');
 
         return parent::doRun($input, $output);
     }
