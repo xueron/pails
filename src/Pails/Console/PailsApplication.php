@@ -3,7 +3,7 @@
  * Pails
  *
  * (The MIT license)
- * Copyright (c) 2015 Rob Morgan
+ * Copyright (c) 2016 Xueron Nee
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated * documentation files (the "Software"), to
@@ -43,7 +43,7 @@ class PailsApplication extends Application
     /**
      * Class Constructor.
      *
-     * Initialize the Phinx console application.
+     * Initialize the Pails console application.
      *
      * @param string $version The Application Version
      */
