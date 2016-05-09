@@ -1,14 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nishurong
- * Date: 16/4/15
- * Time: 下午12:04
- */
-
-
 namespace Pails\Util;
-
 
 class Inflector
 {
@@ -17,6 +8,9 @@ class Inflector
     private $irregular = array();
     private $uncountable = array();
 
+    /**
+     * Inflector constructor.
+     */
     public function __construct()
     {
         $this->_update_plural();
@@ -25,16 +19,29 @@ class Inflector
         $this->_update_uncountable();
     }
 
+    /**
+     * @param $word
+     * @return mixed
+     */
     public function pluralize($word)
     {
         return $this->_apply_inflections($word, $this->plural);
     }
 
+    /**
+     * @param $word
+     * @return mixed
+     */
     public function singularize($word)
     {
         return $this->_apply_inflections($word, $this->singular);
     }
 
+    /**
+     * @param $word
+     * @param $rules
+     * @return mixed
+     */
     private function _apply_inflections($word, $rules)
     {
         $result = $word;
@@ -58,6 +65,9 @@ class Inflector
         return $result;
     }
 
+    /**
+     * 复数规则
+     */
     private function _update_plural()
     {
         $this->_plural('/$/', 's');
@@ -83,6 +93,9 @@ class Inflector
         $this->_plural('/(quiz)$/i', '\1zes');
     }
 
+    /**
+     * 单数规则
+     */
     private function _update_singular()
     {
         $this->_singular('/s$/i', '');
@@ -112,6 +125,9 @@ class Inflector
         $this->_singular('/(database)s$/i', '\1');
     }
 
+    /**
+     * 不规则名词
+     */
     private function _update_irregular()
     {
         $this->_irregular('person', 'people');
@@ -121,8 +137,15 @@ class Inflector
         $this->_irregular('move', 'moves');
         $this->_irregular('cow', 'kine');
         $this->_irregular('zombie', 'zombies');
+        $this->_irregular('woman', 'women');
+        $this->_irregular('tooth', 'teeth');
+        $this->_irregular('goose', 'geese');
+        $this->_irregular('mouse', 'mice');
     }
 
+    /**
+     * 不可数名词
+     */
     private function _update_uncountable()
     {
         $this->_uncountable('equipment');
@@ -136,6 +159,10 @@ class Inflector
         $this->_uncountable('jeans');
     }
 
+    /**
+     * @param $rule
+     * @param $replacement
+     */
     private function _plural($rule, $replacement)
     {
         if (is_string($rule)) unset($this->uncountable[$rule]);
@@ -143,6 +170,10 @@ class Inflector
         $this->plural[sizeof($this->plural)] = array($rule, $replacement);
     }
 
+    /**
+     * @param $rule
+     * @param $replacement
+     */
     private function _singular($rule, $replacement)
     {
         if (is_string($rule)) unset($this->uncountable[$rule]);
@@ -150,6 +181,10 @@ class Inflector
         $this->singular[sizeof($this->singular)] = array($rule, $replacement);
     }
 
+    /**
+     * @param $singular
+     * @param $plural
+     */
     private function _irregular($singular, $plural)
     {
         unset($this->uncountable[$singular]);
@@ -174,6 +209,9 @@ class Inflector
         }
     }
 
+    /**
+     * @param $word
+     */
     private function _uncountable($word)
     {
         $this->uncountable[] = $word;
