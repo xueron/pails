@@ -3,8 +3,6 @@ namespace Pails;
 
 use Phalcon\Di;
 use Phalcon\Loader;
-use Phalcon\Mvc\Router\Annotations;
-use Phalcon\Text;
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
@@ -26,8 +24,8 @@ class Application extends Di
      * Phalcon默认的服务
      * @var array
      */
-    protected $base_services = [
-        "router" => "Phalcon\\Mvc\\Router",
+    protected $baseServices = [
+        "router" => \Phalcon\Mvc\Router::class,  //"Phalcon\\Mvc\\Router",
         "dispatcher" => "dispatcher", "Phalcon\\Mvc\\Dispatcher",
         "url" => "Phalcon\\Mvc\\Url",
         "modelsManager" => "Phalcon\\Mvc\\Model\\Manager",
@@ -54,7 +52,7 @@ class Application extends Di
      * Pails的关键服务
      * @var array
      */
-    protected $core_services = [
+    protected $coreServices = [
         'inflector' => 'Pails\\Util\\Inflector',
     ];
 
@@ -62,7 +60,7 @@ class Application extends Di
      * 应用的默认服务,在应用里面重载。
      * @var array
      */
-    protected $default_services = [
+    protected $bootstraps = [
 
     ];
 
@@ -79,11 +77,15 @@ class Application extends Di
 
         $this->registerCoreServices();
 
-        $this->registerDefaultServices();
-
         if ($basePath) {
             $this->setBasePath($basePath);
         }
+
+        // 初始化
+        $this->init();
+
+        // 引导(执行应用内的初始化)
+        $this->boot();
     }
 
     /**
@@ -91,7 +93,7 @@ class Application extends Di
      */
     protected function registerBaseServices()
     {
-        foreach ($this->base_services as $name => $className) {
+        foreach ($this->baseServices as $name => $className) {
             $this->_services[$name] = new Di\Service($name, $className, true);
         }
 
@@ -101,22 +103,43 @@ class Application extends Di
     }
 
     /**
-     * register Phalcon's build-in services
+     * register Pails' build-in services
      */
-    protected function registerDefaultServices()
+    protected function registerCoreServices()
     {
-        foreach ($this->default_services as $name => $className) {
+        foreach ($this->coreServices as $name => $className) {
             $this->_services[$name] = new Di\Service($name, $className, true);
         }
     }
 
     /**
-     * register Pails' build-in services
+     * init
      */
-    protected function registerCoreServices()
+    protected function init()
     {
-        foreach ($this->core_services as $name => $className) {
-            $this->_services[$name] = new Di\Service($name, $className, true);
+        $loader = new Loader();
+
+        // \App base
+        $loader->registerNamespaces([
+            'App' => $this->path()
+        ]);
+
+        // Other
+        $loader->registerDirs([
+            $this->libPath()
+        ]);
+
+        $loader->register();
+    }
+
+    /**
+     * register Phalcon's build-in services
+     */
+    protected function boot()
+    {
+        foreach ($this->bootstraps as $name => $className) {
+            $bootstrap = new $className;
+            $bootstrap->boot($this);
         }
     }
 
@@ -158,25 +181,26 @@ class Application extends Di
     /**
      * Get the base path of the current Pails application.
      *
+     * @param string $dir
      * @return string
      */
-    public function basePath()
+    public function basePath($dir = '')
     {
-        return $this->basePath;
+        return $dir == '' ? $this->basePath : $this->basePath . DIRECTORY_SEPARATOR . rtrim($dir, '\/');
     }
 
     /**
-     * Get the path to the bootstrap directory.
+     * Helpers: Get the path to the application directory.
      *
      * @return string
      */
-    public function bootstrapPath()
+    public function appPath()
     {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'bootstrap';
+        return $this->basePath . DIRECTORY_SEPARATOR . 'app';
     }
 
     /**
-     * Get the path to the application configuration files.
+     * Helpers: Get the path to the application configuration files.
      *
      * @return string
      */
@@ -186,101 +210,43 @@ class Application extends Di
     }
 
     /**
-     * Get the path to the database directory.
+     * Helpers: Get the path to the database directory.
      *
      * @return string
      */
     public function databasePath()
     {
-        return $this->databasePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'database';
+        return $this->basePath . DIRECTORY_SEPARATOR . 'db';
     }
 
-
-    private function initLoader()
+    /**
+     * Helpers: Get the path to the library directory.
+     *
+     * @return string
+     */
+    public function libPath()
     {
-        $loader = new Loader();
-
-        // \App base
-        $loader->registerNamespaces([
-            'App' => $this->path()
-        ]);
-
-        // Other
-        $loader->registerDirs([
-            $this->basePath() . '/lib'
-        ]);
-
-        $loader->register();
+        return $this->basePath . DIRECTORY_SEPARATOR . 'lib';
     }
 
-    private function initRouter()
+    /**
+     * Helpers: Get the path to the log directory.
+     *
+     * @return string
+     */
+    public function logPath()
     {
-        $this->setShared('router', function () {
-            //
-            $router = new Annotations(false);
-            $router->setEventsManager($this->get('eventsManager'));
-            $router->setDefaultNamespace('App\\Controllers\\');
-            $router->setDefaultController('application');
-            $router->setDefaultAction('index');
-
-            //
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
-            foreach ($iterator as $item) {
-                if (Text::endsWith($item, "Controller.php", false)) {
-                    $name = str_replace([$this->path('Controllers'), "Controller.php"], "", $item);
-                    $name = str_replace("/", "\\", $name);
-                    $router->addResource('App\\Controller\\' . $name);
-                }
-            }
-
-            //
-            return $router;
-        });
+        return $this->basePath . DIRECTORY_SEPARATOR . 'log';
     }
 
-    private function _initConfig()
+    /**
+     * Helpers: Get the path to the tmp directory.
+     *
+     * @return string
+     */
+    public function tpmPath()
     {
-
-    }
-
-    private function _initView()
-    {
-        $this->di->setShared('view', function () {
-            $view = new View();
-            $view->setViewsDir($this->getViewsDir());
-            $view->registerEngines([
-                '.volt' => 'volt',
-                '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
-            ]);
-            return $view;
-        });
-    }
-
-    private function _initVolt()
-    {
-        $this->setShared('volt', function () {
-            $volt = new Volt($this->get('view'));
-            $volt->setOptions([
-                'compiledPath' => dirname($this->app_root) . '/tmp/cache/volt/',
-                'compiledSeparator' => '_',
-                'compileAlways' => $this->debug
-            ]);
-            $volt->getCompiler()->addExtension(new \Pails\Extension\Volt());
-            return $volt;
-        });
-    }
-
-    private function _initDatabase()
-    {
-        $this->setShared('db', function () {
-            return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-                "host" => 'localhost',
-                "username" => 'root',
-                "password" => '',
-                "dbname" => 'dowedo-account',
-                'charset' => 'utf8',
-            ));
-        });
+        return $this->basePath . DIRECTORY_SEPARATOR . 'tmp';
     }
 
     public function run()
