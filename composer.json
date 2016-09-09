@@ -33,7 +33,7 @@
       "Pails\\": "src/Pails"
     },
     "files": [
-      "src/Pails/helpers.php"
+      "src/Pails/helper.php"
     ]
   },
   "autoload-dev": {
