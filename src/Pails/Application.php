@@ -251,8 +251,8 @@ class Application extends Di
 
     public function run()
     {
-        $app = new \Phalcon\Mvc\Application($this);
+        $app = new \App\Application($this);
 
-        $app->handle()->send();
+        $app->boot()->handle()->send();
     }
 } // End Application
