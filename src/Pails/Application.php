@@ -60,7 +60,7 @@ class Application extends Di
      * 应用的默认服务,在应用里面重载。
      * @var array
      */
-    protected $bootstraps = [
+    protected $bootstrapers = [
 
     ];
 
@@ -137,7 +137,7 @@ class Application extends Di
      */
     protected function boot()
     {
-        foreach ($this->bootstraps as $name => $className) {
+        foreach ($this->bootstrappers as $name => $className) {
             $bootstrap = new $className;
             $bootstrap->boot($this);
         }
