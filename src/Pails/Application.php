@@ -57,14 +57,6 @@ class Application extends Di
     ];
 
     /**
-     * 应用的默认服务,在应用里面重载。
-     * @var array
-     */
-    protected $bootstrapers = [
-
-    ];
-
-    /**
      * Application constructor.
      * @param null $basePath
      */
@@ -249,9 +241,9 @@ class Application extends Di
         return $this->basePath . DIRECTORY_SEPARATOR . 'tmp';
     }
 
-    public function run()
+    public function run($app = 'App\\Application')
     {
-        $app = new \App\Application($this);
+        $app = new $app($this);
 
         $app->boot()->handle()->send();
     }
