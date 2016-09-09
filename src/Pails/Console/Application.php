@@ -28,7 +28,9 @@
  */
 namespace Pails\Console;
 
-use Symfony\Component\Console\Application;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\DiInterface;
+use Symfony\Component\Console\Application as ApplicationBase;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,8 +41,20 @@ use Phinx\Console\Command as PhinxCommand;
  * Pails console application.
  *
  */
-class PailsApplication extends Application
+class Application extends ApplicationBase implements InjectionAwareInterface
 {
+    /**
+     * @var
+     */
+    protected $di;
+
+    /**
+     * The output from the previous command.
+     *
+     * @var \Symfony\Component\Console\Output\BufferedOutput
+     */
+    protected $lastOutput;
+
     /**
      * Class Constructor.
      *
@@ -58,18 +72,13 @@ class PailsApplication extends Application
 
         //
         $this->addCommands(array(
-            // Phinx migrations
-            new PhinxCommand\Create(),
-            new PhinxCommand\Migrate(),
-            new PhinxCommand\Rollback(),
-            new PhinxCommand\Status(),
-            new PhinxCommand\Test(),
-            new PhinxCommand\SeedCreate(),
-            new PhinxCommand\SeedRun(),
-
             // Pails
-            new PailsCommand\Create()
+            new PailsCommand\Create(),
+            new PailsCommand\Db\Init()
         ));
+
+        $this->setAutoExit(false);
+        $this->setCatchExceptions(false);
     }
 
     /**
@@ -89,5 +98,51 @@ class PailsApplication extends Application
         }
 
         return parent::doRun($input, $output);
+    }
+
+    /**
+     * Get the default input definitions for the applications.
+     *
+     * This is used to add the --env option to every available command.
+     *
+     * @return \Symfony\Component\Console\Input\InputDefinition
+     */
+    protected function getDefaultInputDefinition()
+    {
+        $definition = parent::getDefaultInputDefinition();
+
+        $definition->addOption($this->getEnvironmentOption());
+
+        return $definition;
+    }
+
+    /**
+     * Get the global environment option for the definition.
+     *
+     * @return \Symfony\Component\Console\Input\InputOption
+     */
+    protected function getEnvironmentOption()
+    {
+        $message = 'The environment the command should run under.';
+
+        return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message);
+    }
+
+    /**
+     * @return \Phalcon\Di
+     */
+    public function getDI()
+    {
+        return $this->di;
+    }
+
+    /**
+     * Sets the dependency injector
+     *
+     * @param mixed $dependencyInjector
+     */
+    public function setDI(DiInterface $dependencyInjector)
+    {
+        $this->di = $dependencyInjector;
     }
 }
