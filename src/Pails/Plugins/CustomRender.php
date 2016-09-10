@@ -18,8 +18,6 @@ class CustomRender extends \Phalcon\Mvc\User\Plugin
         $parts[] = $dispatcher->getControllerName();
         $parts[] = $dispatcher->getActionName();
 
-        var_dump($parts);
-
         $this->view->pick(implode(DIRECTORY_SEPARATOR, $parts));
     }
 }
