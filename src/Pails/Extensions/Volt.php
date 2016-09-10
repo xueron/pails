@@ -1,11 +1,5 @@
 <?php
-namespace Pails\Extension;
-/**
- * Created by PhpStorm.
- * User: nishurong
- * Date: 16/4/15
- * Time: 下午4:26
- */
+namespace Pails\Extensions;
 class Volt
 {
     /**
@@ -20,4 +14,5 @@ class Volt
             return $name . '('. join(", ", $params) . ')';
         }
     }
-} // End Volt
+}
+

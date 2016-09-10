@@ -14,10 +14,10 @@ class Application extends \Phalcon\Mvc\Application
     /**
      * register Phalcon's build-in services
      */
-    protected function boot()
+    public function boot()
     {
-        foreach ($this->bootstrappers as $name => $className) {
-            $bootstrap = new $className;
+        foreach ($this->bootstraps as $name => $className) {
+            $bootstrap = new $className();
             $bootstrap->boot($this->di);
         }
 

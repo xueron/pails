@@ -8,7 +8,7 @@ use Phalcon\Loader;
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
  * @package Pails
  */
-class Application extends Di
+class Application extends Di\FactoryDefault
 {
     /**
      * Pails Version
@@ -21,39 +21,22 @@ class Application extends Di
     protected $basePath;
 
     /**
-     * Phalcon默认的服务
-     * @var array
-     */
-    protected $baseServices = [
-        "router" => \Phalcon\Mvc\Router::class,  //"Phalcon\\Mvc\\Router",
-        "dispatcher" => "dispatcher", "Phalcon\\Mvc\\Dispatcher",
-        "url" => "Phalcon\\Mvc\\Url",
-        "modelsManager" => "Phalcon\\Mvc\\Model\\Manager",
-        "modelsMetadata" => "Phalcon\\Mvc\\Model\\MetaData\\Memory",
-        "response" => "Phalcon\\Http\\Response",
-        "cookies" => "Phalcon\\Http\\Response\\Cookies",
-        "request" => "Phalcon\\Http\\Request",
-        "filter" => "Phalcon\\Filter",
-        "escaper" => "Phalcon\\Escaper",
-        "security" => "Phalcon\\Security",
-        "crypt" => "Phalcon\\Crypt",
-        "annotations" => "Phalcon\\Annotations\\Adapter\\Memory",
-        "flash" => "Phalcon\\Flash\\Direct",
-        "flashSession" => "Phalcon\\Flash\\Session",
-        "tag" => "Phalcon\\Tag",
-        "session" => "Phalcon\\Session\\Adapter\\Files",
-        "sessionBag" => "Phalcon\\Session\\Bag",
-        "eventsManager" => "Phalcon\\Events\\Manager",
-        "transactionManager" => "Phalcon\\Mvc\\Model\\Transaction\\Manager",
-        "assets" => "Phalcon\\Assets\\Manager"
-    ];
-
-    /**
      * Pails的关键服务
      * @var array
      */
     protected $coreServices = [
-        'inflector' => 'Pails\\Util\\Inflector',
+        'inflector' => \Pails\Utils\Inflector::class,
+    ];
+
+    /**
+     * 通过Bootstraps重新定义默认的设置
+     *
+     * @var array
+     */
+    protected $bootstraps = [
+        \Pails\Bootstraps\Router::class,
+        \Pails\Bootstraps\View::class,
+        \Pails\Bootstraps\Dispatcher::class,
     ];
 
     /**
@@ -73,11 +56,9 @@ class Application extends Di
             $this->setBasePath($basePath);
         }
 
-        // 初始化
-        $this->init();
-
-        // 引导(执行应用内的初始化)
         $this->boot();
+
+        $this->init();
     }
 
     /**
@@ -85,13 +66,9 @@ class Application extends Di
      */
     protected function registerBaseServices()
     {
-        foreach ($this->baseServices as $name => $className) {
-            $this->_services[$name] = new Di\Service($name, $className, true);
-        }
-
         // 注册自身
         $this->setShared('app', $this);
-        $this->setShared('di', $this);
+        $this->setShared('di',  $this);
     }
 
     /**
@@ -105,6 +82,17 @@ class Application extends Di
     }
 
     /**
+     * register Phalcon's build-in services
+     */
+    public function boot()
+    {
+        foreach ($this->bootstraps as $className) {
+            $bootstrap = new $className();
+            $bootstrap->boot($this);
+        }
+    }
+
+    /**
      * init
      */
     protected function init()
@@ -113,7 +101,7 @@ class Application extends Di
 
         // \App base
         $loader->registerNamespaces([
-            'App' => $this->path()
+            'App' => $this->path() . '/'
         ]);
 
         // Other
@@ -122,17 +110,6 @@ class Application extends Di
         ]);
 
         $loader->register();
-    }
-
-    /**
-     * register Phalcon's build-in services
-     */
-    protected function boot()
-    {
-        foreach ($this->bootstrappers as $name => $className) {
-            $bootstrap = new $className;
-            $bootstrap->boot($this);
-        }
     }
 
     /**
@@ -236,15 +213,18 @@ class Application extends Di
      *
      * @return string
      */
-    public function tpmPath()
+    public function tmpPath()
     {
         return $this->basePath . DIRECTORY_SEPARATOR . 'tmp';
     }
 
-    public function run($app = 'App\\Application')
+    /**
+     * @param $app
+     */
+    public function run($app)
     {
         $app = new $app($this);
 
         $app->boot()->handle()->send();
     }
-} // End Application
+}
