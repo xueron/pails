@@ -1,5 +1,5 @@
 <?php
-namespace Pails\Util;
+namespace Pails\Utils;
 
 class Inflector
 {
