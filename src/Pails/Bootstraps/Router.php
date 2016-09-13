@@ -18,7 +18,7 @@ class Router
             $router = new Annotations(false);
             $router->removeExtraSlashes(true);
             $router->setEventsManager($app->get('eventsManager'));
-            $router->setDefaultNamespace('App\\Controllers\\');
+            $router->setDefaultNamespace('App\\Controllers');
             $router->setDefaultController('application');
             $router->setDefaultAction('index');
 
