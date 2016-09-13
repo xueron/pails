@@ -12,6 +12,7 @@ class View
     {
         $app->setShared('view', function () use ($app) {
             $view = new PhalconView();
+            $view->setEventsManager($app->getShared('eventsManager'));
             $view->setViewsDir($app->path('views'));
             $view->registerEngines([
                 '.volt' => 'volt',

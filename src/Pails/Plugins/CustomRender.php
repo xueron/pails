@@ -14,7 +14,7 @@ class CustomRender extends \Phalcon\Mvc\User\Plugin
             $namespace = substr($namespace, strlen($defaultNamespace));
         }
 
-        $parts   = array_filter(explode('\\', $namespace));
+        $parts   = array_filter(explode('\\', strtolower($namespace)));
         $parts[] = $dispatcher->getControllerName();
         $parts[] = $dispatcher->getActionName();
 

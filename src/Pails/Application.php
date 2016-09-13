@@ -3,6 +3,7 @@ namespace Pails;
 
 use Phalcon\Di;
 use Phalcon\Loader;
+use Phalcon\Mvc\RouterInterface;
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
@@ -66,9 +67,8 @@ class Application extends Di\FactoryDefault
      */
     protected function registerBaseServices()
     {
-        // 注册自身
-        $this->setShared('app', $this);
-        $this->setShared('di',  $this);
+        // No need to register self again. 'di' is automatically injected for Injectable services
+        $this->setShared('di', $this);
     }
 
     /**
@@ -219,12 +219,35 @@ class Application extends Di\FactoryDefault
     }
 
     /**
+     * @param $name
+     * @return array|mixed
+     */
+    public function getConfig($name)
+    {
+        $config = [];
+        $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $name . '.php';
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+        }
+        return $config;
+    }
+
+    /**
      * @param $app
+     * @throws \Exception
+     * @throws \Phalcon\Mvc\Dispatcher\Exception
      */
     public function run($app)
     {
         $app = new $app($this);
 
-        $app->boot()->handle()->send();
+        try {
+            $app->boot()->handle()->send();
+        } catch (\Phalcon\Mvc\Dispatcher\Exception $e) {
+            echo "Dispatcher Error";
+            throw $e;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
