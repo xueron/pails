@@ -13,6 +13,8 @@ class Dispatcher
             $dispatcher = new PhalconDispatcher();
             $dispatcher->setEventsManager($eventsManager);
             $dispatcher->setDefaultNamespace('App\\Controllers\\');
+            $dispatcher->setModelBinding(true);
+
             return $dispatcher;
         });
     }
