@@ -1,23 +1,24 @@
 <?php
 namespace Pails\Bootstraps;
 
+use Pails\Container;
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Text;
 
 class Router
 {
-    public function boot($app)
+    public function boot(Container $container)
     {
         // Pails 不使用Phalcon的Module功能,通过Namespace组织Controllers.
         // 如果出现多级,比如AdminApi,则一定要以Namespace的形式组织 Admin\Api\xxxxController
         //
         // Note: from phalcon 3, closure bind di as $this by default. so no use($app) needed.
         //
-        $app->setShared('router', function () use ($app) {
+        $container->setShared('router', function () {
             //
             $router = new Annotations(false);
             $router->removeExtraSlashes(true);
-            $router->setEventsManager($app->get('eventsManager'));
+            $router->setEventsManager($this->get('eventsManager'));
             $router->setDefaultNamespace('App\\Controllers');
             $router->setDefaultController('application');
             $router->setDefaultAction('index');
@@ -44,7 +45,7 @@ class Router
             // GET	        /photo/{photo}/edit	edit	photo.edit
             // PUT/PATCH	/photo/{photo}	    update	photo.update
             // DELETE	    /photo/{photo}	    destroy	photo.destroy
-            foreach ($app->getConfig('routes') as $url => $route) {
+            foreach ($this->getConfig('routes') as $url => $route) {
 //                $resourceDefaults = ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'];
 //
 //                // a RESTful resource
@@ -67,17 +68,17 @@ class Router
 //                }
             }
 
-            //
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($app->path('Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
+            // 定义注解路由
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
             foreach ($iterator as $item) {
                 if (Text::endsWith($item, "Controller.php", false)) {
-                    $name = str_replace([$app->path('Controllers') . DIRECTORY_SEPARATOR, "Controller.php"], "", $item);
+                    $name = str_replace([$this->path('Controllers') . DIRECTORY_SEPARATOR, "Controller.php"], "", $item);
                     $name = str_replace(DIRECTORY_SEPARATOR, "\\", $name);
                     $router->addResource('App\\Controllers\\' . $name);
                 }
             }
 
-            //
+            // 定义404路由
             $router->notFound([
                 "controller" => "application",
                 "action"     => "notfound"
@@ -86,17 +87,6 @@ class Router
             //
             return $router;
         });
-    }
-
-    protected function getResourceMethods($defaults, $options)
-    {
-        if (isset($options['only'])) {
-            return array_intersect($defaults, (array) $options['only']);
-        } elseif (isset($options['except'])) {
-            return array_diff($defaults, (array) $options['except']);
-        }
-
-        return $defaults;
     }
 }
 

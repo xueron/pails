@@ -1,15 +1,16 @@
 <?php
 namespace Pails;
 
+use Pails\Bootstraps;
+use Pails\Utils;
 use Phalcon\Di;
 use Phalcon\Loader;
-use Phalcon\Mvc\RouterInterface;
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
  * @package Pails
  */
-class Application extends Di\FactoryDefault
+class Container extends Di\FactoryDefault
 {
     /**
      * Pails Version
@@ -26,7 +27,7 @@ class Application extends Di\FactoryDefault
      * @var array
      */
     protected $coreServices = [
-        'inflector' => \Pails\Utils\Inflector::class,
+        'inflector' => Utils\Inflector::class,
     ];
 
     /**
@@ -35,9 +36,9 @@ class Application extends Di\FactoryDefault
      * @var array
      */
     protected $bootstraps = [
-        \Pails\Bootstraps\Router::class,
-        \Pails\Bootstraps\View::class,
-        \Pails\Bootstraps\Dispatcher::class,
+        Bootstraps\Router::class,
+        Bootstraps\View::class,
+        Bootstraps\Dispatcher::class,
     ];
 
     /**
@@ -46,11 +47,13 @@ class Application extends Di\FactoryDefault
      */
     public function __construct($basePath = null)
     {
-        // INIT DI
+        // INIT Phalcon's DI
         parent::__construct();
 
+        //
         $this->registerBaseServices();
 
+        //
         $this->registerCoreServices();
 
         if ($basePath) {
@@ -233,13 +236,13 @@ class Application extends Di\FactoryDefault
     }
 
     /**
-     * @param $app
+     * @param $appClass
      * @throws \Exception
      * @throws \Phalcon\Mvc\Dispatcher\Exception
      */
-    public function run($app)
+    public function run($appClass)
     {
-        $app = new $app($this);
+        $app = new $appClass($this);
 
         try {
             $app->boot()->handle()->send();

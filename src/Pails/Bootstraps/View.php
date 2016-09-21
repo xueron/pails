@@ -1,19 +1,20 @@
 <?php
 namespace Pails\Bootstraps;
+use Pails\Container;
 use Phalcon\Mvc\View as PhalconView;
 use Phalcon\Mvc\View\Engine\Volt;
 
 class View
 {
     /**
-     * @param $app
+     * @param $container
      */
-    public function boot($app)
+    public function boot(Container $container)
     {
-        $app->setShared('view', function () use ($app) {
+        $container->setShared('view', function () {
             $view = new PhalconView();
-            $view->setEventsManager($app->getShared('eventsManager'));
-            $view->setViewsDir($app->path('views'));
+            $view->setEventsManager($this->getShared('eventsManager'));
+            $view->setViewsDir($this->path('views'));
             $view->registerEngines([
                 '.volt' => 'volt',
                 '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
@@ -21,10 +22,10 @@ class View
             return $view;
         });
 
-        $app->setShared('volt', function () use ($app) {
-            $volt = new Volt($app->get('view'));
+        $container->setShared('volt', function () {
+            $volt = new Volt($this->get('view'));
             $volt->setOptions([
-                'compiledPath' => $app->tmpPath() . '/cache/volt/',
+                'compiledPath' => $this->tmpPath() . '/cache/volt/',
                 'compiledSeparator' => '_',
                 'compileAlways' => true
             ]);
