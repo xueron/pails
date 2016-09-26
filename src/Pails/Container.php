@@ -2,7 +2,6 @@
 namespace Pails;
 
 use Pails\Bootstraps;
-use Pails\Utils;
 use Phalcon\Di;
 use Phalcon\Loader;
 
@@ -27,7 +26,7 @@ class Container extends Di\FactoryDefault
      * @var array
      */
     protected $coreServices = [
-        'inflector' => Utils\Inflector::class,
+        'inflector' => \Pails\Utils\Inflector::class,
     ];
 
     /**
@@ -222,17 +221,37 @@ class Container extends Di\FactoryDefault
     }
 
     /**
+     * 获取配置. 自动注入到服务中
+     *
      * @param $name
+     * @param null $key
+     * @param null $defaultValue
      * @return array|mixed
      */
-    public function getConfig($name)
+    public function getConfig($name, $key = null, $defaultValue = null)
     {
-        $config = [];
+        $serviceName = '___PAILS_CONFIG___' . $name;
+        if ($this->has($serviceName)) {
+            $service = $this->get($serviceName);
+            if ($key) {
+                return $service->get($key, $defaultValue);
+            }
+            return $service;
+        }
+
         $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $name . '.php';
         if (file_exists($configFile)) {
+            $this->setShared($serviceName, "Phalcon\\Config");
+
             $config = require $configFile;
+            $service = $this->get($serviceName, [$config]);
+            if ($key) {
+                return $service->get($key);
+            }
+            return $service;
         }
-        return $config;
+
+        return null;
     }
 
     /**
