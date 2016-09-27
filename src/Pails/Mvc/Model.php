@@ -15,11 +15,11 @@ abstract class Model extends \Phalcon\Mvc\Model
     {
         // 自动更新时间戳字段
         $this->addBehavior(new Timestampable([
-                'beforeCreate' => [
-                    'field' => ['updated_at'],
+                'beforeValidationOnCreate' => [
+                    'field' => ['created_at', 'updated_at'],
                     'format' => 'Y-m-d H:i:s'
                 ],
-                'beforeUpdate' => [
+                'beforeValidationOnUpdate' => [
                     'field' => 'updated_at',
                     'format' => 'Y-m-d H:i:s'
                 ]

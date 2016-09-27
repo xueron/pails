@@ -263,13 +263,6 @@ class Container extends Di\FactoryDefault
     {
         $app = new $appClass($this);
 
-        try {
-            $app->boot()->handle()->send();
-        } catch (\Phalcon\Mvc\Dispatcher\Exception $e) {
-            echo "Dispatcher Error";
-            throw $e;
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $app->init()->boot()->handle()->send();
     }
 }
