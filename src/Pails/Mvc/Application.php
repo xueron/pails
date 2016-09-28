@@ -29,11 +29,13 @@ abstract class Application extends \Phalcon\Mvc\Application
 
     public function init()
     {
+        $debug = new Debug();
         if ($this->debug) {
-            $debug = new Debug();
-            //$debug->setUri('//pails.xueron.com/debug/3.0.x/');
             $debug->listen();
+        } else {
+            $debug->handle();
         }
+
         return $this;
     }
 }

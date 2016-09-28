@@ -6,9 +6,14 @@
 namespace Pails\Mvc;
 
 use Phalcon\Di;
+use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
-abstract class Model extends \Phalcon\Mvc\Model
+PhalconModel::setup([
+    'exceptionOnFailedSave' => true, // 启用异常
+]);
+
+abstract class Model extends PhalconModel
 {
 
     public function initialize()
@@ -39,10 +44,7 @@ abstract class Model extends \Phalcon\Mvc\Model
 
         //
         $model = new static();
-        if ($model->save($data)) {
-            return $model;
-        }
-        return false;
+        $model->save($data);
     }
 
     /**

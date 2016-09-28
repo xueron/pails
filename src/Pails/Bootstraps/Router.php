@@ -23,19 +23,6 @@ class Router
             $router->setDefaultController('application');
             $router->setDefaultAction('index');
 
-            // Add a default route to:
-            // /name/space/controller/action -> App\Controllers\Name\Space\Controller\Action
-            $router->add(
-                "/{namespace:[\w0-9\_\-\/]+}/:controller/:action",
-                [
-                    'controller' => 2,
-                    'action'     => 3
-                ]
-            )->convert('namespace', function ($namespace) {
-                $parts = explode("/", strtolower($namespace));
-                return 'App\\Controllers\\' . implode("\\", array_map('ucfirst', $parts));
-            });
-
             // Process /config/routes.php
             // Verb	        Path	            Action	Route Name
             // GET	        /photo	            index	photo.index

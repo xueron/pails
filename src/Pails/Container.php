@@ -35,6 +35,7 @@ class Container extends Di\FactoryDefault
      * @var array
      */
     protected $bootstraps = [
+        Bootstraps\Database::class,
         Bootstraps\Router::class,
         Bootstraps\View::class,
         Bootstraps\Dispatcher::class,
@@ -218,6 +219,16 @@ class Container extends Di\FactoryDefault
     public function tmpPath()
     {
         return $this->basePath . DIRECTORY_SEPARATOR . 'tmp';
+    }
+
+    /**
+     * Helpers: Get the path to the tmp directory.
+     *
+     * @return string
+     */
+    public function storagePath()
+    {
+        return $this->basePath . DIRECTORY_SEPARATOR . 'storage';
     }
 
     /**
