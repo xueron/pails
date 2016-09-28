@@ -42,7 +42,7 @@ class Debug extends \Phalcon\Debug
         return $this;
     }
 
-    public function friendlyExceptionHandler(\Exception $exception)
+    public function friendlyExceptionHandler(\Throwable $exception)
     {
         $message = $exception->getMessage();
         $file = $exception->getFile();
