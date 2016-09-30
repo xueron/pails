@@ -5,6 +5,9 @@ use Pails\Bootstraps;
 use Phalcon\Di;
 use Phalcon\Loader;
 
+//
+defined('APP_DEBUG') or define('APP_DEBUG', false);
+
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
  * @package Pails
@@ -22,15 +25,15 @@ class Container extends Di\FactoryDefault
     protected $basePath;
 
     /**
-     * Pails的关键服务
+     * Pails的关键服务, 直接注入类名
      * @var array
      */
     protected $coreServices = [
-        'inflector' => \Pails\Utils\Inflector::class,
+        'inflector' => \Pails\Plugins\Inflector::class,
     ];
 
     /**
-     * 通过Bootstraps重新定义默认的设置
+     * 通过Bootstraps注册的服务,可以进行一些初始化工作。
      *
      * @var array
      */
@@ -39,6 +42,7 @@ class Container extends Di\FactoryDefault
         Bootstraps\Router::class,
         Bootstraps\View::class,
         Bootstraps\Dispatcher::class,
+        Bootstraps\ApiResponse::class
     ];
 
     /**
@@ -272,8 +276,47 @@ class Container extends Di\FactoryDefault
      */
     public function run($appClass)
     {
-        $app = new $appClass($this);
+        try {
+            //$app = new $appClass($this);
+            $app = $this->getShared($appClass);
+            $app->init()->boot()->handle()->send();
+        } catch (\Phalcon\Exception $e) {
+            $this->errorLog($e->getMessage());
+            if (APP_DEBUG) {
+                throw $e;
+            }
+        } catch (\RuntimeException $e) {
+            if (APP_DEBUG) {
+                throw $e;
+            }
+        } catch (\LogicException $e) {
+            if (APP_DEBUG) {
+                throw $e;
+            }
+        } catch (\Exception $e) {
+            if (APP_DEBUG) {
+                throw $e;
+            }
+        } catch (\Error $e) {
+            if (APP_DEBUG) {
+                throw $e;
+            }
+        }
+    }
 
-        $app->init()->boot()->handle()->send();
+    public function exit($message, $code)
+    {
+
+    }
+
+    public function errorLog($message)
+    {
+        $message = addslashes($message);
+
+        // log locally
+        error_log($message, $this->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
+
+        // log to system
+        return error_log($message);
     }
 }

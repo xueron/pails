@@ -81,7 +81,10 @@ abstract class Model extends PhalconModel
             "page" => $page
         ];
 
-        $paginator = $di->get("Phalcon\\Paginator\\Adapter\\QueryBuilder", [$params]);
+        return $di->get("Pails\\Plugins\\Paginator", [$params]);
+
+        // remove
+        $paginator = $di->get("Pails\\Plugins\\Paginator", [$params]);
         $data = $paginator->getPaginate();
 
         $items = [];
@@ -99,7 +102,7 @@ abstract class Model extends PhalconModel
      * @param $id
      * @return array|bool
      */
-    public static function show($id)
+    public static function show($id, $transformer = null)
     {
         $item = static::findFirst($id);
         if ($item) {

@@ -1,11 +1,13 @@
 <?php
 namespace Pails\Plugins;
 
+use Phalcon\Events\EventInterface;
 use Phalcon\Mvc\DispatcherInterface;
+use Phalcon\Mvc\User\Plugin;
 
-class CustomRender extends \Phalcon\Mvc\User\Plugin
+class CustomRender extends Plugin
 {
-    public function beforeExecuteRoute($event, DispatcherInterface $dispatcher)
+    public function beforeExecuteRoute(EventInterface $event, DispatcherInterface $dispatcher)
     {
         $defaultNamespace = $dispatcher->getDefaultNamespace();
         $namespace = $dispatcher->getNamespaceName();
