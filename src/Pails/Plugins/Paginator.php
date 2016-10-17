@@ -53,6 +53,4 @@ class Paginator extends QueryBuilder
         }
         return $this->_meta;
     }
-
-
 }

@@ -1,6 +1,6 @@
 <?php
-namespace Pails\Extensions;
-class Volt
+namespace Pails\Plugins;
+class VoltExtension
 {
     /**
      * This method is called on any attempt to compile a function call

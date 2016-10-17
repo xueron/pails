@@ -5,36 +5,62 @@
  */
 namespace Pails\Plugins;
 
+use League\Fractal\Pagination\Cursor;
+use Phalcon\Mvc\User\Plugin;
 
-use EllipseSynergie\ApiResponse\AbstractResponse;
-use Pails\Exception;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\DiInterface;
-
-class ApiResponse extends AbstractResponse implements InjectionAwareInterface
+class ApiResponse extends Plugin
 {
+    const CODE_WRONG_ARGS = 'GEN-WRONG-ARGS';
+
+    const CODE_NOT_FOUND = 'GEN-NOT-FOUND';
+
+    const CODE_INTERNAL_ERROR = 'GEN-INTERNAL-ERROR';
+
+    const CODE_UNAUTHORIZED = 'GEN-UNAUTHORIZED';
+
+    const CODE_FORBIDDEN = 'GEN-FORBIDDEN';
+
+    const CODE_GONE = 'GEN-GONE';
+
+    const CODE_METHOD_NOT_ALLOWED = 'GEN-METHOD-NOT-ALLOWED';
+
+    const CODE_UNWILLING_TO_PROCESS = 'GEN-UNWILLING-TO-PROCESS';
+
+    const CODE_UNPROCESSABLE = 'GEN-UNPROCESSABLE';
+
     /**
-     * @var DiInterface
+     * HTTP Status code
+     *
+     * @var int
      */
-    protected $_dependencyInjector = null;
+    protected $statusCode = 200;
 
-    public function setDI(DiInterface $dependencyInjector)
+    /**
+     * Getter for statusCode
+     *
+     * @return int
+     */
+    public function getStatusCode()
     {
-        $this->_dependencyInjector = $dependencyInjector;
+        return $this->statusCode;
     }
 
-    public function getDI()
+    /**
+     * Setter for status code
+     *
+     * @param int $statusCode
+     * @return $this
+     */
+    public function setStatusCode($statusCode)
     {
-        return $this->_dependencyInjector;
+        $this->statusCode = $statusCode;
+        return $this;
     }
+
 
     public function response(array $data, array $headers = [])
     {
-        $di = $this->_dependencyInjector;
-        if (!is_object($di)) {
-            throw new Exception("A dependency injection container is required to access the 'response' service");
-        }
-        $response = $di->getShared('response');
+        $response = $this->getDI()->getShared('response');
 
         $response->setJsonContent($data, JSON_UNESCAPED_UNICODE);
         $response->setStatusCode($this->getStatusCode());
@@ -73,5 +99,148 @@ class ApiResponse extends AbstractResponse implements InjectionAwareInterface
             ]
         ];
         return $this->response($data, $headers);
+    }
+
+    /**
+     * Response for one item
+     *
+     * @param $data
+     * @param callable|\League\Fractal\TransformerAbstract $transformer
+     * @param string $resourceKey
+     * @param array $meta
+     * @param array $headers
+     * @return mixed
+     */
+    public function withItem($data, $transformer, $resourceKey = null, $meta = [], array $headers = [])
+    {
+        $data = $this->getDI()->get('fractal')->item($data, $transformer, $resourceKey, $meta);
+
+        return $this->withArray($data, $headers);
+    }
+
+    /**
+     * Response for collection of items
+     *
+     * @param $data
+     * @param callable|\League\Fractal\TransformerAbstract $transformer
+     * @param string $resourceKey
+     * @param Cursor $cursor
+     * @param array $meta
+     * @param array $headers
+     * @return mixed
+     */
+    public function withCollection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [], array $headers = [])
+    {
+        $data = $this->getDI()->get('fractal')->collection($data, $transformer, $resourceKey, $cursor, $meta);
+
+        return $this->withArray($data, $headers);
+    }
+
+    /**
+     * Generates a response with a 403 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorForbidden($message = 'Forbidden', array $headers = [])
+    {
+        return $this->setStatusCode(403)->withError($message, static::CODE_FORBIDDEN, $headers);
+    }
+
+    /**
+     * Generates a response with a 500 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorInternalError($message = 'Internal Error', array $headers = [])
+    {
+        return $this->setStatusCode(500)->withError($message, static::CODE_INTERNAL_ERROR, $headers);
+    }
+
+    /**
+     * Generates a response with a 404 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorNotFound($message = 'Resource Not Found', array $headers = [])
+    {
+        return $this->setStatusCode(404)->withError($message, static::CODE_NOT_FOUND, $headers);
+    }
+
+    /**
+     * Generates a response with a 401 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorUnauthorized($message = 'Unauthorized', array $headers = [])
+    {
+        return $this->setStatusCode(401)->withError($message, static::CODE_UNAUTHORIZED, $headers);
+    }
+
+    /**
+     * Generates a response with a 400 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorWrongArgs($message = 'Wrong Arguments', array $headers = [])
+    {
+        return $this->setStatusCode(400)->withError($message, static::CODE_WRONG_ARGS, $headers);
+    }
+
+    /**
+     * Generates a response with a 410 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorGone($message = 'Resource No Longer Available', array $headers = [])
+    {
+        return $this->setStatusCode(410)->withError($message, static::CODE_GONE, $headers);
+    }
+
+    /**
+     * Generates a response with a 405 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorMethodNotAllowed($message = 'Method Not Allowed', array $headers = [])
+    {
+        return $this->setStatusCode(405)->withError($message, static::CODE_METHOD_NOT_ALLOWED, $headers);
+    }
+
+    /**
+     * Generates a Response with a 431 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorUnwillingToProcess($message = 'Server is unwilling to process the request', array $headers = [])
+    {
+        return $this->setStatusCode(431)->withError($message, static::CODE_UNWILLING_TO_PROCESS, $headers);
+    }
+
+    /**
+     * Generates a Response with a 422 HTTP header and a given message.
+     *
+     * @param string $message
+     * @param array  $headers
+     * @return mixed
+     */
+    public function errorUnprocessable($message = 'Unprocessable Entity', array $headers = [])
+    {
+        return $this->setStatusCode(422)->withError($message, static::CODE_UNPROCESSABLE, $headers);
     }
 }

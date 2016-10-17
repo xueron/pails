@@ -82,20 +82,6 @@ abstract class Model extends PhalconModel
         ];
 
         return $di->get("Pails\\Plugins\\Paginator", [$params]);
-
-        // remove
-        $paginator = $di->get("Pails\\Plugins\\Paginator", [$params]);
-        $data = $paginator->getPaginate();
-
-        $items = [];
-        foreach ($data->items as $item) {
-            $items[] = $item->toArray();
-        }
-
-        $data = (array)$data;
-        $data['items'] = $items;
-
-        return $data;
     }
 
     /**

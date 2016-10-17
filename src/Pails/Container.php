@@ -1,7 +1,8 @@
 <?php
 namespace Pails;
 
-use Pails\Bootstraps;
+use Pails\Providers;
+use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Di;
 use Phalcon\Loader;
 
@@ -25,24 +26,19 @@ class Container extends Di\FactoryDefault
     protected $basePath;
 
     /**
-     * Pails的关键服务, 直接注入类名
-     * @var array
-     */
-    protected $coreServices = [
-        'inflector' => \Pails\Plugins\Inflector::class,
-    ];
-
-    /**
-     * 通过Bootstraps注册的服务,可以进行一些初始化工作。
+     * Pails 框架一级的服务,在容器初始化的时候注册
      *
      * @var array
      */
-    protected $bootstraps = [
-        Bootstraps\Database::class,
-        Bootstraps\Router::class,
-        Bootstraps\View::class,
-        Bootstraps\Dispatcher::class,
-        Bootstraps\ApiResponse::class
+    protected $providers = [
+        Providers\ApiResponseServiceProvider::class,
+        Providers\DatabaseServiceProvider::class,
+        Providers\DispatcherServiceProvider::class,
+        Providers\FractalServiceProvider::class,
+        Providers\InflectorServiceProvider::class,
+        Providers\RouterServiceProvider::class,
+        Providers\ViewServiceProvider::class,
+        Providers\VoltServiceProvider::class
     ];
 
     /**
@@ -51,52 +47,40 @@ class Container extends Di\FactoryDefault
      */
     public function __construct($basePath = null)
     {
-        // INIT Phalcon's DI
+        // 初始化Phalcon默认的服务
         parent::__construct();
 
-        //
-        $this->registerBaseServices();
-
-        //
-        $this->registerCoreServices();
+        // 初始化Pails的默认服务
+        $this->registerServices($this->providers);
 
         if ($basePath) {
             $this->setBasePath($basePath);
         }
 
-        $this->boot();
-
         $this->init();
     }
 
     /**
-     * register Container self as a service
+     * 注册服务列表
+     * @param array $serviceProviders
      */
-    protected function registerBaseServices()
+    public function registerServices($serviceProviders = [])
     {
-        // No need to register self again. 'di' is automatically injected for Injectable services
-        $this->setShared('di', $this);
-    }
-
-    /**
-     * register Pails' build-in services
-     */
-    protected function registerCoreServices()
-    {
-        foreach ($this->coreServices as $name => $className) {
-            $this->_services[$name] = new Di\Service($name, $className, true);
+        foreach ($serviceProviders as $serviceProviderClass) {
+            $this->registerService(new $serviceProviderClass($this));
         }
     }
 
     /**
-     * register Phalcon's build-in services
+     * 注册一个服务
+     * @param ServiceProviderInterface $serviceProvider
+     * @return $this
      */
-    public function boot()
+    public function registerService(ServiceProviderInterface $serviceProvider)
     {
-        foreach ($this->bootstraps as $className) {
-            $bootstrap = new $className();
-            $bootstrap->boot($this);
-        }
+        $serviceProvider->register();
+
+        return $this;
     }
 
     /**
@@ -117,6 +101,8 @@ class Container extends Di\FactoryDefault
         ]);
 
         $loader->register();
+
+        return $this;
     }
 
     /**
@@ -238,14 +224,14 @@ class Container extends Di\FactoryDefault
     /**
      * 获取配置. 自动注入到服务中
      *
-     * @param $name
+     * @param $section
      * @param null $key
      * @param null $defaultValue
      * @return array|mixed
      */
-    public function getConfig($name, $key = null, $defaultValue = null)
+    public function getConfig($section, $key = null, $defaultValue = null)
     {
-        $serviceName = '___PAILS_CONFIG___' . $name;
+        $serviceName = '___PAILS_CONFIG___' . $section;
         if ($this->has($serviceName)) {
             $service = $this->get($serviceName);
             if ($key) {
@@ -254,14 +240,14 @@ class Container extends Di\FactoryDefault
             return $service;
         }
 
-        $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $name . '.php';
+        $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $section . '.php';
         if (file_exists($configFile)) {
             $this->setShared($serviceName, "Phalcon\\Config");
 
             $config = require $configFile;
             $service = $this->get($serviceName, [$config]);
             if ($key) {
-                return $service->get($key);
+                return $service->get($key, $defaultValue);
             }
             return $service;
         }
@@ -271,36 +257,24 @@ class Container extends Di\FactoryDefault
 
     /**
      * @param $appClass
+     * @throws \Error
      * @throws \Exception
-     * @throws \Phalcon\Mvc\Dispatcher\Exception
+     * @throws \Phalcon\Exception
      */
     public function run($appClass)
     {
+        $debug = new Debug();
+        $debug->listen();
+
         try {
-            //$app = new $appClass($this);
             $app = $this->getShared($appClass);
             $app->init()->boot()->handle()->send();
-        } catch (\Phalcon\Exception $e) {
-            $this->errorLog($e->getMessage());
-            if (APP_DEBUG) {
-                throw $e;
-            }
-        } catch (\RuntimeException $e) {
-            if (APP_DEBUG) {
-                throw $e;
-            }
-        } catch (\LogicException $e) {
-            if (APP_DEBUG) {
-                throw $e;
-            }
         } catch (\Exception $e) {
-            if (APP_DEBUG) {
-                throw $e;
-            }
+            $this->errorLog($e->getMessage());
+            throw $e;
         } catch (\Error $e) {
-            if (APP_DEBUG) {
-                throw $e;
-            }
+            $this->errorLog($e->getMessage());
+            throw $e;
         }
     }
 
@@ -314,7 +288,7 @@ class Container extends Di\FactoryDefault
         $message = addslashes($message);
 
         // log locally
-        error_log($message, $this->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
+        error_log($message . "\n", 3, $this->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
 
         // log to system
         return error_log($message);
