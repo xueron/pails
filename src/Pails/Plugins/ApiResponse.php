@@ -5,7 +5,6 @@
  */
 namespace Pails\Plugins;
 
-use League\Fractal\Pagination\Cursor;
 use Phalcon\Mvc\User\Plugin;
 
 class ApiResponse extends Plugin
@@ -106,14 +105,13 @@ class ApiResponse extends Plugin
      *
      * @param $data
      * @param callable|\League\Fractal\TransformerAbstract $transformer
-     * @param string $resourceKey
      * @param array $meta
      * @param array $headers
      * @return mixed
      */
-    public function withItem($data, $transformer, $resourceKey = null, $meta = [], array $headers = [])
+    public function withItem($data, $transformer, $meta = [], array $headers = [])
     {
-        $data = $this->getDI()->get('fractal')->item($data, $transformer, $resourceKey, $meta);
+        $data = $this->getDI()->get('fractal')->item($data, $transformer, null, $meta);
 
         return $this->withArray($data, $headers);
     }
@@ -123,15 +121,13 @@ class ApiResponse extends Plugin
      *
      * @param $data
      * @param callable|\League\Fractal\TransformerAbstract $transformer
-     * @param string $resourceKey
-     * @param Cursor $cursor
      * @param array $meta
      * @param array $headers
      * @return mixed
      */
-    public function withCollection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [], array $headers = [])
+    public function withCollection($data, $transformer, $meta = [], array $headers = [])
     {
-        $data = $this->getDI()->get('fractal')->collection($data, $transformer, $resourceKey, $cursor, $meta);
+        $data = $this->getDI()->get('fractal')->collection($data, $transformer, null, null, $meta);
 
         return $this->withArray($data, $headers);
     }
