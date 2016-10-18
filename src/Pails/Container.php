@@ -1,13 +1,20 @@
 <?php
 namespace Pails;
 
+use Pails\Exception\Handler;
 use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
+use Phalcon\Config;
+use Phalcon\Debug;
 use Phalcon\Di;
 use Phalcon\Loader;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 //
 defined('APP_DEBUG') or define('APP_DEBUG', false);
+$debug = new Debug();
+$debug->setUri('//static.pails.xueron.com/debug/3.0.x/');
+$debug->listen();
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
@@ -18,7 +25,7 @@ class Container extends Di\FactoryDefault
     /**
      * Pails Version
      */
-    const VERSION = '0.0.1';
+    const VERSION = '3.0.0';
 
     /**
      * @var string
@@ -32,6 +39,7 @@ class Container extends Di\FactoryDefault
      */
     protected $providers = [
         Providers\ApiResponseServiceProvider::class,
+        Providers\CollectionServiceProvider::class,
         Providers\DatabaseServiceProvider::class,
         Providers\DispatcherServiceProvider::class,
         Providers\FractalServiceProvider::class,
@@ -47,17 +55,15 @@ class Container extends Di\FactoryDefault
      */
     public function __construct($basePath = null)
     {
-        // 初始化Phalcon默认的服务
         parent::__construct();
-
-        // 初始化Pails的默认服务
-        $this->registerServices($this->providers);
 
         if ($basePath) {
             $this->setBasePath($basePath);
         }
 
-        $this->init();
+        $this->registerAutoLoader();
+
+        $this->registerServices($this->providers);
     }
 
     /**
@@ -69,6 +75,7 @@ class Container extends Di\FactoryDefault
         foreach ($serviceProviders as $serviceProviderClass) {
             $this->registerService(new $serviceProviderClass($this));
         }
+        //throw new RuntimeException("aa");
     }
 
     /**
@@ -86,13 +93,13 @@ class Container extends Di\FactoryDefault
     /**
      * init
      */
-    protected function init()
+    protected function registerAutoLoader()
     {
         $loader = new Loader();
 
         // \App base
         $loader->registerNamespaces([
-            'App' => $this->path() . '/'
+            'App' => $this->appPath()
         ]);
 
         // Other
@@ -212,13 +219,33 @@ class Container extends Di\FactoryDefault
     }
 
     /**
-     * Helpers: Get the path to the tmp directory.
+     * Helpers: Get the path to the storage directory.
      *
      * @return string
      */
     public function storagePath()
     {
         return $this->basePath . DIRECTORY_SEPARATOR . 'storage';
+    }
+
+    /**
+     * Helpers: Get the path to the resource directory.
+     *
+     * @return string
+     */
+    public function resourcesPath()
+    {
+        return $this->basePath . DIRECTORY_SEPARATOR . 'resources';
+    }
+
+    /**
+     * Helpers: Get the path to the views directory.
+     *
+     * @return string
+     */
+    public function viewsPath()
+    {
+        return $this->resourcesPath() . DIRECTORY_SEPARATOR . 'views';
     }
 
     /**
@@ -242,17 +269,19 @@ class Container extends Di\FactoryDefault
 
         $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $section . '.php';
         if (file_exists($configFile)) {
-            $this->setShared($serviceName, "Phalcon\\Config");
+            // register a new config service
+            $this->setShared($serviceName, Config::class);
 
+            // instance the config service
             $config = require $configFile;
             $service = $this->get($serviceName, [$config]);
             if ($key) {
                 return $service->get($key, $defaultValue);
             }
             return $service;
+        } else {
+            throw new \DomainException("config file ${section}.php not exists");
         }
-
-        return null;
     }
 
     /**
@@ -263,34 +292,25 @@ class Container extends Di\FactoryDefault
      */
     public function run($appClass)
     {
-        $debug = new Debug();
-        $debug->listen();
-
         try {
             $app = $this->getShared($appClass);
             $app->init()->boot()->handle()->send();
         } catch (\Exception $e) {
-            $this->errorLog($e->getMessage());
-            throw $e;
-        } catch (\Error $e) {
-            $this->errorLog($e->getMessage());
-            throw $e;
+            $this->reportException($e);
+            $this->renderException($e);
+        } catch (\Throwable $e) {
+            $this->reportException($e = new FatalThrowableError($e));
+            $this->renderException($e);
         }
     }
 
-    public function exit($message, $code)
+    public function renderException(\Exception $e)
     {
-
+        $this->get(Handler::class)->render($e);
     }
 
-    public function errorLog($message)
+    public function reportException(\Exception $e)
     {
-        $message = addslashes($message);
-
-        // log locally
-        error_log($message . "\n", 3, $this->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
-
-        // log to system
-        return error_log($message);
+        $this->get(Handler::class)->report($e);
     }
 }

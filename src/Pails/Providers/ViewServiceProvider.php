@@ -15,7 +15,7 @@ class ViewServiceProvider extends AbstractServiceProvider
                 // Closure, $this is maped to DI
                 $view = new PhalconView();
                 $view->setEventsManager($this->getShared('eventsManager'));
-                $view->setViewsDir($this->path('views'));
+                $view->setViewsDir($this->viewsPath());
                 $view->registerEngines([
                     '.volt' => 'volt',
                     '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
