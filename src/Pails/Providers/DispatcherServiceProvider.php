@@ -18,7 +18,7 @@ class DispatcherServiceProvider extends AbstractServiceProvider
 
                 $dispatcher = new PhalconDispatcher();
                 $dispatcher->setEventsManager($eventsManager);
-                $dispatcher->setDefaultNamespace('App\\Controllers');
+                $dispatcher->setDefaultNamespace('App\\Http\\Controllers');
                 $dispatcher->setModelBinding(true);
 
                 return $dispatcher;
