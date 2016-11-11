@@ -14,7 +14,6 @@ class ServiceHub extends Plugin
         if (!is_object($service)) {
             $service = $this->getDI()->getShared($service);
         }
-
-
+        return $service;
     }
 }

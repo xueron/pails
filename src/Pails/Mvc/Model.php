@@ -32,6 +32,10 @@ abstract class Model extends PhalconModel
         );
     }
 
+    /**
+     * @param array $data
+     * @return static
+     */
     public static function make($data = [])
     {
         // filter empty values
@@ -43,12 +47,12 @@ abstract class Model extends PhalconModel
         unset($data['updated_at']);
 
         //
-        $model = new static();
-        $model->save($data);
+        $model = new static($data);
+        return $model;
     }
 
     /**
-     * 跟find()类似,包含总数、页数、上一页、下一页等信息
+     * 跟find()类似, 包含总数、页数、上一页、下一页等信息
      *
      * @param $parameters
      * @param int $limit
@@ -59,6 +63,7 @@ abstract class Model extends PhalconModel
     {
         // static function.
         $di = Di::getDefault();
+        $manager = $di->getShared('modelsManager');
 
         //
         if (!is_array($parameters)) {
@@ -67,7 +72,7 @@ abstract class Model extends PhalconModel
             $params = $parameters;
         }
 
-        $manager = $di->getShared('modelsManager');
+        //
         $builder = $manager->createBuilder($params);
         $builder->from(get_called_class());
 
@@ -75,25 +80,11 @@ abstract class Model extends PhalconModel
             $limit = $params['limit'];
         }
 
-        $params = [
+        $options = [
             "builder" => $builder,
             "limit" => $limit,
             "page" => $page
         ];
-
-        return $di->get("Pails\\Plugins\\Paginator", [$params]);
-    }
-
-    /**
-     * @param $id
-     * @return array|bool
-     */
-    public static function show($id, $transformer = null)
-    {
-        $item = static::findFirst($id);
-        if ($item) {
-            return $item->toArray();
-        }
-        return false;
+        return $di->get("Pails\\Plugins\\Paginator", [$options]);
     }
 }

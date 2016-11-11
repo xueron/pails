@@ -73,13 +73,12 @@ class ApiResponse extends Plugin
     public function withArray(array $array, array $headers = [])
     {
         $status = $this->getStatusCode() == 200;
-        $data = [
+        $data = array_merge([
             "status" => $status,
             "success" => $status,
             "code" => $this->getStatusCode(),
             "msg" => 'success',
-            "data" => $array
-        ];
+        ], $array);
         return $this->response($data, $headers);
     }
 
@@ -90,7 +89,6 @@ class ApiResponse extends Plugin
             "success" => false,
             "code" => $errorCode ?: $this->getStatusCode(),
             "msg" => $message,
-            "data" => [],
             'error' => [
                 'code' => $errorCode,
                 'http_code' => $this->statusCode,
@@ -136,7 +134,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 403 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorForbidden($message = 'Forbidden', array $headers = [])
@@ -148,7 +146,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 500 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorInternalError($message = 'Internal Error', array $headers = [])
@@ -160,7 +158,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 404 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorNotFound($message = 'Resource Not Found', array $headers = [])
@@ -172,7 +170,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 401 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorUnauthorized($message = 'Unauthorized', array $headers = [])
@@ -184,7 +182,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 400 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorWrongArgs($message = 'Wrong Arguments', array $headers = [])
@@ -196,7 +194,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 410 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorGone($message = 'Resource No Longer Available', array $headers = [])
@@ -208,7 +206,7 @@ class ApiResponse extends Plugin
      * Generates a response with a 405 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorMethodNotAllowed($message = 'Method Not Allowed', array $headers = [])
@@ -220,7 +218,7 @@ class ApiResponse extends Plugin
      * Generates a Response with a 431 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorUnwillingToProcess($message = 'Server is unwilling to process the request', array $headers = [])
@@ -232,7 +230,7 @@ class ApiResponse extends Plugin
      * Generates a Response with a 422 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param array $headers
      * @return mixed
      */
     public function errorUnprocessable($message = 'Unprocessable Entity', array $headers = [])
