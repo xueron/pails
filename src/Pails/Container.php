@@ -18,7 +18,7 @@ class Container extends Di\FactoryDefault
     /**
      * Pails Version
      */
-    const VERSION = '3.0.0';
+    const VERSION = '2.0.0-rc';
 
     /**
      * @var string
@@ -68,7 +68,6 @@ class Container extends Di\FactoryDefault
         foreach ($serviceProviders as $serviceProviderClass) {
             $this->registerService(new $serviceProviderClass($this));
         }
-        //throw new RuntimeException("aa");
     }
 
     /**
@@ -84,7 +83,9 @@ class Container extends Di\FactoryDefault
     }
 
     /**
-     * init
+     * 注册loader。
+     *
+     * 注：只注册项目自身的内容，其他内容通过composer.json，交给composer维护，有比较成熟的cache机制
      */
     protected function registerAutoLoader()
     {
@@ -100,6 +101,7 @@ class Container extends Di\FactoryDefault
             $this->libPath()
         ]);
 
+        //
         $loader->register();
 
         return $this;

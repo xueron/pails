@@ -18,13 +18,14 @@ class VoltServiceProvider extends AbstractServiceProvider
             $this->serviceName,
             function () {
                 $compiledPath = $this->tmpPath() . '/cache/volt/';
-                mkdir($compiledPath, 0755, true);
-
+                if (!file_exists($compiledPath)) {
+                    @mkdir($compiledPath, 0755, true);
+                }
                 $volt = new Volt($this->get('view'));
                 $volt->setOptions([
                     'compiledPath' => $compiledPath,
                     'compiledSeparator' => '_',
-                    'compileAlways' => true
+                    'compileAlways' => @constant('APP_DEBUG') ?: false
                 ]);
 
                 $volt->getCompiler()->addExtension(new VoltExtension());
