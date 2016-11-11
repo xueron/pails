@@ -22,7 +22,7 @@ class RouterServiceProvider extends AbstractServiceProvider
                 $router = new Annotations(false);
                 $router->removeExtraSlashes(true);
                 $router->setEventsManager($this->get('eventsManager'));
-                $router->setDefaultNamespace('App\\Controllers');
+                $router->setDefaultNamespace('App\\Http\\Controllers');
                 $router->setDefaultController('application');
                 $router->setDefaultAction('index');
 
@@ -59,12 +59,12 @@ class RouterServiceProvider extends AbstractServiceProvider
                 }
 
                 // 定义注解路由
-                $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
+                $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Http/Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
                 foreach ($iterator as $item) {
                     if (Text::endsWith($item, "Controller.php", false)) {
-                        $name = str_replace([$this->path('Controllers') . DIRECTORY_SEPARATOR, "Controller.php"], "", $item);
+                        $name = str_replace([$this->path('Http/Controllers') . DIRECTORY_SEPARATOR, "Controller.php"], "", $item);
                         $name = str_replace(DIRECTORY_SEPARATOR, "\\", $name);
-                        $router->addResource('App\\Controllers\\' . $name);
+                        $router->addResource('App\\Http\\Controllers\\' . $name);
                     }
                 }
 

@@ -16,6 +16,8 @@ use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 class Handler extends Component
 {
+    protected $debug = false;
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -29,6 +31,8 @@ class Handler extends Component
      */
     public function __construct(DiInterface $di = null)
     {
+        $this->debug = constant('APP_DEBUG') ?: false;
+
         if (is_object($di)) {
             $this->setDI($di);
         }
@@ -43,13 +47,19 @@ class Handler extends Component
     public function report(Exception $e)
     {
         if ($this->shouldReport($e)) {
+            $class = addslashes(get_class($e));
             $message = addslashes($e->getMessage());
+            $file = addslashes($e->getFile());
+            $line = addslashes($e->getLine());
+            $time = date("c");
 
             // log locally
-            error_log($message . "\n", 3, $this->getDI()->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
+            $log = sprintf("[%s] [%s] %s thrown in %s on line %d\n", $time, $class, $message, $file, $line);
+            error_log($log, 3, $this->getDI()->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
 
             // log to system
-            error_log($message);
+            $syslog = sprintf("[%s] %s thrown in %s on line %d", $class, $message, $file, $line);
+            error_log($syslog);
         }
     }
 
@@ -89,10 +99,9 @@ class Handler extends Component
      */
     public function render(Exception $e)
     {
-
         if ($this->isConsole()) {
             $output = new StreamOutput(fopen('php://stdout', 'w'));
-            $output->setVerbosity(APP_DEBUG ? OutputInterface::VERBOSITY_DEBUG : OutputInterface::VERBOSITY_NORMAL);
+            $output->setVerbosity($this->debug ? OutputInterface::VERBOSITY_DEBUG : OutputInterface::VERBOSITY_NORMAL);
             return $this->renderForConsole($output, $e);
         } else {
             return $this->renderForBrowser($e);
@@ -118,13 +127,13 @@ class Handler extends Component
                 "error" => $e->getMessage()
             ]);
         } else {
-            if (APP_DEBUG) {
+            if ($this->debug) {
                 $debug = new \Phalcon\Debug();
                 $debug->setUri('//static.pails.xueron.com/debug/3.0.x/');
                 $debug->onUncaughtException($e);
             } else {
                 $e = FlattenException::create($e);
-                $handler = new SymfonyExceptionHandler(APP_DEBUG);
+                $handler = new SymfonyExceptionHandler($this->debug);
                 echo $handler->getHtml($e);
             }
         }

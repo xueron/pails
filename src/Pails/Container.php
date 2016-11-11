@@ -5,16 +5,9 @@ use Pails\Exception\Handler;
 use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
-use Phalcon\Debug;
 use Phalcon\Di;
 use Phalcon\Loader;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-
-//
-defined('APP_DEBUG') or define('APP_DEBUG', false);
-$debug = new Debug();
-$debug->setUri('//static.pails.xueron.com/debug/3.0.x/');
-$debug->listen();
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
@@ -306,11 +299,11 @@ class Container extends Di\FactoryDefault
 
     public function renderException(\Exception $e)
     {
-        $this->get(Handler::class)->render($e);
+        $this->getShared(Handler::class)->render($e);
     }
 
     public function reportException(\Exception $e)
     {
-        $this->get(Handler::class)->report($e);
+        $this->getShared(Handler::class)->report($e);
     }
 }
