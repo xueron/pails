@@ -13,7 +13,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
  * @package Pails
  */
-class Container extends Di\FactoryDefault
+class Container extends Di\FactoryDefault implements ContainerInterface
 {
     /**
      * Pails Version

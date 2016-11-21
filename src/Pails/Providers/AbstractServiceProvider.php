@@ -5,6 +5,7 @@
  */
 namespace Pails\Providers;
 
+use Pails\ContainerInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\DiInterface;
 
@@ -19,9 +20,9 @@ abstract class AbstractServiceProvider extends Injectable  implements ServicePro
     /**
      * AbstractServiceProvider constructor.
      *
-     * @param DiInterface $di The Dependency Injector.
+     * @param ContainerInterface|DiInterface $di
      */
-    public function __construct(DiInterface $di)
+    public function __construct(ContainerInterface $di)
     {
         $this->setDI($di);
     }

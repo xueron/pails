@@ -33,11 +33,14 @@ class Application extends ApplicationBase implements InjectionAwareInterface
      *
      * Initialize the Pails console application.
      *
-     * @param string $version The Application Version
+     * @param DiInterface $di
+     * @internal param string $version The Application Version
      */
-    public function __construct($version = '0.0.1')
+    public function __construct(DiInterface $di)
     {
-        parent::__construct('Pails', $version);
+        $this->setDI($di);
+
+        parent::__construct('Pails', $this->di->version());
 
         // For Phinx, set configuration file by default
         $this->getDefinition()->addOption(new InputOption('--configuration', '-c', InputOption::VALUE_REQUIRED, 'The configuration file to load'));
