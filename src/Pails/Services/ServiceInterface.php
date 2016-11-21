@@ -3,8 +3,6 @@
  * ServiceInterface.php
  *
  */
-
-
 namespace Pails\Services;
 
 use Phalcon\Di\InjectionAwareInterface;
