@@ -5,10 +5,10 @@
  */
 namespace Pails\Providers;
 
+use Phalcon\Di\Injectable;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\User\Component;
 
-abstract class AbstractServiceProvider extends Component implements ServiceProviderInterface
+abstract class AbstractServiceProvider extends Injectable  implements ServiceProviderInterface
 {
     /**
      * The Service name.
