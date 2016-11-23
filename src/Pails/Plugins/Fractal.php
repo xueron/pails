@@ -25,7 +25,7 @@ class Fractal extends Plugin
 
     public function item($data, $transformer, $resourceKey = null, $meta = [])
     {
-        if (!is_object($transformer)) {
+        if (!is_object($transformer) && !is_callable($transformer)) {
             $transformer = $this->getDI()->getShared($transformer);
         }
         $resource = new Item($data, $transformer, $resourceKey);
@@ -41,7 +41,7 @@ class Fractal extends Plugin
 
     public function collection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [])
     {
-        if (!is_object($transformer)) {
+        if (!is_object($transformer) && !is_callable($transformer)) {
             $transformer = $this->getDI()->getShared($transformer);
         }
 
