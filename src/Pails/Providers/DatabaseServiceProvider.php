@@ -10,7 +10,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
 
     public function register()
     {
-        $this->getDI()->setShared(
+        $this->getDI()->set(
             $this->serviceName,
             function () {
                 $env = env('APP_ENV', 'development');
