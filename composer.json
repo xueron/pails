@@ -42,8 +42,5 @@
     "psr-4": {
       "Test\\Pails\\": "tests/Pails"
     }
-  },
-  "bin": [
-    "bin/pails"
-  ]
+  }
 }
