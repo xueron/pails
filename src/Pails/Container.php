@@ -1,11 +1,13 @@
 <?php
 namespace Pails;
 
+use Pails\Console\Application;
 use Pails\Exception\Handler;
 use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\Di;
+use Phalcon\Http\Response;
 use Phalcon\Loader;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
@@ -289,7 +291,15 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     {
         try {
             $app = $this->getShared($appClass);
-            $app->init()->boot()->handle()->send();
+
+            $res = $app->init()->boot()->handle();
+
+            // Mvc Application
+            if ($res instanceof Response) {
+                $res->send();
+            } elseif (is_int($res) && $app instanceof Application) {
+                exit($res);
+            }
         } catch (\Exception $e) {
             $this->reportException($e);
             $this->renderException($e);

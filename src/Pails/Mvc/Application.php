@@ -1,11 +1,12 @@
 <?php
 namespace Pails\Mvc;
+use Pails\ApplicationInterface;
 
 /**
  * Class Application
  * @package Pails\Mvc
  */
-abstract class Application extends \Phalcon\Mvc\Application
+abstract class Application extends \Phalcon\Mvc\Application implements ApplicationInterface
 {
     protected $providers = [];
 

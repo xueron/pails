@@ -1,23 +1,27 @@
 <?php
 namespace Pails\Console;
 
+use Pails\ApplicationInterface;
+use Pails\Console\Commands;
+use Pails\ContainerInterface;
+use Phalcon\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Symfony\Component\Console\Application as ApplicationBase;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Pails\Console\Command as PailsCommand;
-use Phinx\Console\Command as PhinxCommand;
 
 /**
  * Pails console application.
  *
  */
-class Application extends ApplicationBase implements InjectionAwareInterface
+abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface
 {
     /**
-     * @var
+     * @var DiInterface
      */
     protected $di;
 
@@ -29,16 +33,42 @@ class Application extends ApplicationBase implements InjectionAwareInterface
     protected $lastOutput;
 
     /**
+     * Service Providers want to be injected
+     *
+     * @var array
+     */
+    protected $providers = [
+
+    ];
+
+    /**
+     * Commands
+     *
+     * @var array
+     */
+    protected $commands = [
+
+    ];
+
+    protected $pailsCommands = [
+        Commands\HelloWorldCommand::class
+    ];
+
+    /**
      * Class Constructor.
      *
      * Initialize the Pails console application.
      *
-     * @param DiInterface $di
+     * @param ContainerInterface|DiInterface $di
      * @internal param string $version The Application Version
      */
-    public function __construct(DiInterface $di)
+    public function __construct(ContainerInterface $di = null)
     {
-        $this->setDI($di);
+        if ($di) {
+            $this->setDI($di);
+        } else {
+            $this->setDI(Di::getDefault());
+        }
 
         parent::__construct('Pails', $this->di->version());
 
@@ -46,15 +76,20 @@ class Application extends ApplicationBase implements InjectionAwareInterface
         $this->getDefinition()->addOption(new InputOption('--configuration', '-c', InputOption::VALUE_REQUIRED, 'The configuration file to load'));
         array_push($_SERVER['argv'], '--configuration=config/database.yml');
 
-        //
+        // Phinx commands wraps
         $this->addCommands(array(
-            // Pails
-            new PailsCommand\Create(),
-            new PailsCommand\Db\Init()
+            new Commands\Db\InitCommand(),
+            new Commands\Db\BreakpointCommand(),
+            new Commands\Db\CreateCommand(),
+            new Commands\Db\MigrateCommand(),
+            new Commands\Db\RollbackCommand(),
+            new Commands\Db\SeedCreateCommand(),
+            new Commands\Db\SeedRunCommand(),
+            new Commands\Db\StatusCommand()
         ));
 
-        $this->setAutoExit(false);
-        $this->setCatchExceptions(false);
+        // Pails commands
+        $this->resolveCommands($this->pailsCommands);
     }
 
     /**
@@ -105,7 +140,29 @@ class Application extends ApplicationBase implements InjectionAwareInterface
     }
 
     /**
-     * @return \Phalcon\Di
+     * Run an Artisan console command by name.
+     *
+     * @param  string  $command
+     * @param  array  $parameters
+     * @return int
+     */
+    public function call($command, array $parameters = [])
+    {
+        array_unshift($parameters, $command);
+
+        $this->lastOutput = new BufferedOutput;
+
+        $this->setCatchExceptions(false);
+
+        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
+
+        $this->setCatchExceptions(true);
+
+        return $result;
+    }
+
+    /**
+     * @return \Phalcon\DiInterface
      */
     public function getDI()
     {
@@ -120,5 +177,69 @@ class Application extends ApplicationBase implements InjectionAwareInterface
     public function setDI(DiInterface $dependencyInjector)
     {
         $this->di = $dependencyInjector;
+    }
+
+    /**
+     * register services
+     */
+    public function boot()
+    {
+        $this->di->registerServices($this->providers);
+
+        return $this;
+    }
+
+    public function init()
+    {
+        $this->resolveCommands($this->commands);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function handle()
+    {
+        $exitCode = $this->run();
+        return $exitCode;
+    }
+
+    /**
+     * Add a command, resolving through the application.
+     *
+     * @param  string  $command
+     * @return \Symfony\Component\Console\Command\Command
+     */
+    public function resolve($command)
+    {
+        return $this->add($this->di->get($command));
+    }
+
+    /**
+     * Resolve an array of commands through the application.
+     *
+     * @param  array|mixed  $commands
+     * @return $this
+     */
+    public function resolveCommands($commands)
+    {
+        $commands = is_array($commands) ? $commands : func_get_args();
+
+        foreach ($commands as $command) {
+            $this->resolve($command);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the output for the last run command.
+     *
+     * @return string
+     */
+    public function output()
+    {
+        return $this->lastOutput ? $this->lastOutput->fetch() : '';
     }
 }

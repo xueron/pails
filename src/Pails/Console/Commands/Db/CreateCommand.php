@@ -1,13 +1,15 @@
 <?php
-namespace Pails\Console\Command\Db;
+namespace Pails\Console\Commands\Db;
 
 
-class Create extends \Phinx\Console\Command\Create
+use Phinx\Console\Command\Create;
+
+class CreateCommand extends Create
 {
     protected function configure()
     {
         parent::configure();
+
         $this->setName('db:create');
     }
-
 }
