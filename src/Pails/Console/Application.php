@@ -140,7 +140,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     }
 
     /**
-     * Run an Artisan console command by name.
+     * Run an console command by name.
      *
      * @param  string  $command
      * @param  array  $parameters
@@ -201,8 +201,19 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      */
     public function handle()
     {
-        $exitCode = $this->run();
-        return $exitCode;
+        $result = $this->run();
+
+        return $result;
+    }
+
+    /**
+     * Get the output for the last run command.
+     *
+     * @return string
+     */
+    public function output()
+    {
+        return $this->lastOutput ? $this->lastOutput->fetch() : '';
     }
 
     /**
@@ -231,15 +242,5 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         }
 
         return $this;
-    }
-
-    /**
-     * Get the output for the last run command.
-     *
-     * @return string
-     */
-    public function output()
-    {
-        return $this->lastOutput ? $this->lastOutput->fetch() : '';
     }
 }

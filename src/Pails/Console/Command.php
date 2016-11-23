@@ -165,6 +165,13 @@ class Command extends SymfonyCommand implements InjectionAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // set env through argument --env
+        if ($input->hasOption('env')) {
+            $env = $input->getOption('env');
+            putenv("APP_ENV=$env");
+        }
+
+        // call method defined in Command.
         return call_user_func_array([$this, 'handle'], []);
     }
 
