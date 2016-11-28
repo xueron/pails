@@ -7,6 +7,10 @@ use Phalcon\Mvc\User\Plugin;
 
 class CustomRender extends Plugin
 {
+    /**
+     * @param EventInterface $event
+     * @param DispatcherInterface $dispatcher
+     */
     public function beforeExecuteRoute(EventInterface $event, DispatcherInterface $dispatcher)
     {
         $defaultNamespace = $dispatcher->getDefaultNamespace();

@@ -57,6 +57,11 @@ class ApiResponse extends Plugin
     }
 
 
+    /**
+     * @param array $data
+     * @param array $headers
+     * @return mixed
+     */
     public function response(array $data, array $headers = [])
     {
         $response = $this->getDI()->getShared('response');
@@ -70,6 +75,11 @@ class ApiResponse extends Plugin
         return $response;
     }
 
+    /**
+     * @param array $array
+     * @param array $headers
+     * @return mixed
+     */
     public function withArray(array $array, array $headers = [])
     {
         $status = $this->getStatusCode() == 200;
@@ -82,6 +92,14 @@ class ApiResponse extends Plugin
         return $this->response($data, $headers);
     }
 
+    /**
+     * 出错的返回
+     *
+     * @param $message
+     * @param $errorCode
+     * @param array $headers
+     * @return mixed
+     */
     public function withError($message, $errorCode, array $headers = [])
     {
         $data = [
@@ -94,6 +112,24 @@ class ApiResponse extends Plugin
                 'http_code' => $this->statusCode,
                 'message' => $message
             ]
+        ];
+        return $this->response($data, $headers);
+    }
+
+    /**
+     * 成功的返回
+     *
+     * @param string $message
+     * @param array $headers
+     * @return mixed
+     */
+    public function withSuccess($message = 'success', array $headers = [])
+    {
+        $data = [
+            "status" => true,
+            "success" => true,
+            "code" => $this->getStatusCode(),
+            "msg" => $message,
         ];
         return $this->response($data, $headers);
     }

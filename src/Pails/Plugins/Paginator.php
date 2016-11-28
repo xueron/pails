@@ -15,6 +15,9 @@ class Paginator extends QueryBuilder
 
     protected $_paginator = null;
 
+    /**
+     * @return null|\stdClass
+     */
     public function getPaginate()
     {
         if ($this->_paginator == null) {
@@ -23,6 +26,9 @@ class Paginator extends QueryBuilder
         return $this->_paginator;
     }
 
+    /**
+     * @return null
+     */
     public function getData()
     {
         if ($this->_paginator == null) {
@@ -34,6 +40,9 @@ class Paginator extends QueryBuilder
         return $this->_data;
     }
 
+    /**
+     * @return array|null
+     */
     public function getMeta()
     {
         if ($this->_paginator == null) {

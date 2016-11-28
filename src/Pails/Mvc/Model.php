@@ -57,7 +57,8 @@ abstract class Model extends PhalconModel
      * @param $parameters
      * @param int $limit
      * @param int $page
-     * @return mixed
+     * @return \Pails\Plugins\Paginator
+
      */
     public static function list($parameters = null, $page = 1, $limit = 20)
     {

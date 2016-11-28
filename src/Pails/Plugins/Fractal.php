@@ -13,6 +13,10 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Phalcon\Mvc\User\Plugin;
 
+/**
+ * Class Fractal
+ * @package Pails\Plugins
+ */
 class Fractal extends Plugin
 {
     /**
@@ -23,6 +27,13 @@ class Fractal extends Plugin
         return $this->getDI()->getShared(Manager::class);
     }
 
+    /**
+     * @param $data
+     * @param $transformer
+     * @param null $resourceKey
+     * @param array $meta
+     * @return array
+     */
     public function item($data, $transformer, $resourceKey = null, $meta = [])
     {
         if (!is_object($transformer) && !is_callable($transformer)) {
@@ -39,6 +50,14 @@ class Fractal extends Plugin
         return $rootScope->toArray();
     }
 
+    /**
+     * @param $data
+     * @param $transformer
+     * @param null $resourceKey
+     * @param Cursor|null $cursor
+     * @param array $meta
+     * @return array
+     */
     public function collection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [])
     {
         if (!is_object($transformer) && !is_callable($transformer)) {

@@ -14,7 +14,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
-class Command extends SymfonyCommand implements InjectionAwareInterface
+/**
+ * Class Command
+ * @package Pails\Console
+ */
+abstract class Command extends SymfonyCommand implements InjectionAwareInterface
 {
     /**
      * The Laravel application instance.

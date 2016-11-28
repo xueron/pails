@@ -310,11 +310,17 @@ class Container extends Di\FactoryDefault implements ContainerInterface
         }
     }
 
+    /**
+     * @param \Exception $e
+     */
     public function renderException(\Exception $e)
     {
         $this->getShared(Handler::class)->render($e);
     }
 
+    /**
+     * @param \Exception $e
+     */
     public function reportException(\Exception $e)
     {
         $this->getShared(Handler::class)->report($e);
