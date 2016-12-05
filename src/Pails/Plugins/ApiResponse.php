@@ -9,23 +9,18 @@ use Phalcon\Mvc\User\Plugin;
 
 class ApiResponse extends Plugin
 {
-    const CODE_WRONG_ARGS = 'GEN-WRONG-ARGS';
-
-    const CODE_NOT_FOUND = 'GEN-NOT-FOUND';
-
-    const CODE_INTERNAL_ERROR = 'GEN-INTERNAL-ERROR';
-
-    const CODE_UNAUTHORIZED = 'GEN-UNAUTHORIZED';
-
-    const CODE_FORBIDDEN = 'GEN-FORBIDDEN';
-
-    const CODE_GONE = 'GEN-GONE';
-
-    const CODE_METHOD_NOT_ALLOWED = 'GEN-METHOD-NOT-ALLOWED';
-
-    const CODE_UNWILLING_TO_PROCESS = 'GEN-UNWILLING-TO-PROCESS';
-
-    const CODE_UNPROCESSABLE = 'GEN-UNPROCESSABLE';
+    /**
+     * Common error code
+     */
+    const CODE_WRONG_ARGS = 400;
+    const CODE_UNAUTHORIZED = 401;
+    const CODE_FORBIDDEN = 403;
+    const CODE_NOT_FOUND = 404;
+    const CODE_METHOD_NOT_ALLOWED = 405;
+    const CODE_GONE = 410;
+    const CODE_UNPROCESSABLE = 422;
+    const CODE_UNWILLING_TO_PROCESS = 431;
+    const CODE_INTERNAL_ERROR = 500;
 
     /**
      * HTTP Status code
@@ -93,14 +88,18 @@ class ApiResponse extends Plugin
     }
 
     /**
-     * 出错的返回
+     * 出错的返回.
      *
+     * 我们约定：
+     *     5XX 为服务器端的内部错误，如数据库存取失败等等；
+     *     4XX 是客户端引起的错误，如参数不对、没有授权等等；
+     *         更多的状态码，可以自定义；
      * @param $message
      * @param $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function withError($message, $errorCode, array $headers = [])
+    public function withError($message, $errorCode = 500, array $headers = [])
     {
         $data = [
             "status" => false,
@@ -175,7 +174,7 @@ class ApiResponse extends Plugin
      */
     public function errorForbidden($message = 'Forbidden', array $headers = [])
     {
-        return $this->setStatusCode(403)->withError($message, static::CODE_FORBIDDEN, $headers);
+        return $this->withError($message, static::CODE_FORBIDDEN, $headers);
     }
 
     /**
@@ -187,7 +186,7 @@ class ApiResponse extends Plugin
      */
     public function errorInternalError($message = 'Internal Error', array $headers = [])
     {
-        return $this->setStatusCode(500)->withError($message, static::CODE_INTERNAL_ERROR, $headers);
+        return $this->withError($message, static::CODE_INTERNAL_ERROR, $headers);
     }
 
     /**
@@ -199,7 +198,7 @@ class ApiResponse extends Plugin
      */
     public function errorNotFound($message = 'Resource Not Found', array $headers = [])
     {
-        return $this->setStatusCode(404)->withError($message, static::CODE_NOT_FOUND, $headers);
+        return $this->withError($message, static::CODE_NOT_FOUND, $headers);
     }
 
     /**
@@ -211,7 +210,7 @@ class ApiResponse extends Plugin
      */
     public function errorUnauthorized($message = 'Unauthorized', array $headers = [])
     {
-        return $this->setStatusCode(401)->withError($message, static::CODE_UNAUTHORIZED, $headers);
+        return $this->withError($message, static::CODE_UNAUTHORIZED, $headers);
     }
 
     /**
@@ -223,7 +222,7 @@ class ApiResponse extends Plugin
      */
     public function errorWrongArgs($message = 'Wrong Arguments', array $headers = [])
     {
-        return $this->setStatusCode(400)->withError($message, static::CODE_WRONG_ARGS, $headers);
+        return $this->withError($message, static::CODE_WRONG_ARGS, $headers);
     }
 
     /**
@@ -235,7 +234,7 @@ class ApiResponse extends Plugin
      */
     public function errorGone($message = 'Resource No Longer Available', array $headers = [])
     {
-        return $this->setStatusCode(410)->withError($message, static::CODE_GONE, $headers);
+        return $this->withError($message, static::CODE_GONE, $headers);
     }
 
     /**
@@ -247,7 +246,7 @@ class ApiResponse extends Plugin
      */
     public function errorMethodNotAllowed($message = 'Method Not Allowed', array $headers = [])
     {
-        return $this->setStatusCode(405)->withError($message, static::CODE_METHOD_NOT_ALLOWED, $headers);
+        return $this->withError($message, static::CODE_METHOD_NOT_ALLOWED, $headers);
     }
 
     /**
@@ -259,7 +258,7 @@ class ApiResponse extends Plugin
      */
     public function errorUnwillingToProcess($message = 'Server is unwilling to process the request', array $headers = [])
     {
-        return $this->setStatusCode(431)->withError($message, static::CODE_UNWILLING_TO_PROCESS, $headers);
+        return $this->withError($message, static::CODE_UNWILLING_TO_PROCESS, $headers);
     }
 
     /**
@@ -271,6 +270,6 @@ class ApiResponse extends Plugin
      */
     public function errorUnprocessable($message = 'Unprocessable Entity', array $headers = [])
     {
-        return $this->setStatusCode(422)->withError($message, static::CODE_UNPROCESSABLE, $headers);
+        return $this->withError($message, static::CODE_UNPROCESSABLE, $headers);
     }
 }
