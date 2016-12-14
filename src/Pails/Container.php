@@ -42,7 +42,8 @@ class Container extends Di\FactoryDefault implements ContainerInterface
         Providers\RouterServiceProvider::class,
         Providers\ViewServiceProvider::class,
         Providers\VoltServiceProvider::class,
-        Providers\LoggerServiceProvider::class
+        Providers\LoggerServiceProvider::class,
+        Providers\RandomServiceProvider::class
     ];
 
     /**
