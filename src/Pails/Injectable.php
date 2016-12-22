@@ -42,7 +42,7 @@ abstract class Injectable extends \Phalcon\Di\Injectable
         }
         $message = sprintf("[%s] %s", $class, $message);
 
-        if (isset($this->logger) && ($this->logger instanceof Adapter::class)) {
+        if (isset($this->logger) && ($this->logger instanceof Adapter)) {
             if (method_exists($this->logger, $method)) {
                 return $this->logger->$method($message);
             } else {
