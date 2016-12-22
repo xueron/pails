@@ -30,6 +30,7 @@ abstract class Injectable extends \Phalcon\Di\Injectable
 {
     public function __call($method, $args)
     {
+        // 处理需要日志的信息
         $message = array_shift($args);
         if (is_resource($message)) {
             $message = sprintf("resource-type=%s", get_resource_type($message));
@@ -41,25 +42,25 @@ abstract class Injectable extends \Phalcon\Di\Injectable
             }
         }
 
+        // 获取debug信息
         $file = '';
         $line = '';
         $class = static::class;
         $function = '';
+        $trace = debug_backtrace();
+        array_shift($trace);
+        $_first = array_shift($trace);
+        if ($_first) {
+            $file = $_first['file'];
+            $line = $_first['line'];
+            $class = $_first['class'];
+            $function = $_first['function'];
+        }
+
         if (defined('APP_DEBUG') && APP_DEBUG) {
-            $trace = debug_backtrace();
-            $_first = array_shift($trace);
-            $_second = array_shift($trace);
-            if ($_first) {
-                $file = $_first['file'];
-                $line = $_first['line'];
-            }
-            if ($_second) {
-                $class = $_second['class'];
-                $function = $_second['function'];
-            }
-            $message = sprintf("[%s::%s] [file=%s line=%s] %s", $class, $function, $file, $line, $message);
+            $message = sprintf("[%s::%s] %s [file=%s line=%s]", $class, $function, $message, $file, $line);
         } else {
-            $message = sprintf("[%s] %s", $class, $message);
+            $message = sprintf("[%s::%s] %s", $class, $function, $message);
         }
         array_unshift($args, $message);
 
