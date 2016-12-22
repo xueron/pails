@@ -134,6 +134,19 @@ class ApiResponse extends Plugin
     }
 
     /**
+     * 成功的返回, 携带有效数据
+     *
+     * @param mixed $data
+     * @param array $headers
+     * @return mixed
+     */
+    public function withData($data, array $headers = []) {
+        return $this->withArray([
+            'data' => $data
+        ], $headers);
+    }
+
+    /**
      * Response for one item
      *
      * @param $data
