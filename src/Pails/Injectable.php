@@ -58,7 +58,7 @@ abstract class Injectable extends \Phalcon\Di\Injectable
         }
 
         if (defined('APP_DEBUG') && APP_DEBUG) {
-            $message = sprintf("[%s::%s] %s [file=%s line=%s]", $class, $function, $message, $file, $line);
+            $message = sprintf("[%s::%s] %s [file=%s, line=%s]", $class, $function, $message, $file, $line);
         } else {
             $message = sprintf("[%s::%s] %s", $class, $function, $message);
         }
