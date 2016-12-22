@@ -8,8 +8,6 @@
 
 namespace Pails;
 
-use Phalcon\Logger\Adapter;
-
 /**
  * Class Injectable
  * @package Pails
@@ -30,26 +28,44 @@ use Phalcon\Logger\Adapter;
  */
 abstract class Injectable extends \Phalcon\Di\Injectable
 {
-    public function __call($method, $message)
+    public function __call($method, $args)
     {
-        $class = static::class;
+        $message = array_shift($args);
         if (is_resource($message)) {
             $message = sprintf("resource-type=%s", get_resource_type($message));
+        } elseif (is_object($message)) {
+            $message = var_export($message, 1);
         } else {
             if (!is_scalar($message)) {
                 $message = serialize($message);
             }
         }
-        $message = sprintf("[%s] %s", $class, $message);
 
-        if (isset($this->logger) && ($this->logger instanceof Adapter)) {
-            if (method_exists($this->logger, $method)) {
-                return $this->logger->$method($message);
-            } else {
-                error_log("method $method not supported");
-                error_log($message);
+        $file = '';
+        $line = '';
+        $class = static::class;
+        $function = '';
+        if (defined('APP_DEBUG') && APP_DEBUG) {
+            $trace = debug_backtrace();
+            $_first = array_shift($trace);
+            $_second = array_shift($trace);
+            if ($_first) {
+                $file = $_first['file'];
+                $line = $_first['line'];
             }
+            if ($_second) {
+                $class = $_second['class'];
+                $function = $_second['function'];
+            }
+            $message = sprintf("[%s::%s] [file=%s line=%s] %s", $class, $function, $file, $line, $message);
         } else {
+            $message = sprintf("[%s] %s", $class, $message);
+        }
+        array_unshift($args, $message);
+
+        try {
+            return call_user_func_array([$this->logger, $method], $args);
+        } catch (\Exception $e) {
             error_log($message);
         }
     }
