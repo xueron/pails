@@ -11,6 +11,7 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 PhalconModel::setup([
     'exceptionOnFailedSave' => true, // 启用异常
+    'ignoreUnknownColumns' => true, // 忽略不存在的字段
 ]);
 
 abstract class Model extends PhalconModel
