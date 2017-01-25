@@ -21,7 +21,7 @@ class VoltServiceProvider extends AbstractServiceProvider
                 if (!file_exists($compiledPath)) {
                     @mkdir($compiledPath, 0755, true);
                 }
-                $volt = new Volt($this->get('view'));
+                $volt = new Volt($this->get('view'), $this);
                 $volt->setOptions([
                     'compiledPath' => $compiledPath,
                     'compiledSeparator' => '_',
