@@ -5,7 +5,7 @@
  */
 namespace Pails\Providers;
 
-use Pails\Collection\Collection;
+use Pails\Collection;
 
 class CollectionServiceProvider extends AbstractServiceProvider
 {

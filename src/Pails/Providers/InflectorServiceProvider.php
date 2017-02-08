@@ -5,7 +5,7 @@
  */
 namespace Pails\Providers;
 
-use Pails\Plugins\Inflector;
+use Pails\Pluralizer;
 
 class InflectorServiceProvider extends AbstractServiceProvider
 {
@@ -15,7 +15,7 @@ class InflectorServiceProvider extends AbstractServiceProvider
     {
         $this->getDI()->setShared(
             $this->serviceName,
-            Inflector::class
+            Pluralizer::class
         );
     }
 }

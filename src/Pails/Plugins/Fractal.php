@@ -11,13 +11,13 @@ use League\Fractal\Manager;
 use League\Fractal\Pagination\Cursor;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
-use Phalcon\Mvc\User\Plugin;
+use Pails\Injectable;
 
 /**
  * Class Fractal
  * @package Pails\Plugins
  */
-class Fractal extends Plugin
+class Fractal extends Injectable
 {
     /**
      * @return Manager

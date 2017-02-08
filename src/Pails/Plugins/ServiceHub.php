@@ -5,9 +5,9 @@
  */
 namespace Pails\Plugins;
 
-use Phalcon\Mvc\User\Plugin;
+use Pails\Injectable;
 
-class ServiceHub extends Plugin
+class ServiceHub extends Injectable
 {
     public function service($service)
     {

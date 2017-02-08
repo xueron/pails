@@ -13,9 +13,9 @@ namespace Pails;
  * @package Pails
  *
  * @property \Pails\Plugins\ApiResponse $apiResponse
- * @property \Pails\Collection\Collection collection
+ * @property \Pails\Collection $collection
  * @property \Pails\Plugins\Fractal $fractal
- * @property \Pails\Plugins\Inflector $inflector
+ * @property \Pails\Pluralizer $inflector
  * @property \Phalcon\Logger\Adapter\File $logger
  * @method \Phalcon\Logger\AdapterInterface error($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface info($message, array $context = [])

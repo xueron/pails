@@ -1,5 +1,6 @@
 <?php
 namespace Pails\Plugins;
+
 class VoltExtension
 {
     /**

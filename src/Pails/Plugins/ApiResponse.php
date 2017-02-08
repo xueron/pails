@@ -5,9 +5,9 @@
  */
 namespace Pails\Plugins;
 
-use Phalcon\Mvc\User\Plugin;
+use Pails\Injectable;
 
-class ApiResponse extends Plugin
+class ApiResponse extends Injectable
 {
     /**
      * Common error code

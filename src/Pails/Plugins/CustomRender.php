@@ -1,11 +1,11 @@
 <?php
 namespace Pails\Plugins;
 
+use Pails\Injectable;
 use Phalcon\Events\EventInterface;
 use Phalcon\Mvc\DispatcherInterface;
-use Phalcon\Mvc\User\Plugin;
 
-class CustomRender extends Plugin
+class CustomRender extends Injectable
 {
     /**
      * @param EventInterface $event
