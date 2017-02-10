@@ -42,7 +42,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     ];
 
     /**
-     * Commands
+     * 应用创建的命令
      *
      * @var array
      */
@@ -50,8 +50,15 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
 
     ];
 
+    /**
+     * Pails 内建的命令
+     *
+     * @var array
+     */
     protected $pailsCommands = [
-        Commands\HelloWorldCommand::class
+        Commands\HelloWorldCommand::class,
+        Commands\Cache\ClearCommand::class,
+        Commands\Route\ClearCacheCommand::class
     ];
 
     /**

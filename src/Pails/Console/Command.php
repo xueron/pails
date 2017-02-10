@@ -2,6 +2,7 @@
 
 namespace Pails\Console;
 
+use Pails\Container;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Symfony\Component\Console\Helper\Table;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 /**
  * Class Command
+ *
  * @package Pails\Console
  */
 abstract class Command extends SymfonyCommand implements InjectionAwareInterface
@@ -23,7 +25,7 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * The Laravel application instance.
      *
-     * @var DiInterface
+     * @var Container
      */
     protected $di;
 
