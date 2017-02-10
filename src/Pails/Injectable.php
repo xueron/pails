@@ -13,10 +13,12 @@ namespace Pails;
  * @package Pails
  *
  * @property \Pails\Plugins\ApiResponse $apiResponse
- * @property \Pails\Collection $collection
  * @property \Pails\Plugins\Fractal $fractal
  * @property \Pails\Pluralizer $inflector
  * @property \Phalcon\Logger\Adapter\File $logger
+ * @property \Phalcon\Logger\Adapter\File $errorLogger
+ * @property \Pails\Plugins\Config $config
+ * @property \Phalcon\Cache\Backend\File $cache
  * @method \Phalcon\Logger\AdapterInterface error($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface info($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface debug($message, array $context = [])

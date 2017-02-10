@@ -9,6 +9,7 @@ use Phalcon\Config;
 use Phalcon\Di;
 use Phalcon\Http\Response;
 use Phalcon\Loader;
+use Phalcon\Version;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 /**
@@ -20,7 +21,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '2.0.0-rc';
+    const VERSION = '3.0.0-dev';
 
     /**
      * @var string
@@ -33,17 +34,9 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      * @var array
      */
     protected $providers = [
-        Providers\ApiResponseServiceProvider::class,
-        Providers\CollectionServiceProvider::class,
+        Providers\PailsServiceProvider::class,
         Providers\DatabaseServiceProvider::class,
-        Providers\DispatcherServiceProvider::class,
-        Providers\FractalServiceProvider::class,
-        Providers\InflectorServiceProvider::class,
         Providers\RouterServiceProvider::class,
-        Providers\ViewServiceProvider::class,
-        Providers\VoltServiceProvider::class,
-        Providers\LoggerServiceProvider::class,
-        Providers\RandomServiceProvider::class
     ];
 
     /**
@@ -61,6 +54,16 @@ class Container extends Di\FactoryDefault implements ContainerInterface
         $this->registerAutoLoader();
 
         $this->registerServices($this->providers);
+    }
+
+    /**
+     * 获取应用的环境
+     *
+     * @return string
+     */
+    public function environment()
+    {
+        return env('APP_ENV', 'development');
     }
 
     /**
@@ -112,13 +115,23 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     }
 
     /**
-     * Get the version number of the application.
+     * Get the version number of pails.
      *
      * @return string
      */
     public function version()
     {
         return static::VERSION;
+    }
+
+    /**
+     * Get the version number of the phalcon framework.
+     *
+     * @return string
+     */
+    public function getPhalconVersion()
+    {
+        return Version::get();
     }
 
     /**

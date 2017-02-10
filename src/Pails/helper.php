@@ -12,7 +12,7 @@ if (!function_exists('app')) {
      *
      * @param null $name
      * @param array $parameters
-     * @return mixed|\Phalcon\DI\FactoryDefault|Di\FactoryDefault\Cli
+     * @return mixed|\Phalcon\DI\FactoryDefault|Di\FactoryDefault\Cli|\Pails\Container
      */
     function app($name = null, $parameters = [])
     {

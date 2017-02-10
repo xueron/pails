@@ -6,12 +6,10 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 
 class DatabaseServiceProvider extends AbstractServiceProvider
 {
-    protected $serviceName = 'db';
-
     public function register()
     {
         $this->getDI()->set(
-            $this->serviceName,
+            'db',
             function () {
                 $env = env('APP_ENV', 'development');
                 $yaml = Yaml::parse(@file_get_contents($this->configPath() . '/database.yml'));
@@ -30,4 +28,3 @@ class DatabaseServiceProvider extends AbstractServiceProvider
         );
     }
 }
-

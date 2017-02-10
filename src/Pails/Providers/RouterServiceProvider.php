@@ -35,6 +35,7 @@ class RouterServiceProvider extends AbstractServiceProvider
                 // GET	        /photo/{photo}/edit	edit	photo.edit
                 // PUT/PATCH	/photo/{photo}	    update	photo.update
                 // DELETE	    /photo/{photo}	    destroy	photo.destroy
+
 //                foreach ($this->getConfig('routes') as $url => $route) {
 //                $resourceDefaults = ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'];
 //

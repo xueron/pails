@@ -5,9 +5,7 @@
  */
 namespace Pails\Providers;
 
-use Phalcon\Di\InjectionAwareInterface;
-
-interface ServiceProviderInterface extends InjectionAwareInterface
+interface ServiceProviderInterface
 {
     /**
      * Register application service.
@@ -15,11 +13,4 @@ interface ServiceProviderInterface extends InjectionAwareInterface
      * @return mixed
      */
     public function register();
-
-    /**
-     * Gets the Service name.
-     *
-     * @return string
-     */
-    public function getName();
 }

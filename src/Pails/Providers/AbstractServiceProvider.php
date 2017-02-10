@@ -6,17 +6,12 @@
 namespace Pails\Providers;
 
 use Pails\ContainerInterface;
-use Phalcon\Di\Injectable;
+use Pails\Injectable;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 
-abstract class AbstractServiceProvider extends Injectable  implements ServiceProviderInterface
+abstract class AbstractServiceProvider extends Injectable  implements ServiceProviderInterface, InjectionAwareInterface
 {
-    /**
-     * The Service name.
-     * @var string
-     */
-    protected $serviceName;
-
     /**
      * AbstractServiceProvider constructor.
      *
@@ -25,16 +20,6 @@ abstract class AbstractServiceProvider extends Injectable  implements ServicePro
     public function __construct(ContainerInterface $di)
     {
         $this->setDI($di);
-    }
-
-    /**
-     * Gets the Service name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->serviceName;
     }
 
     abstract function register();
