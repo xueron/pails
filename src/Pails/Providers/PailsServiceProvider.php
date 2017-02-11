@@ -182,7 +182,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $volt->setOptions([
                     'compiledPath' => $compiledPath,
                     'compiledSeparator' => '_',
-                    'compileAlways' => @constant('APP_DEBUG') ?: false
+                    'compileAlways' => $this->get('config')->get('app.debug', false)
                 ]);
 
                 $volt->getCompiler()->addExtension(new VoltExtension());
@@ -197,7 +197,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             function () {
 
                 $url = new Url();
-                if ($baseUrl = $this->config->get('url.base_url')) {
+                if ($baseUrl = $this->get('config')->get('url.base_url')) {
                     $url->setBaseUri($baseUrl);
                 }
                 return $url;

@@ -87,6 +87,7 @@ abstract class Model extends PhalconModel
             "limit" => $limit,
             "page" => $page
         ];
+
         return $di->get("Pails\\Plugins\\Paginator", [$options]);
     }
 }

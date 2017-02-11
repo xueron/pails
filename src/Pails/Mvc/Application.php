@@ -12,6 +12,7 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
 
     /**
      * register services
+     * @return $this
      */
     public function boot()
     {
@@ -20,6 +21,9 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function init()
     {
         return $this;

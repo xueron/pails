@@ -5,6 +5,8 @@ namespace Pails\Console;
 use Pails\Container;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -20,14 +22,19 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
  *
  * @package Pails\Console
  */
-abstract class Command extends SymfonyCommand implements InjectionAwareInterface
+abstract class Command extends SymfonyCommand implements InjectionAwareInterface, EventsAwareInterface
 {
     /**
-     * The Laravel application instance.
+     * The Pails container instance.
      *
      * @var Container
      */
     protected $di;
+
+    /**
+     * The global EventsManager
+     */
+    protected $eventsManager;
 
     /**
      * The input interface implementation.
@@ -522,9 +529,29 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
      * Set the Laravel application instance.
      *
      * @param DiInterface $di
+     * @return $this
      */
     public function setDI(DiInterface $di)
     {
         $this->di = $di;
+        return $this;
+    }
+
+    /**
+     * @param ManagerInterface $eventsManager
+     * @return $this
+     */
+    public function setEventsManager(ManagerInterface $eventsManager)
+    {
+        $this->eventsManager = $eventsManager;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEventsManager()
+    {
+        return $this->eventsManager;
     }
 }

@@ -7,6 +7,8 @@ use Pails\ContainerInterface;
 use Phalcon\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Symfony\Component\Console\Application as ApplicationBase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
@@ -18,12 +20,17 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Pails console application.
  *
  */
-abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface
+abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface, EventsAwareInterface
 {
     /**
-     * @var DiInterface
+     * @var ContainerInterface
      */
     protected $di;
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $eventsManager;
 
     /**
      * The output from the previous command.
@@ -58,7 +65,8 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     protected $pailsCommands = [
         Commands\HelloWorldCommand::class,
         Commands\Cache\ClearCommand::class,
-        Commands\Route\ClearCacheCommand::class
+        Commands\Route\ListCommand::class,
+        Commands\Route\ClearCommand::class,
     ];
 
     /**
@@ -71,11 +79,15 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      */
     public function __construct(ContainerInterface $di = null)
     {
+        // 注入DI
         if ($di) {
             $this->setDI($di);
         } else {
             $this->setDI(Di::getDefault());
         }
+
+        // 注入事件管理器
+        $this->eventsManager = $this->di->getEventsManager();
 
         parent::__construct('Pails', $this->di->version());
 
@@ -224,14 +236,16 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     }
 
     /**
-     * Add a command, resolving through the application.
+     * Add a command, resolving through the application. 通过DI的自动注入功能，注入DI和事件管理器
      *
      * @param  string  $command
      * @return \Symfony\Component\Console\Command\Command
      */
     public function resolve($command)
     {
-        return $this->add($this->di->get($command));
+        $commandInstance = $this->di->get($command);
+        $commandInstance->setEventsManager($this->di->getEventsManager());
+        return $this->add($commandInstance);
     }
 
     /**
@@ -249,5 +263,23 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         }
 
         return $this;
+    }
+
+    /**
+     * @param ManagerInterface $eventsManager
+     * @return $this
+     */
+    public function setEventsManager(ManagerInterface $eventsManager)
+    {
+        $this->eventsManager = $eventsManager;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEventsManager()
+    {
+        return $this->eventsManager;
     }
 }

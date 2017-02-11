@@ -12,22 +12,38 @@ use Pails\Console\Command;
 
 class ClearCommand extends Command
 {
-    protected $name = 'cache:clear';
+    protected $signature = 'cache:clear {name? : 需要清空的缓存类型，可选 data | view | route，为空则全部清空}';
 
     protected $description = '清空缓存';
 
     public function handle()
     {
-        $cachePath = $this->di->tmpPath() . '/cache/data/';
-        if (!file_exists($cachePath)) {
-            $this->info("缓存目录不存在");
+        $name = $this->argument('name');
+        $allowedTypes = ['data', 'volt', 'routes'];
+
+        if (empty($name)) {
+            $types = $allowedTypes;
         } else {
-            foreach (new \DirectoryIterator($cachePath) as $cacheFile) {
-                if ($cacheFile->isFile()) {
-                    @unlink($cacheFile->getFilename());
-                }
+            if (!array_has($allowedTypes, $name)) {
+                $this->info("请输入正确的缓存类型");
+                return false;
+            } else {
+                $types = [$name];
             }
-            $this->info("缓存已经清空");
+        }
+
+        foreach ($types as $target) {
+            $cachePath = $this->di->tmpPath() . '/cache/' . $target . '/';
+            if (!file_exists($cachePath)) {
+                $this->info("缓存目录 $cachePath 不存在");
+            } else {
+                foreach (new \DirectoryIterator($cachePath) as $cacheFile) {
+                    if ($cacheFile->isFile()) {
+                        @unlink($cacheFile->getFilename());
+                    }
+                }
+                $this->info("$target 缓存已经清空");
+            }
         }
     }
 }

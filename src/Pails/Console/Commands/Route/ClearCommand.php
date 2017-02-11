@@ -10,9 +10,9 @@ namespace Pails\Console\Commands\Route;
 
 use Pails\Console\Command;
 
-class ClearCacheCommand extends Command
+class ClearCommand extends Command
 {
-    protected $name = 'route:clear-cache';
+    protected $name = 'route:clear';
 
     protected $description = '清空路由缓存';
 
