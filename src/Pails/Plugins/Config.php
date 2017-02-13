@@ -10,22 +10,12 @@ use Pails\Injectable;
 
 class Config extends Injectable implements \ArrayAccess
 {
-    protected $_env = 'development';
-
     protected $_sections = [];
-
-    public function __construct()
-    {
-        // INIT env
-        if ($env = env("APP_ENV", "development")) {
-            $this->_env = $env;
-        }
-    }
 
     public function getConfig($section)
     {
         if (!isset($this->_sections[$section])) {
-            $this->_sections[$section] = $this->getDI()->getConfig($section, $this->_env, []);
+            $this->_sections[$section] = $this->getDI()->getConfig($section, $this->getDI()->environment(), []);
         }
         return $this->_sections[$section];
     }

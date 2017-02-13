@@ -12,7 +12,7 @@ class InitCommand extends Init
     protected function configure()
     {
         $this->setName('db:init')
-            ->setDescription('Initialize the application for Phinx')
+            ->setDescription('初始化数据库迁移')
             ->setHelp(sprintf(
                 '%sInitializes the application for Phinx%s',
                 PHP_EOL,

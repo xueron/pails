@@ -17,5 +17,7 @@ class SeedRunCommand extends SeedRun
         parent::configure();
 
         $this->setName("seed:run");
+        $this->setDescription("执行数据库seed");
+
     }
 }

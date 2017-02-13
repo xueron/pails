@@ -17,5 +17,7 @@ class MigrateCommand extends Migrate
         parent::configure();
 
         $this->setName("db:migrate");
+        $this->setDescription("执行数据库迁移");
+
     }
 }

@@ -1,0 +1,16 @@
+<?php
+namespace DummyNamespace;
+
+/**
+ * @RoutePrefix("dummyPrefix")
+ */
+class DummyClass extends DummyExtends
+{
+    /**
+     * @Route("")
+     */
+    public function indexAction()
+    {
+
+    }
+}

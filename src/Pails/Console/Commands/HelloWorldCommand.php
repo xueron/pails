@@ -11,7 +11,7 @@ class HelloWorldCommand extends Command
 {
     protected $name = 'pails:helloworld';
 
-    protected $description = 'This is a demo command';
+    protected $description = '这是一个Pails内建的命令行工具的Demo';
 
     public function handle()
     {

@@ -17,5 +17,7 @@ class StatusCommand extends Status
         parent::configure();
 
         $this->setName("db:status");
+        $this->setDescription("显示数据库迁移状态");
+
     }
 }

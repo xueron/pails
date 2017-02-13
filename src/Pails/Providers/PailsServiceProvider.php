@@ -16,7 +16,8 @@ use Pails\Pluralizer;
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Annotations\Adapter\Files as FileAnnotations;
 use Phalcon\Cache\Backend\File as FileCache;
-use Phalcon\Cache\Frontend\Data;
+use Phalcon\Cache\Frontend\Data as DataFrontend;
+use Phalcon\Cache\Frontend\Output as OutputFrontend;
 use Phalcon\Crypt;
 use Phalcon\Logger\Adapter\File;
 use Phalcon\Mvc\Dispatcher;
@@ -57,8 +58,8 @@ class PailsServiceProvider extends AbstractServiceProvider
 
         // cache
         $di->setShared('cache', function () {
-            $frontCache = new Data([
-                "lifetime" => $this->config->get('cache.lifetime', 3600),
+            $frontCache = new DataFrontend([
+                "lifetime" => $this->get('config')->get('cache.lifetime', 3600),
             ]);
 
             $cachePath = $this->tmpPath() . '/cache/data/';
@@ -73,6 +74,28 @@ class PailsServiceProvider extends AbstractServiceProvider
             );
             return $cache;
         });
+
+        // modelsCache, 设置模型缓存服务
+        $di->set(
+            "modelsCache",
+            function () {
+                $frontCache = new DataFrontend([
+                    "lifetime" => $this->get('config')->get('cache.model.lifetime', 3600),
+                ]);
+
+                $cachePath = $this->tmpPath() . '/cache/models/';
+                if (!file_exists($cachePath)) {
+                    @mkdir($cachePath, 0755, true);
+                }
+                $cache = new FileCache(
+                    $frontCache,
+                    [
+                        "cacheDir" => $cachePath
+                    ]
+                );
+                return $cache;
+            }
+        );
 
         // config
         $di->setShared(
@@ -167,6 +190,32 @@ class PailsServiceProvider extends AbstractServiceProvider
                     '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
                 ]);
                 return $view;
+            }
+        );
+
+        // viewCache
+        $di->set( // Not shared
+            "viewCache",
+            function () {
+                // Cache data for one day by default
+                $frontCache = new OutputFrontend(
+                    [
+                        "lifetime" => $this->get('config')->get('cache.view.lifetime', 86400),
+                    ]
+                );
+
+                $cachePath = $this->tmpPath() . '/cache/view/';
+                if (!file_exists($cachePath)) {
+                    @mkdir($cachePath, 0755, true);
+                }
+                $cache = new FileCache(
+                    $frontCache,
+                    [
+                        "cacheDir" => $cachePath
+                    ]
+                );
+
+                return $cache;
             }
         );
 

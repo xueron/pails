@@ -17,5 +17,7 @@ class BreakpointCommand extends Breakpoint
         parent::configure();
 
         $this->setName("db:breakpoint");
+
+        $this->setDescription("管理数据库迁移的断点");
     }
 }

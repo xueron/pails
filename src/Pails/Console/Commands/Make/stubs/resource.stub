@@ -1,0 +1,57 @@
+<?php
+namespace DummyNamespace;
+
+/**
+ * @RoutePrefix("dummyPrefix")
+ */
+class DummyClass extends DummyExtends
+{
+    /**
+     * @Get("")
+     */
+    public function indexAction()
+    {
+
+    }
+
+    /**
+     * @Get("/new")
+     */
+    public function newAction()
+    {
+
+    }
+
+    /**
+     * @Get("/{id:([0-9]+)}")
+     */
+    public function showAction($id)
+    {
+
+    }
+
+    /**
+     * @Post("")
+     */
+    public function createAction()
+    {
+
+    }
+
+    /**
+     * @Put("/{id:([0-9]+)}")
+     */
+    public function updateAction($id)
+    {
+
+    }
+
+    /**
+     * @Delete("/{id:([0-9]+)}")
+     */
+    public function deleteAction($id)
+    {
+
+    }
+}
+

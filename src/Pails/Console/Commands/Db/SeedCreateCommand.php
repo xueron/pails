@@ -17,5 +17,7 @@ class SeedCreateCommand extends SeedCreate
         parent::configure();
 
         $this->setName("seed:create");
+        $this->setDescription("创建一个数据库seeder");
+
     }
 }
