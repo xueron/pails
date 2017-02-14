@@ -1,12 +1,5 @@
 <?php
-/**
- * ClearCommand.php
- *
- */
-
-
 namespace Pails\Console\Commands\Make;
-
 
 use Pails\Console\Command;
 use Phalcon\Text;
@@ -22,15 +15,27 @@ class CommandCommand extends Command
     public function handle()
     {
         $name = trim($this->argument('name'));
-        $stub = @file_get_contents(__DIR__ . '/stubs/command.stub');
+        $command = trim($this->option('command'));
+        if ($this->getApplication()->has($command)) {
+            throw new \LogicException("命令 $command 已经存在");
+        }
 
         $className = Text::camelize($name) . 'Command';
         $fileName = $this->getDI()->appPath() . '/Console/Commands/' . $className . '.php';
+        if (file_exists($fileName)) {
+            throw new \LogicException("文件 $fileName 已经存在");
+        }
 
+        // create command file
+        $stub = @file_get_contents(__DIR__ . '/stubs/command.stub');
         $stub = str_replace('DummyClass', $className, $stub);
-        $stub = str_replace('dummy:command', $this->option('command'), $stub);
-
+        $stub = str_replace('dummy:command', $command, $stub);
         @file_put_contents($fileName, $stub);
+
+        // rewrite commands.php config
+        $commands = (array)$this->getDI()->getConfig('commands', null, []);
+        $commands[$command] = 'App\\Console\\Commands\\' . $className;
+        @file_put_contents($this->getDI()->configPath() . '/commands.php', "<?php return " . var_export($commands, true) . ";");
 
         $this->info("$name created at $fileName");
     }

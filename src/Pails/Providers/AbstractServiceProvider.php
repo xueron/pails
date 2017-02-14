@@ -10,6 +10,10 @@ use Pails\Injectable;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 
+/**
+ * Class AbstractServiceProvider
+ * @package Pails\Providers
+ */
 abstract class AbstractServiceProvider extends Injectable  implements ServiceProviderInterface, InjectionAwareInterface
 {
     /**
@@ -22,5 +26,8 @@ abstract class AbstractServiceProvider extends Injectable  implements ServicePro
         $this->setDI($di);
     }
 
+    /**
+     * @return mixed
+     */
     abstract function register();
 }

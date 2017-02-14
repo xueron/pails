@@ -19,7 +19,6 @@ class ResourceCommand extends Command
         $namespace = trim($this->input->getOption('namespace'));
         $extends = trim($this->input->getOption('extends'));
         $routePrefix = trim($this->input->getOption('route-prefix'));
-        $stub = @file_get_contents(__DIR__ . '/stubs/resource.stub');
 
         if ($namespace) {
             $fullNameSpace = 'App\\Http\\Controllers\\' . $namespace;
@@ -32,12 +31,15 @@ class ResourceCommand extends Command
 
         $className = Text::camelize($name) . 'Controller';
         $fileName = $fullPath . '/' . $className . '.php';
+        if (file_exists($fileName)) {
+            throw new \LogicException("文件 $fileName 已经存在");
+        }
 
+        $stub = @file_get_contents(__DIR__ . '/stubs/resource.stub');
         $stub = str_replace('DummyNamespace', $fullNameSpace, $stub);
         $stub = str_replace('DummyClass', $className, $stub);
         $stub = str_replace('DummyExtends', $extends, $stub);
         $stub = str_replace('dummyPrefix', $routePrefix, $stub);
-
         @file_put_contents($fileName, $stub);
 
         $this->info("$name created at $fileName");

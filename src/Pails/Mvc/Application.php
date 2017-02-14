@@ -18,6 +18,12 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
     {
         $this->getDI()->registerServices($this->providers);
 
+        // register services from services.php
+        $services = (array)$this->getDI()->getConfig('services', null, []);
+        foreach ($services as $name => $class) {
+            $this->getDI()->setShared($name, $class);
+        }
+
         return $this;
     }
 

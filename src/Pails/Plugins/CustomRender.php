@@ -5,6 +5,10 @@ use Pails\Injectable;
 use Phalcon\Events\EventInterface;
 use Phalcon\Mvc\DispatcherInterface;
 
+/**
+ * Class CustomRender
+ * @package Pails\Plugins
+ */
 class CustomRender extends Injectable
 {
     /**

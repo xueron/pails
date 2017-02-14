@@ -63,7 +63,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      * @var array
      */
     protected $pailsCommands = [
-        Commands\HelloWorldCommand::class,
         Commands\Cache\ClearCommand::class,
         Commands\Model\ClearCommand::class,
         Commands\Route\ListCommand::class,
@@ -74,6 +73,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ModelCommand::class,
         Commands\Make\ControllerCommand::class,
         Commands\Make\ResourceCommand::class,
+        Commands\Make\ServiceCommand::class,
     ];
 
     /**
@@ -212,11 +212,25 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     {
         $this->di->registerServices($this->providers);
 
+        // register services from services.php
+        $services = (array)$this->getDI()->getConfig('services', null, []);
+        foreach ($services as $name => $class) {
+            $this->getDI()->setShared($name, $class);
+        }
+
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function init()
     {
+        // load from config file
+        $commands = array_values((array)$this->getDI()->getConfig('commands', null, []));
+        $this->resolveCommands($commands);
+
+        // load from Application.php
         $this->resolveCommands($this->commands);
 
         return $this;

@@ -1,7 +1,6 @@
 <?php
 namespace Pails\Console\Commands\Make;
 
-
 use Pails\Console\Command;
 use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,13 +15,15 @@ class ModelCommand extends Command
     public function handle()
     {
         $name = trim($this->argument('name'));
-        $stub = @file_get_contents(__DIR__ . '/stubs/model.stub');
 
         $className = Text::camelize($name);
         $fileName = $this->getDI()->appPath() . '/Models/' . $className . '.php';
+        if (file_exists($fileName)) {
+            throw new \LogicException("文件 $fileName 已经存在");
+        }
 
+        $stub = @file_get_contents(__DIR__ . '/stubs/model.stub');
         $stub = str_replace('DummyClass', $className, $stub);
-
         @file_put_contents($fileName, $stub);
 
         $this->info("$name created at $fileName");

@@ -11,14 +11,15 @@ class RouterServiceProvider extends AbstractServiceProvider
     public function register()
     {
         // Pails 不使用Phalcon的Module功能,通过Namespace组织Controllers.
-        // 如果出现多级,比如AdminApi,则一定要以Namespace的形式组织 Admin\Api\xxxxController
+        //
+        // 如果出现多级,比如Admin/Api,则一定要以Namespace的形式组织 Admin\Api\XxxxController
         //
         // Note: from phalcon 3, closure bind di as $this by default. so no use($app) needed.
         //
         $this->getDI()->setShared(
             $this->serviceName,
             function () {
-                //
+                // 定义注解路由
                 $router = new Annotations(false);
                 $router->removeExtraSlashes(true);
                 $router->setEventsManager($this->get('eventsManager'));
@@ -26,7 +27,6 @@ class RouterServiceProvider extends AbstractServiceProvider
                 $router->setDefaultController('index');
                 $router->setDefaultAction('index');
 
-                // 定义注解路由
                 $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Http/Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
                 foreach ($iterator as $item) {
                     if (Text::endsWith($item, "Controller.php", false)) {

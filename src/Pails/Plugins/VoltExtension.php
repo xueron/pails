@@ -1,6 +1,10 @@
 <?php
 namespace Pails\Plugins;
 
+/**
+ * Class VoltExtension
+ * @package Pails\Plugins
+ */
 class VoltExtension
 {
     /**
