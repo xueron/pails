@@ -47,5 +47,10 @@
     "psr-4": {
       "Test\\Pails\\": "tests/Pails"
     }
-  }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
