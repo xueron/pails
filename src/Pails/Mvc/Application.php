@@ -1,41 +1,37 @@
 <?php
 namespace Pails\Mvc;
-use Pails\Debug;
+use Pails\ApplicationInterface;
 
 /**
  * Class Application
  * @package Pails\Mvc
  */
-abstract class Application extends \Phalcon\Mvc\Application
+abstract class Application extends \Phalcon\Mvc\Application implements ApplicationInterface
 {
-    protected $debug = false;
-
-    protected $bootstraps = [
-
-    ];
+    protected $providers = [];
 
     /**
      * register services
+     * @return $this
      */
     public function boot()
     {
-        foreach ($this->bootstraps as $className) {
-            $bootstrap = new $className();
-            $bootstrap->boot($this->getDI());
+        $this->getDI()->registerServices($this->providers);
+
+        // register services from services.php
+        $services = (array)$this->getDI()->getConfig('services', null, []);
+        foreach ($services as $name => $class) {
+            $this->getDI()->setShared($name, $class);
         }
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function init()
     {
-        $debug = new Debug();
-        if ($this->debug) {
-            $debug->listen();
-        } else {
-            $debug->handle();
-        }
-
         return $this;
     }
 }

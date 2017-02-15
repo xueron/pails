@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Providers;
+
+use Pails\Providers\AbstractServiceProvider;
+
+class DummyClass extends AbstractServiceProvider
+{
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->getDI()->setShared(
+            'dummyServiceName',
+
+            function () {
+                //
+            }
+        );
+    }
+}

@@ -1,20 +1,27 @@
 <?php
 namespace Pails;
 
-use Pails\Bootstraps;
+use Pails\Console\Application;
+use Pails\Exception\Handler;
+use Pails\Providers;
+use Pails\Providers\ServiceProviderInterface;
+use Phalcon\Config;
 use Phalcon\Di;
+use Phalcon\Http\Response;
 use Phalcon\Loader;
+use Phalcon\Version;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
  * @package Pails
  */
-class Container extends Di\FactoryDefault
+class Container extends Di\FactoryDefault implements ContainerInterface
 {
     /**
      * Pails Version
      */
-    const VERSION = '0.0.1';
+    const VERSION = '3.0.0-dev';
 
     /**
      * @var string
@@ -22,23 +29,14 @@ class Container extends Di\FactoryDefault
     protected $basePath;
 
     /**
-     * Pails的关键服务
-     * @var array
-     */
-    protected $coreServices = [
-        'inflector' => \Pails\Utils\Inflector::class,
-    ];
-
-    /**
-     * 通过Bootstraps重新定义默认的设置
+     * Pails 框架一级的服务,在容器初始化的时候注册
      *
      * @var array
      */
-    protected $bootstraps = [
-        Bootstraps\Database::class,
-        Bootstraps\Router::class,
-        Bootstraps\View::class,
-        Bootstraps\Dispatcher::class,
+    protected $providers = [
+        Providers\PailsServiceProvider::class,
+        Providers\DatabaseServiceProvider::class,
+        Providers\RouterServiceProvider::class,
     ];
 
     /**
@@ -47,64 +45,62 @@ class Container extends Di\FactoryDefault
      */
     public function __construct($basePath = null)
     {
-        // INIT Phalcon's DI
         parent::__construct();
-
-        //
-        $this->registerBaseServices();
-
-        //
-        $this->registerCoreServices();
 
         if ($basePath) {
             $this->setBasePath($basePath);
         }
 
-        $this->boot();
+        $this->registerAutoLoader();
 
-        $this->init();
+        $this->registerServices($this->providers);
     }
 
     /**
-     * register Container self as a service
+     * 获取应用的环境
+     *
+     * @return string
      */
-    protected function registerBaseServices()
+    public function environment()
     {
-        // No need to register self again. 'di' is automatically injected for Injectable services
-        $this->setShared('di', $this);
+        return env('APP_ENV', 'development');
     }
 
     /**
-     * register Pails' build-in services
+     * 注册服务列表
+     * @param array $serviceProviders
      */
-    protected function registerCoreServices()
+    public function registerServices($serviceProviders = [])
     {
-        foreach ($this->coreServices as $name => $className) {
-            $this->_services[$name] = new Di\Service($name, $className, true);
+        foreach ($serviceProviders as $serviceProviderClass) {
+            $this->registerService(new $serviceProviderClass($this));
         }
     }
 
     /**
-     * register Phalcon's build-in services
+     * 注册一个服务
+     * @param ServiceProviderInterface $serviceProvider
+     * @return $this
      */
-    public function boot()
+    public function registerService(ServiceProviderInterface $serviceProvider)
     {
-        foreach ($this->bootstraps as $className) {
-            $bootstrap = new $className();
-            $bootstrap->boot($this);
-        }
+        $serviceProvider->register();
+
+        return $this;
     }
 
     /**
-     * init
+     * 注册loader。
+     *
+     * 注：只注册项目自身的内容，其他内容通过composer.json，交给composer维护，有比较成熟的cache机制
      */
-    protected function init()
+    protected function registerAutoLoader()
     {
         $loader = new Loader();
 
         // \App base
         $loader->registerNamespaces([
-            'App' => $this->path() . '/'
+            'App' => $this->appPath()
         ]);
 
         // Other
@@ -112,17 +108,30 @@ class Container extends Di\FactoryDefault
             $this->libPath()
         ]);
 
+        //
         $loader->register();
+
+        return $this;
     }
 
     /**
-     * Get the version number of the application.
+     * Get the version number of pails.
      *
      * @return string
      */
     public function version()
     {
         return static::VERSION;
+    }
+
+    /**
+     * Get the version number of the phalcon framework.
+     *
+     * @return string
+     */
+    public function getPhalconVersion()
+    {
+        return Version::get();
     }
 
     /**
@@ -222,7 +231,7 @@ class Container extends Di\FactoryDefault
     }
 
     /**
-     * Helpers: Get the path to the tmp directory.
+     * Helpers: Get the path to the storage directory.
      *
      * @return string
      */
@@ -232,16 +241,36 @@ class Container extends Di\FactoryDefault
     }
 
     /**
+     * Helpers: Get the path to the resource directory.
+     *
+     * @return string
+     */
+    public function resourcesPath()
+    {
+        return $this->basePath . DIRECTORY_SEPARATOR . 'resources';
+    }
+
+    /**
+     * Helpers: Get the path to the views directory.
+     *
+     * @return string
+     */
+    public function viewsPath()
+    {
+        return $this->resourcesPath() . DIRECTORY_SEPARATOR . 'views';
+    }
+
+    /**
      * 获取配置. 自动注入到服务中
      *
-     * @param $name
+     * @param $section
      * @param null $key
      * @param null $defaultValue
      * @return array|mixed
      */
-    public function getConfig($name, $key = null, $defaultValue = null)
+    public function getConfig($section, $key = null, $defaultValue = null)
     {
-        $serviceName = '___PAILS_CONFIG___' . $name;
+        $serviceName = '___PAILS_CONFIG___' . $section;
         if ($this->has($serviceName)) {
             $service = $this->get($serviceName);
             if ($key) {
@@ -250,30 +279,64 @@ class Container extends Di\FactoryDefault
             return $service;
         }
 
-        $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $name . '.php';
+        $configFile = $this->configPath() . DIRECTORY_SEPARATOR . $section . '.php';
         if (file_exists($configFile)) {
-            $this->setShared($serviceName, "Phalcon\\Config");
+            // register a new config service
+            $this->setShared($serviceName, Config::class);
 
+            // instance the config service
             $config = require $configFile;
             $service = $this->get($serviceName, [$config]);
             if ($key) {
-                return $service->get($key);
+                return $service->get($key, $defaultValue);
             }
             return $service;
+        } else {
+            throw new \DomainException("config file ${section}.php not exists");
         }
-
-        return null;
     }
 
     /**
      * @param $appClass
+     * @throws \Error
      * @throws \Exception
-     * @throws \Phalcon\Mvc\Dispatcher\Exception
+     * @throws \Phalcon\Exception
      */
     public function run($appClass)
     {
-        $app = new $appClass($this);
+        try {
+            $app = $this->getShared($appClass);
 
-        $app->init()->boot()->handle()->send();
+            $res = $app->init()->boot()->handle();
+
+            // Mvc Application
+            if ($res instanceof Response) {
+                $res->send();
+            } elseif (is_int($res) && $app instanceof Application) {
+                exit($res);
+            }
+        } catch (\Exception $e) {
+            $this->reportException($e);
+            $this->renderException($e);
+        } catch (\Throwable $e) {
+            $this->reportException($e = new FatalThrowableError($e));
+            $this->renderException($e);
+        }
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    public function renderException(\Exception $e)
+    {
+        $this->getShared(Handler::class)->render($e);
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    public function reportException(\Exception $e)
+    {
+        $this->getShared(Handler::class)->report($e);
     }
 }

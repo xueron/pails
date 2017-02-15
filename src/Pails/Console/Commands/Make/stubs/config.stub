@@ -1,0 +1,12 @@
+<?php
+return [
+    'development' => [
+        'key' => 'value',
+    ],
+    'testing' => [
+        'key' => 'value',
+    ],
+    'production' => [
+        'key' => 'value',
+    ]
+];

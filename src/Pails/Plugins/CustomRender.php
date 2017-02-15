@@ -1,11 +1,21 @@
 <?php
 namespace Pails\Plugins;
 
+use Pails\Injectable;
+use Phalcon\Events\EventInterface;
 use Phalcon\Mvc\DispatcherInterface;
 
-class CustomRender extends \Phalcon\Mvc\User\Plugin
+/**
+ * Class CustomRender
+ * @package Pails\Plugins
+ */
+class CustomRender extends Injectable
 {
-    public function beforeExecuteRoute($event, DispatcherInterface $dispatcher)
+    /**
+     * @param EventInterface $event
+     * @param DispatcherInterface $dispatcher
+     */
+    public function beforeExecuteRoute(EventInterface $event, DispatcherInterface $dispatcher)
     {
         $defaultNamespace = $dispatcher->getDefaultNamespace();
         $namespace = $dispatcher->getNamespaceName();
