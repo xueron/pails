@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 class DummyClass extends ModelBase
