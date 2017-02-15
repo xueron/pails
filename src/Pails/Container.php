@@ -7,6 +7,7 @@ use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\Di;
+use Phalcon\DiInterface;
 use Phalcon\Http\Response;
 use Phalcon\Loader;
 use Phalcon\Version;
@@ -21,7 +22,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.0-dev';
+    const VERSION = '3.0.0';
 
     /**
      * @var string
@@ -292,7 +293,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
             }
             return $service;
         } else {
-            throw new \DomainException("config file ${section}.php not exists");
+            return $defaultValue;
         }
     }
 
