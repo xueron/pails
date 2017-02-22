@@ -22,7 +22,12 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.0';
+    const VERSION = '3.0.3';
+
+    /**
+     * @var Loader $loader
+     */
+    protected $loader;
 
     /**
      * @var string
@@ -93,24 +98,44 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * 注册loader。
      *
-     * 注：只注册项目自身的内容，其他内容通过composer.json，交给composer维护，有比较成熟的cache机制
      */
     protected function registerAutoLoader()
     {
-        $loader = new Loader();
+        if (!$this->loader) {
+            $this->loader = new Loader();
+        }
 
-        // \App base
-        $loader->registerNamespaces([
+        // Register App
+        $this->loader->registerNamespaces([
             'App' => $this->appPath()
-        ]);
+        ])->register();
 
-        // Other
-        $loader->registerDirs([
-            $this->libPath()
-        ]);
+        return $this;
+    }
 
-        //
-        $loader->register();
+    /**
+     * Register namespaces. Append to exists.
+     *
+     * @param $namespaces
+     * @return $this
+     */
+    public function registerNamespaces($namespaces)
+    {
+        $this->loader->registerNamespaces($namespaces, true);
+
+        return $this;
+    }
+
+    /**
+     * Register namespace. Append to exists.
+     *
+     * @param $namespace
+     * @param $path
+     * @return $this
+     */
+    public function registerNamespace($namespace, $path)
+    {
+        $this->loader->registerNamespaces([$namespace => $path], true);
 
         return $this;
     }
@@ -199,16 +224,6 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     public function databasePath()
     {
         return $this->basePath . DIRECTORY_SEPARATOR . 'db';
-    }
-
-    /**
-     * Helpers: Get the path to the library directory.
-     *
-     * @return string
-     */
-    public function libPath()
-    {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'lib';
     }
 
     /**

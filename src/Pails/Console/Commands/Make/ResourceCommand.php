@@ -11,7 +11,7 @@ class ResourceCommand extends Command
 {
     protected $name = 'make:resource';
 
-    protected $description = '创建一个Resource Controller';
+    protected $description = '创建Resource Controller';
 
     public function handle()
     {

@@ -7,11 +7,11 @@ use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class ValidatorCommand extends Command
+class ProviderCommand extends Command
 {
-    protected $name = 'make:validator';
+    protected $name = 'make:provider';
 
-    protected $description = '创建Validator';
+    protected $description = '创建Provider';
 
     public function handle()
     {
@@ -22,8 +22,8 @@ class ValidatorCommand extends Command
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Validator';
-        $pathName = $this->getDI()->appPath() . '/Validator/';
+        $className = Text::camelize($name) . 'Providers';
+        $pathName = $this->getDI()->appPath() . '/Providers/';
         if (!file_exists($pathName)) {
             @mkdir($pathName, 0755, true);
         }
@@ -32,16 +32,15 @@ class ValidatorCommand extends Command
             throw new \LogicException("文件 $fileName 已经存在");
         }
 
-        $stub = @file_get_contents(__DIR__ . '/stubs/validator.stub');
+        $stub = @file_get_contents(__DIR__ . '/stubs/provider.stub');
         $stub = str_replace('DummyClass', $className, $stub);
+        $stub = str_replace('dummyServiceName', $alias, $stub);
         @file_put_contents($fileName, $stub);
 
-        if ($alias) {
-            // rewrite services.php config
-            $services = (array)$this->getDI()->getConfig('services', null, []);
-            $services[$alias] = 'App\\Validators\\' . $className;
-            @file_put_contents($this->getDI()->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
-        }
+        // rewrite services.php config
+        $providers = (array)$this->getDI()->getConfig('providers', null, []);
+        $providers[$alias] = 'App\\Providers\\' . $className;
+        @file_put_contents($this->getDI()->configPath() . '/providers.php', "<?php return " . var_export($providers, true) . ";");
 
         $this->info("$name created at $fileName");
     }
@@ -54,7 +53,7 @@ class ValidatorCommand extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, '验证器的名称（类名）'],
+            ['name', InputArgument::REQUIRED, 'Provider的名称（类名，不含Provider后缀）'],
         ];
     }
 
@@ -66,7 +65,7 @@ class ValidatorCommand extends Command
     protected function getOptions()
     {
         return [
-            ['alias', null, InputOption::VALUE_OPTIONAL, '验证器的别名，在DI里面以此名称注册', null],
+            ['alias', null, InputOption::VALUE_REQUIRED, '服务的名称', null],
         ];
     }
 }

@@ -51,6 +51,8 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                     }
 
                     return $db;
+                } else {
+                    throw new \RuntimeException("no database config found. please check config file exists or APP_ENV is configed");
                 }
             }
         );

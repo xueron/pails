@@ -16,12 +16,16 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
      */
     public function boot()
     {
-        $this->getDI()->registerServices($this->providers);
+        $this->di->registerServices($this->providers);
 
         // register services from services.php
-        $services = (array)$this->getDI()->getConfig('services', null, []);
+        $providers = (array)$this->di->getConfig('providers', null, []);
+        $this->di->registerServices(array_values($providers));
+
+        // register services from services.php
+        $services = (array)$this->di->getConfig('services', null, []);
         foreach ($services as $name => $class) {
-            $this->getDI()->setShared($name, $class);
+            $this->di->setShared($name, $class);
         }
 
         return $this;
@@ -32,6 +36,8 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
      */
     public function init()
     {
+        //
+
         return $this;
     }
 }

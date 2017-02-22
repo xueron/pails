@@ -1,0 +1,18 @@
+<?php
+namespace App\Validators;
+
+use Phalcon\Validation;
+use Phalcon\Validation\Validator;
+use Phalcon\Validation\Message;
+
+class DummyClass extends Validator
+{
+    /**
+     * Executes the validation
+     */
+    public function validate($validation, $field)
+    {
+
+    }
+}
+
