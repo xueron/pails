@@ -3,7 +3,7 @@ namespace Pails\Console;
 
 use Pails\ApplicationInterface;
 use Pails\Console\Commands;
-use Pails\ContainerInterface;
+use Pails\Container;
 use Phalcon\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface, EventsAwareInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     protected $di;
 
@@ -74,6 +74,8 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ControllerCommand::class,
         Commands\Make\ResourceCommand::class,
         Commands\Make\ServiceCommand::class,
+        Commands\Make\ProviderCommand::class,
+        Commands\Make\ValidatorCommand::class
     ];
 
     /**
@@ -213,7 +215,11 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         $this->di->registerServices($this->providers);
 
         // register services from services.php
-        $services = (array)$this->getDI()->getConfig('services', null, []);
+        $providers = (array)$this->di->getConfig('providers', null, []);
+        $this->di->registerServices(array_values($providers));
+
+        // register services from services.php
+        $services = (array)$this->di->getConfig('services', null, []);
         foreach ($services as $name => $class) {
             $this->getDI()->setShared($name, $class);
         }
@@ -227,7 +233,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     public function init()
     {
         // load from config file
-        $commands = array_values((array)$this->getDI()->getConfig('commands', null, []));
+        $commands = array_values((array)$this->di->getConfig('commands', null, []));
         $this->resolveCommands($commands);
 
         // load from Application.php

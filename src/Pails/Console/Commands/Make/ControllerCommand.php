@@ -10,7 +10,7 @@ class ControllerCommand extends Command
 {
     protected $name = 'make:controller';
 
-    protected $description = '创建一个Controller';
+    protected $description = '创建Controller';
 
     public function handle()
     {

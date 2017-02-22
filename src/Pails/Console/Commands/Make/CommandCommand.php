@@ -10,7 +10,7 @@ class CommandCommand extends Command
 {
     protected $name = 'make:command';
 
-    protected $description = '创建一个命令行工具';
+    protected $description = '创建Command';
 
     public function handle()
     {

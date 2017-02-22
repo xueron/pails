@@ -11,7 +11,7 @@ class ServiceCommand extends Command
 {
     protected $name = 'make:service';
 
-    protected $description = '创建服务';
+    protected $description = '创建Service';
 
     public function handle()
     {

@@ -13,16 +13,18 @@ use Phalcon\DiInterface;
 
 interface ContainerInterface extends DiInterface
 {
+    public function registerNamespaces($namespaces);
+    public function registerNamespace($namespace, $path);
     public function registerServices($serviceProviders = []);
     public function registerService(ServiceProviderInterface $serviceProvider);
     public function version();
+    public function getPhalconVersion();
     public function setBasePath($basePath);
     public function path($dir);
     public function basePath($dir);
     public function appPath();
     public function configPath();
     public function databasePath();
-    public function libPath();
     public function logPath();
     public function tmpPath();
     public function storagePath();
