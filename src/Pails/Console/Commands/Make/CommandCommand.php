@@ -15,12 +15,14 @@ class CommandCommand extends Command
     public function handle()
     {
         $name = trim($this->argument('name'));
+
         $command = trim($this->option('command'));
+
         if ($this->getApplication()->has($command)) {
             throw new \LogicException("命令 $command 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Command';
+        $className = $name . 'Command';
         $fileName = $this->getDI()->appPath() . '/Console/Commands/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
@@ -60,7 +62,7 @@ class CommandCommand extends Command
     protected function getOptions()
     {
         return [
-            ['command', null, InputOption::VALUE_OPTIONAL, '命令行的名称', 'command:name'],
+            ['command', null, InputOption::VALUE_REQUIRED, '命令的名称', 'command:name'],
         ];
     }
 }

@@ -3,7 +3,6 @@ namespace Pails\Console\Commands\Make;
 
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -22,7 +21,7 @@ class ServiceCommand extends Command
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Service';
+        $className = $name . 'Service';
         $fileName = $this->getDI()->appPath() . '/Services/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");

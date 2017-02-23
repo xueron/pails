@@ -16,7 +16,7 @@ class ModelCommand extends Command
     {
         $name = trim($this->argument('name'));
 
-        $className = Text::camelize($name);
+        $className = $name;
         $fileName = $this->getDI()->appPath() . '/Models/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");

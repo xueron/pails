@@ -3,7 +3,6 @@ namespace Pails\Console\Commands\Make;
 
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -22,7 +21,7 @@ class ProviderCommand extends Command
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Providers';
+        $className = $name . 'Providers';
         $pathName = $this->getDI()->appPath() . '/Providers/';
         if (!file_exists($pathName)) {
             @mkdir($pathName, 0755, true);

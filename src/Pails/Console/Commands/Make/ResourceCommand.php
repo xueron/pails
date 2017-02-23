@@ -29,7 +29,7 @@ class ResourceCommand extends Command
         }
 
 
-        $className = Text::camelize($name) . 'Controller';
+        $className = $name . 'Controller';
         $fileName = $fullPath . '/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
@@ -67,7 +67,7 @@ class ResourceCommand extends Command
         return [
             ['namespace', null, InputOption::VALUE_OPTIONAL, '命名空间，不含 \'App\\Http\\Controllers\'', ''],
             ['extends', null, InputOption::VALUE_OPTIONAL, '继承自', 'ControllerBase'],
-            ['route-prefix', null, InputOption::VALUE_OPTIONAL, '路由前缀，如  \'/api/orders\'', ''],
+            ['route-prefix', null, InputOption::VALUE_REQUIRED, '路由前缀，如  \'/api/orders\'', ''],
         ];
     }
 }

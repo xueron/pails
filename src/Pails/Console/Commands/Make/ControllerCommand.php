@@ -27,7 +27,7 @@ class ControllerCommand extends Command
             $fullPath = $this->getDI()->appPath() . '/Http/Controllers';
         }
 
-        $className = Text::camelize($name) . 'Controller';
+        $className = $name . 'Controller';
         $fileName = $fullPath . '/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
@@ -51,7 +51,7 @@ class ControllerCommand extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::REQUIRED, 'Controller名称（类名，不含 \'Controller\'）'],
+            ['name', InputArgument::REQUIRED, 'Controller名称（类名，不含 \'Controller\' 后缀）'],
         ];
     }
 
@@ -63,9 +63,9 @@ class ControllerCommand extends Command
     protected function getOptions()
     {
         return [
-            ['namespace', null, InputOption::VALUE_OPTIONAL, '命名空间，不含 \'App\\Http\\Controllers\'', ''],
+            ['namespace', null, InputOption::VALUE_OPTIONAL, '命名空间，不含 \'App\\Http\\Controllers\' 前缀', ''],
             ['extends', null, InputOption::VALUE_OPTIONAL, '继承自', 'ControllerBase'],
-            ['route-prefix', null, InputOption::VALUE_OPTIONAL, '路由前缀，如  \'/api/orders\'', ''],
+            ['route-prefix', null, InputOption::VALUE_REQUIRED, '路由前缀，如  \'/api/orders\'', ''],
         ];
     }
 }

@@ -65,6 +65,8 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     protected $pailsCommands = [
         Commands\Cache\ClearCommand::class,
         Commands\Model\ClearCommand::class,
+        Commands\Model\ListCommand::class,
+        Commands\Model\ShowCommand::class,
         Commands\Route\ListCommand::class,
         Commands\Route\ClearCommand::class,
         Commands\View\ClearCommand::class,

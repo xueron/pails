@@ -22,7 +22,7 @@ class ValidatorCommand extends Command
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Validator';
+        $className = $name . 'Validator';
         $pathName = $this->getDI()->appPath() . '/Validator/';
         if (!file_exists($pathName)) {
             @mkdir($pathName, 0755, true);
