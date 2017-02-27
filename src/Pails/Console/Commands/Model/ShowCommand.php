@@ -101,7 +101,7 @@ class ShowCommand extends Command
                 $this->line("Columns of $modelTable");
                 $this->table($columnHeaders, $columnData);
                 $this->output->newLine();
-                $this->line("Indexes of $modelTable");
+                $this->line("Indices of $modelTable");
                 $this->table($indexHeaders, $indexData);
             }
         } else {

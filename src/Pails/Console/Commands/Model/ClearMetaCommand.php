@@ -1,24 +1,17 @@
 <?php
-/**
- * ClearCommand.php
- *
- */
-
-
 namespace Pails\Console\Commands\Model;
-
 
 use Pails\Console\Command;
 
-class ClearCommand extends Command
+class ClearMetaCommand extends Command
 {
-    protected $name = 'model:clear';
+    protected $name = 'model:clear-meta';
 
-    protected $description = '清空Model数据缓存';
+    protected $description = '清空Model元数据缓存';
 
     public function handle()
     {
-        $cachePath = $this->di->tmpPath() . '/cache/models/';
+        $cachePath = $this->di->tmpPath() . '/cache/metadata/';
         if (!file_exists($cachePath)) {
             $this->info("缓存目录不存在");
         } else {

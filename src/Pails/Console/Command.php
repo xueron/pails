@@ -554,4 +554,28 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     {
         return $this->eventsManager;
     }
+
+    /**
+     * Magic method __get
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (!$this->di) {
+            $this->di = \Phalcon\Di::getDefault();
+            if (!is_object($this->di)) {
+                throw new \RuntimeException("A dependency injection object is required to access the application services");
+            }
+        }
+
+        if ($this->di->has($name)) {
+            $service = $this->di->getService($name);
+            $this->$name = $service;
+            return $service;
+        }
+
+        trigger_error("Access to undefined property $name");
+        return null;
+    }
 }

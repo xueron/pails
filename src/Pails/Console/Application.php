@@ -4,6 +4,7 @@ namespace Pails\Console;
 use Pails\ApplicationInterface;
 use Pails\Console\Commands;
 use Pails\Container;
+use Pails\ContainerInterface;
 use Phalcon\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
@@ -64,7 +65,15 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      */
     protected $pailsCommands = [
         Commands\Cache\ClearCommand::class,
+        Commands\Mns\CreateQueueCommand::class,
+        Commands\Mns\CreateTopicCommand::class,
+        Commands\Mns\DeleteQueueCommand::class,
+        Commands\Mns\DeleteTopicCommand::class,
+        Commands\Mns\ListQueueCommand::class,
+        Commands\Mns\ListTopicCommand::class,
+        Commands\Mns\ListSubscriptionsCommand::class,
         Commands\Model\ClearCommand::class,
+        Commands\Model\ClearMetaCommand::class,
         Commands\Model\ListCommand::class,
         Commands\Model\ShowCommand::class,
         Commands\Route\ListCommand::class,
@@ -77,7 +86,8 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ResourceCommand::class,
         Commands\Make\ServiceCommand::class,
         Commands\Make\ProviderCommand::class,
-        Commands\Make\ValidatorCommand::class
+        Commands\Make\ValidatorCommand::class,
+
     ];
 
     /**

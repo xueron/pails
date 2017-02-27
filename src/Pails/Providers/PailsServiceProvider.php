@@ -21,6 +21,8 @@ use Phalcon\Cache\Frontend\Output as OutputFrontend;
 use Phalcon\Crypt;
 use Phalcon\Logger\Adapter\File;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Model\Metadata\Files as FileMetaData;
+use Phalcon\Mvc\Model\MetaData\Memory as MemoryMetaData;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
@@ -94,6 +96,23 @@ class PailsServiceProvider extends AbstractServiceProvider
                     ]
                 );
                 return $cache;
+            }
+        );
+
+        // modelsMetadata, 元数据管理
+        $di->set(
+            "modelsMetadata",
+            function () {
+                if ($this->environment() == 'production') {
+                    $metaDataDir = $this->tmpPath() . '/cache/metadata';
+                    if (!file_exists($metaDataDir)) {
+                        @mkdir($metaDataDir, 0755, true);
+                    }
+                    return new FileMetaData([
+                        'metaDataDir' => $metaDataDir
+                    ]);
+                }
+                return new MemoryMetaData();
             }
         );
 
