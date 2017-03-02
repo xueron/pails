@@ -9,7 +9,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
 {
     public function register()
     {
-        $this->getDI()->set(
+        $this->di->set(
             'db',
             function () {
                 $env = env('APP_ENV', 'development');
@@ -26,7 +26,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                     ));
 
                     // debug sql
-                    if ($this->get('config')->get('app.debug', false)) {
+                    if ($this->config->get('app.debug', false)) {
                         $eventsManager = $this->getEventsManager();
                         $logger = new File($this->logPath() . '/db_query.log');
 

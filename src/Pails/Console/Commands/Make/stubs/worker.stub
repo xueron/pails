@@ -1,0 +1,13 @@
+<?php
+namespace App\Workers;
+
+use Pails\Queue\Job;
+use Pails\Queue\ListenerOptions;
+
+class DummyClass extends \Pails\Queue\Worker
+{
+    public function handle(Job $job, ListenerOptions $options)
+    {
+
+    }
+}

@@ -17,7 +17,11 @@ class ModelCommand extends Command
         $name = trim($this->argument('name'));
 
         $className = $name;
-        $fileName = $this->getDI()->appPath() . '/Models/' . $className . '.php';
+        $pathName = $this->di->appPath() . '/Models/';
+        if (!file_exists($pathName)) {
+            @mkdir($pathName, 0755, true);
+        }
+        $fileName = $pathName . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
         }

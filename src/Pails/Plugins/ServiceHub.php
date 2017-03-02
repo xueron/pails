@@ -12,7 +12,7 @@ class ServiceHub extends Injectable
     public function service($service)
     {
         if (!is_object($service)) {
-            $service = $this->getDI()->getShared($service);
+            $service = $this->di->getShared($service);
         }
         return $service;
     }

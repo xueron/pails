@@ -1,13 +1,12 @@
 <?php
 namespace Pails;
 
-use Pails\Console\Application;
+use Pails\Console\Application as ConsoleApplication;
 use Pails\Exception\Handler;
 use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\Di;
-use Phalcon\DiInterface;
 use Phalcon\Http\Response;
 use Phalcon\Loader;
 use Phalcon\Version;
@@ -22,7 +21,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.3';
+    const VERSION = '3.0.4';
 
     /**
      * @var Loader $loader
@@ -41,6 +40,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      */
     protected $providers = [
         Providers\PailsServiceProvider::class,
+        Providers\CommonServiceProvider::class,
         Providers\DatabaseServiceProvider::class,
         Providers\RouterServiceProvider::class,
     ];
@@ -69,7 +69,11 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      */
     public function environment()
     {
-        return env('APP_ENV', 'development');
+        $env = env('APP_ENV', 'development'); // May empty
+        if (!$env) {
+            $env = 'development';
+        }
+        return $env;
     }
 
     /**
@@ -79,7 +83,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     public function registerServices($serviceProviders = [])
     {
         foreach ($serviceProviders as $serviceProviderClass) {
-            $this->registerService(new $serviceProviderClass($this));
+            $this->registerService(new $serviceProviderClass());
         }
     }
 
@@ -328,7 +332,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
             // Mvc Application
             if ($res instanceof Response) {
                 $res->send();
-            } elseif (is_int($res) && $app instanceof Application) {
+            } elseif (is_int($res) && $app instanceof ConsoleApplication) {
                 exit($res);
             }
         } catch (\Exception $e) {

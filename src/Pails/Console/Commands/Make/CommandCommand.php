@@ -23,7 +23,7 @@ class CommandCommand extends Command
         }
 
         $className = $name . 'Command';
-        $fileName = $this->getDI()->appPath() . '/Console/Commands/' . $className . '.php';
+        $fileName = $this->di->appPath() . '/Console/Commands/' . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
         }
@@ -35,9 +35,9 @@ class CommandCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite commands.php config
-        $commands = (array)$this->getDI()->getConfig('commands', null, []);
+        $commands = (array)$this->di->getConfig('commands', null, []);
         $commands[$command] = 'App\\Console\\Commands\\' . $className;
-        @file_put_contents($this->getDI()->configPath() . '/commands.php', "<?php return " . var_export($commands, true) . ";");
+        @file_put_contents($this->di->configPath() . '/commands.php', "<?php return " . var_export($commands, true) . ";");
 
         $this->info("$name created at $fileName");
     }

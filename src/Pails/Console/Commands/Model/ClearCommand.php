@@ -1,12 +1,5 @@
 <?php
-/**
- * ClearCommand.php
- *
- */
-
-
 namespace Pails\Console\Commands\Model;
-
 
 use Pails\Console\Command;
 

@@ -5,9 +5,9 @@
  */
 namespace Pails\Console\Commands\Db;
 
-use Phinx\Console\Command\Status;
+use Phinx\Console\Command\Test;
 
-class StatusCommand extends Status
+class TestCommand extends Test
 {
     use ExecuteTrait;
 
@@ -15,7 +15,7 @@ class StatusCommand extends Status
     {
         parent::configure();
 
-        $this->setName("db:status");
-        $this->setDescription("显示数据库迁移状态");
+        $this->setName("db:test");
+        $this->setDescription("测试数据库配置");
     }
 }

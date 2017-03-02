@@ -21,10 +21,13 @@ class ControllerCommand extends Command
 
         if ($namespace) {
             $fullNameSpace = 'App\\Http\\Controllers\\' . $namespace;
-            $fullPath = $this->getDI()->appPath() . '/Http/Controllers/' . str_replace('\\', '//', $namespace);
+            $fullPath = $this->di->appPath() . '/Http/Controllers/' . str_replace('\\', '//', $namespace);
         } else {
             $fullNameSpace = 'App\\Http\\Controllers';
-            $fullPath = $this->getDI()->appPath() . '/Http/Controllers';
+            $fullPath = $this->di->appPath() . '/Http/Controllers';
+        }
+        if (!file_exists($fullPath)) {
+            @mkdir($fullPath, 0755, true);
         }
 
         $className = $name . 'Controller';

@@ -13,7 +13,7 @@ class ListCommand extends Command
 
     public function handle()
     {
-        $iterator = new DirectoryIterator($this->getDI()->path("Models"));
+        $iterator = new DirectoryIterator($this->di->path("Models"));
         $data = [];
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile() && Text::endsWith($fileinfo->getFilename(), ".php")  && ($fileinfo->getFilename() != 'ModelBase.php')) {

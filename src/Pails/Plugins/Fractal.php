@@ -24,7 +24,7 @@ class Fractal extends Injectable
      */
     public function getManager()
     {
-        return $this->getDI()->getShared(Manager::class);
+        return $this->di->getShared(Manager::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Fractal extends Injectable
     public function item($data, $transformer, $resourceKey = null, $meta = [])
     {
         if (!is_object($transformer) && !is_callable($transformer)) {
-            $transformer = $this->getDI()->getShared($transformer);
+            $transformer = $this->di->getShared($transformer);
         }
         $resource = new Item($data, $transformer, $resourceKey);
 
@@ -61,7 +61,7 @@ class Fractal extends Injectable
     public function collection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [])
     {
         if (!is_object($transformer) && !is_callable($transformer)) {
-            $transformer = $this->getDI()->getShared($transformer);
+            $transformer = $this->di->getShared($transformer);
         }
 
         $resource = new Collection($data, $transformer, $resourceKey);

@@ -18,12 +18,12 @@ class ValidatorCommand extends Command
         $name = trim($this->argument('name'));
 
         $alias = trim($this->option('alias'));
-        if ($alias && $this->getDI()->has($alias)) {
+        if ($alias && $this->di->has($alias)) {
             throw new \LogicException("服务 $alias 已经存在");
         }
 
         $className = $name . 'Validator';
-        $pathName = $this->getDI()->appPath() . '/Validator/';
+        $pathName = $this->di->appPath() . '/Validator/';
         if (!file_exists($pathName)) {
             @mkdir($pathName, 0755, true);
         }
@@ -38,9 +38,9 @@ class ValidatorCommand extends Command
 
         if ($alias) {
             // rewrite services.php config
-            $services = (array)$this->getDI()->getConfig('services', null, []);
+            $services = (array)$this->di->getConfig('services', null, []);
             $services[$alias] = 'App\\Validators\\' . $className;
-            @file_put_contents($this->getDI()->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
+            @file_put_contents($this->di->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
         }
 
         $this->info("$name created at $fileName");
