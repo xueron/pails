@@ -39,13 +39,13 @@ class AliOSS extends AbstractAdapter
      */
     public function write($path, $contents, Config $config = null)
     {
-        $result = $this->client->putObject([
-            "Bucket" => $this->bucket,
-            "Key" => $path,
-            "Content" => $contents,
-            "ContentLength" => strlen($contents)
-        ]);
-        return $result;
+        $result = $this->client->putObject($this->bucket, $path, $contents);
+        if (!is_null($result)) {
+            $type = 'file';
+            $size = strlen($contents);
+            return compact('contents', 'type', 'size', 'path');
+        }
+        return false;
     }
 
     /**
@@ -98,43 +98,36 @@ class AliOSS extends AbstractAdapter
      * Rename a file.
      *
      * @param string $path
-     * @param string $newpath
+     * @param string $newPath
      *
      * @return bool
      */
-    public function rename($path, $newpath)
+    public function rename($path, $newPath)
     {
-        $this->client->copyObject([
-            'SourceBucket' => $this->bucket,
-            'SourceKey' => $path,
-            'DestBucket' => $this->bucket,
-            'DestKey' => $newpath
-        ]);
-
-        $this->client->deleteObject([
-            'Bucket' => $this->bucket,
-            'Key' => $path
-        ]);
-
-        return true;
+        if ($this->client->copyObject($this->bucket, $path, $this->bucket, $newPath) !== null) {
+            $result = $this->client->deleteObject($this->bucket, $path);
+            if (!is_null($result)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Copy a file.
      *
      * @param string $path
-     * @param string $newpath
+     * @param string $newPath
      *
      * @return bool
      */
-    public function copy($path, $newpath)
+    public function copy($path, $newPath)
     {
-        return $this->client->copyObject([
-            'SourceBucket' => $this->bucket,
-            'SourceKey' => $path,
-            'DestBucket' => $this->bucket,
-            'DestKey' => $newpath
-        ]);
+        $result = $this->client->copyObject($this->bucket, $path, $this->bucket, $newPath);
+        if (is_null($result)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -146,10 +139,11 @@ class AliOSS extends AbstractAdapter
      */
     public function delete($path)
     {
-        $this->client->deleteObject([
-            'Bucket' => $this->bucket,
-            'Key' => $path
-        ]);
+        $result = $this->client->deleteObject($this->bucket, $path);
+        if (is_null($result)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -162,10 +156,10 @@ class AliOSS extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        $this->client->deleteObject([
-            'Bucket' => $this->bucket,
-            'Key' => $dirname
-        ]);
+        if (substr($dirname, -1 , 1) != '/') {
+            $dirname = $dirname . '/';
+        }
+        $result = $this->client->deleteObject($this->bucket, $dirname);
         return true;
     }
 
@@ -179,19 +173,10 @@ class AliOSS extends AbstractAdapter
      */
     public function createDir($dirname, Config $config = null)
     {
-        // 阿里云没有实际文件夹的概念，Object/ 作为虚拟文件夹创建，长度为0
-        if (substr($dirname, -1) != '/') {
-            $path = $dirname . '/';
-        } else {
-            $path = $dirname;
+        $result = $this->client->createObjectDir($this->bucket, $dirname);
+        if (is_null($result)) {
+            return false;
         }
-
-        $this->client->putObject([
-            "Bucket" => $this->bucket,
-            "Key" => $path,
-            "Content" => "",
-            "ContentLength" => 0
-        ]);
 
         return ['path' => $dirname, 'type' => 'dir'];
     }
@@ -218,13 +203,7 @@ class AliOSS extends AbstractAdapter
      */
     public function has($path)
     {
-        if ($this->client->getObjectMetadata([
-            "Bucket" => $this->bucket,
-            "Key" => $path
-        ])) {
-            return true;
-        }
-        return false;
+        return $this->client->doesObjectExist($this->bucket, $path);
     }
 
     /**
@@ -236,13 +215,13 @@ class AliOSS extends AbstractAdapter
      */
     public function read($path)
     {
-        /* @var $object OSSObject */
-        $object = $this->client->getObject([
-            "Bucket" => $this->bucket,
-            "Key" => $path
-        ]);
+        $contents = $this->client->getObject($this->bucket, $path);
 
-        return $this->normalizeMetaData($path, $object) + ['contents' => stream_get_contents($object->getObjectContent())];
+        if ($contents != null) {
+            $res = ['path' => $path, 'contents' => $contents];
+            return $res;
+        }
+        return false;
     }
 
     /**
@@ -254,16 +233,15 @@ class AliOSS extends AbstractAdapter
      */
     public function readStream($path)
     {
-        $object = $this->client->getObject([
-            "Bucket" => $this->bucket,
-            "Key" => $path
-        ]);
+        $contents = $this->client->getObject($this->bucket, $path);
 
-        $stream = fopen('php://temp', 'w+');
-        fwrite($stream, stream_get_contents($object->getObjectContent()));
-        rewind($stream);
-
-        return $this->normalizeMetaData($path, $object) + ['stream' => $stream];
+        if ($contents != null) {
+            $stream = fopen('php://temp', 'w+b');
+            fwrite($stream, $contents);
+            rewind($stream);
+            return ['path' => $path, 'stream' => $stream];
+        }
+        return false;
     }
 
     /**
@@ -288,12 +266,7 @@ class AliOSS extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        $objectMeta = $this->client->getObjectMetadata([
-            "Bucket" => $this->bucket,
-            "Key" => $path
-        ]);
-
-        return $this->normalizeMetaData($path, $objectMeta);
+        return $this->normalizeMetaData($path);
     }
 
     /**
@@ -348,19 +321,21 @@ class AliOSS extends AbstractAdapter
      * Builds the normalized output array from a object.
      *
      * @param string $path
-     * @param OSSObject $object
-     * @return array
-     * @internal param BlobProperties $properties
+     * @return array|boolean
      *
      */
-    protected function normalizeMetaData($path, OSSObject $object)
+    protected function normalizeMetaData($path)
     {
+        $meta = $this->client->getObjectMeta($this->bucket, $path);
+        if (is_null($meta)) {
+            return false;
+        }
         return [
             'path'      => $path,
-            'timestamp' => (int) $object->getLastModified()->format('U'),
+            'timestamp' => strtotime($meta[strtolower('Last-Modified')]),
             'dirname'   => Util::dirname($path),
-            'mimetype'  => $object->getContentType(),
-            'size'      => $object->getContentLength(),
+            'mimetype'  => $meta[strtolower('Content-Type')],
+            'size'      => $meta[strtolower('Content-Length')],
             'type'      => 'file',
         ];
     }

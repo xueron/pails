@@ -8,6 +8,7 @@ use Phalcon\Cache\Backend\File as FileCache;
 use Phalcon\Cache\Frontend\Data as DataFrontend;
 use Phalcon\Cache\Frontend\Output as OutputFrontend;
 use Phalcon\Crypt;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Metadata\Files as FileMetaData;
@@ -44,7 +45,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         // cache
         $di->setShared('cache', function () {
             $frontCache = new DataFrontend([
-                "lifetime" => $this->config->get('cache.lifetime', 3600),
+                "lifetime" => $this['config']->get('cache.lifetime', 3600),
             ]);
 
             $cachePath = $this->tmpPath() . '/cache/data/';
@@ -65,7 +66,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             "modelsCache",
             function () {
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this->config->get('cache.model.lifetime', 3600),
+                    "lifetime" => $this['config']->get('cache.model.lifetime', 3600),
                 ]);
 
                 $cachePath = $this->tmpPath() . '/cache/models/';
@@ -104,7 +105,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             'crypt',
             function () {
                 $crypt = new Crypt();
-                $crypt->setKey($this->config->get('app.key', '#1dj8$=dp?.ak//j1V$'));
+                $crypt->setKey($this['config']->get('app.key', '#1dj8$=dp?.ak//j1V$'));
                 return $crypt;
             }
         );
@@ -113,7 +114,8 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'dispatcher',
             function () {
-                $eventsManager = $this->getShared('eventsManager');
+                /* @var ManagerInterface $eventsManager */
+                $eventsManager = $this['eventsManager'];
                 $eventsManager->attach('dispatch', new \Pails\Plugins\CustomRender());
 
                 $dispatcher = new Dispatcher();
@@ -184,7 +186,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 // Cache data for one day by default
                 $frontCache = new OutputFrontend(
                     [
-                        "lifetime" => $this->config->get('cache.view.lifetime', 86400),
+                        "lifetime" => $this['config']->get('cache.view.lifetime', 86400),
                     ]
                 );
 
@@ -211,11 +213,11 @@ class PailsServiceProvider extends AbstractServiceProvider
                 if (!file_exists($compiledPath)) {
                     @mkdir($compiledPath, 0755, true);
                 }
-                $volt = new Volt($this->view, $this);
+                $volt = new Volt($this['view'], $this);
                 $volt->setOptions([
                     'compiledPath' => $compiledPath,
                     'compiledSeparator' => '_',
-                    'compileAlways' => $this->config->get('app.debug', false)
+                    'compileAlways' => $this['config']->get('app.debug', false)
                 ]);
 
                 $volt->getCompiler()->addExtension(new VoltExtension());
@@ -229,7 +231,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             'url',
             function () {
                 $url = new Url();
-                if ($baseUrl = $this->config->get('url.base_url')) {
+                if ($baseUrl = $this['config']->get('url.base_url')) {
                     $url->setBaseUri($baseUrl);
                 }
                 return $url;

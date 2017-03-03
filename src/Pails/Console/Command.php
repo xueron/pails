@@ -18,6 +18,24 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 /**
  * Class Command
  *
+ * @property \Pails\Plugins\ApiResponse $apiResponse
+ * @property \Pails\Plugins\Fractal $fractal
+ * @property \Pails\Pluralizer $inflector
+ * @property \Pails\Plugins\Config $config
+ * @property \Pails\Exception\Handler $exceptionHandler
+ * @property \Phalcon\Security\Random $random
+ * @property \Phalcon\Cache\Backend\File $cache
+ * @property \Phalcon\Logger\Adapter\File $logger
+ * @property \Phalcon\Logger\Adapter\File $errorLogger
+ * @property \GuzzleHttp\Client $httpClient
+ * @property \AliyunMNS\Client $mns
+ * @property \OSS\OssClient $oss
+ * @property \League\Flysystem\FilesystemInterface $localFs
+ * @property \League\Flysystem\FilesystemInterface $ossFs
+ * @property \League\Flysystem\MountManager $filesystem
+ * @property \Redis $redis
+ * @property \Pails\Queue\Queue $queue
+ *
  * @package Pails\Console
  */
 abstract class Command extends SymfonyCommand implements InjectionAwareInterface, EventsAwareInterface

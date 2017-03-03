@@ -21,6 +21,12 @@ namespace Pails;
  * @property \Phalcon\Logger\Adapter\File $errorLogger
  * @property \GuzzleHttp\Client $httpClient
  * @property \AliyunMNS\Client $mns
+ * @property \OSS\OssClient $oss
+ * @property \League\Flysystem\FilesystemInterface $localFs
+ * @property \League\Flysystem\FilesystemInterface $ossFs
+ * @property \League\Flysystem\MountManager $filesystem
+ * @property \Redis $redis
+ * @property \Pails\Queue\Queue $queue
  *
  * @method \Phalcon\Logger\AdapterInterface error($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface info($message, array $context = [])
