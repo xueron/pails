@@ -3,7 +3,6 @@ namespace Pails\Console\Commands\Make;
 
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -18,12 +17,12 @@ class ProviderCommand extends Command
         $name = trim($this->argument('name'));
 
         $alias = trim($this->option('alias'));
-        if ($alias && $this->getDI()->has($alias)) {
+        if ($alias && $this->di->has($alias)) {
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Providers';
-        $pathName = $this->getDI()->appPath() . '/Providers/';
+        $className = $name . 'Provider';
+        $pathName = $this->di->appPath() . '/Providers/';
         if (!file_exists($pathName)) {
             @mkdir($pathName, 0755, true);
         }
@@ -38,9 +37,9 @@ class ProviderCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite services.php config
-        $providers = (array)$this->getDI()->getConfig('providers', null, []);
+        $providers = (array)$this->di->getConfig('providers', null, []);
         $providers[$alias] = 'App\\Providers\\' . $className;
-        @file_put_contents($this->getDI()->configPath() . '/providers.php', "<?php return " . var_export($providers, true) . ";");
+        @file_put_contents($this->di->configPath() . '/providers.php', "<?php return " . var_export($providers, true) . ";");
 
         $this->info("$name created at $fileName");
     }

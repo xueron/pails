@@ -16,7 +16,7 @@ class RouterServiceProvider extends AbstractServiceProvider
         //
         // Note: from phalcon 3, closure bind di as $this by default. so no use($app) needed.
         //
-        $this->getDI()->setShared(
+        $this->di->setShared(
             $this->serviceName,
             function () {
                 // 定义注解路由

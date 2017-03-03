@@ -26,7 +26,7 @@ class Config extends Injectable implements \ArrayAccess
     public function getConfig($section)
     {
         if (!isset($this->_sections[$section])) {
-            $this->_sections[$section] = $this->getDI()->getConfig($section, $this->getDI()->environment(), []);
+            $this->_sections[$section] = $this->di->getConfig($section, $this->di->environment(), []);
         }
         return $this->_sections[$section];
     }

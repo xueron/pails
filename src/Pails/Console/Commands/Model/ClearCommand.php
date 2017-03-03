@@ -1,12 +1,5 @@
 <?php
-/**
- * ClearCommand.php
- *
- */
-
-
 namespace Pails\Console\Commands\Model;
-
 
 use Pails\Console\Command;
 
@@ -14,7 +7,7 @@ class ClearCommand extends Command
 {
     protected $name = 'model:clear';
 
-    protected $description = '清空模型缓存';
+    protected $description = '清空Model数据缓存';
 
     public function handle()
     {

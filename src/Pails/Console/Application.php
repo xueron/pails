@@ -3,8 +3,7 @@ namespace Pails\Console;
 
 use Pails\ApplicationInterface;
 use Pails\Console\Commands;
-use Pails\Container;
-use Phalcon\Di;
+use Pails\InjectableTrait;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
@@ -22,15 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface, EventsAwareInterface
 {
-    /**
-     * @var Container
-     */
-    protected $di;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventsManager;
+    use InjectableTrait;
 
     /**
      * The output from the previous command.
@@ -45,7 +36,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      * @var array
      */
     protected $providers = [
-
     ];
 
     /**
@@ -54,7 +44,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      * @var array
      */
     protected $commands = [
-
     ];
 
     /**
@@ -63,8 +52,27 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      * @var array
      */
     protected $pailsCommands = [
+        Commands\Db\BreakpointCommand::class,
+        Commands\Db\CreateCommand::class,
+        Commands\Db\InitCommand::class,
+        Commands\Db\MigrateCommand::class,
+        Commands\Db\RollbackCommand::class,
+        Commands\Db\SeedCreateCommand::class,
+        Commands\Db\SeedRunCommand::class,
+        Commands\Db\StatusCommand::class,
+        Commands\Db\TestCommand::class,
         Commands\Cache\ClearCommand::class,
+        Commands\Mns\CreateQueueCommand::class,
+        Commands\Mns\CreateTopicCommand::class,
+        Commands\Mns\DeleteQueueCommand::class,
+        Commands\Mns\DeleteTopicCommand::class,
+        Commands\Mns\ListQueueCommand::class,
+        Commands\Mns\ListTopicCommand::class,
+        Commands\Mns\ListSubscriptionsCommand::class,
         Commands\Model\ClearCommand::class,
+        Commands\Model\ClearMetaCommand::class,
+        Commands\Model\ListCommand::class,
+        Commands\Model\ShowCommand::class,
         Commands\Route\ListCommand::class,
         Commands\Route\ClearCommand::class,
         Commands\View\ClearCommand::class,
@@ -75,7 +83,9 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ResourceCommand::class,
         Commands\Make\ServiceCommand::class,
         Commands\Make\ProviderCommand::class,
-        Commands\Make\ValidatorCommand::class
+        Commands\Make\ValidatorCommand::class,
+        Commands\Make\WorkerCommand::class,
+        Commands\Queue\ListenCommand::class,
     ];
 
     /**
@@ -83,38 +93,10 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      *
      * Initialize the Pails console application.
      *
-     * @param ContainerInterface|DiInterface $di
-     * @internal param string $version The Application Version
      */
-    public function __construct(ContainerInterface $di = null)
+    public function __construct()
     {
-        // 注入DI
-        if ($di) {
-            $this->setDI($di);
-        } else {
-            $this->setDI(Di::getDefault());
-        }
-
-        // 注入事件管理器
-        $this->eventsManager = $this->di->getEventsManager();
-
         parent::__construct('Pails', $this->di->version());
-
-        // For Phinx, set configuration file by default
-        $this->getDefinition()->addOption(new InputOption('--configuration', '-c', InputOption::VALUE_REQUIRED, 'The configuration file to load'));
-        array_push($_SERVER['argv'], '--configuration=config/database.yml');
-
-        // Phinx commands wraps
-        $this->addCommands(array(
-            new Commands\Db\InitCommand(),
-            new Commands\Db\BreakpointCommand(),
-            new Commands\Db\CreateCommand(),
-            new Commands\Db\MigrateCommand(),
-            new Commands\Db\RollbackCommand(),
-            new Commands\Db\SeedCreateCommand(),
-            new Commands\Db\SeedRunCommand(),
-            new Commands\Db\StatusCommand()
-        ));
 
         // Pails commands
         $this->resolveCommands($this->pailsCommands);
@@ -164,7 +146,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     {
         $message = 'The environment the command should run under.';
 
-        return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message);
+        return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message, 'development');
     }
 
     /**
@@ -187,24 +169,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         $this->setCatchExceptions(true);
 
         return $result;
-    }
-
-    /**
-     * @return \Phalcon\DiInterface
-     */
-    public function getDI()
-    {
-        return $this->di;
-    }
-
-    /**
-     * Sets the dependency injector
-     *
-     * @param mixed $dependencyInjector
-     */
-    public function setDI(DiInterface $dependencyInjector)
-    {
-        $this->di = $dependencyInjector;
     }
 
     /**
@@ -290,23 +254,5 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         }
 
         return $this;
-    }
-
-    /**
-     * @param ManagerInterface $eventsManager
-     * @return $this
-     */
-    public function setEventsManager(ManagerInterface $eventsManager)
-    {
-        $this->eventsManager = $eventsManager;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEventsManager()
-    {
-        return $this->eventsManager;
     }
 }

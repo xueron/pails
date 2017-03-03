@@ -1,16 +1,18 @@
 <?php
 namespace Pails\Console\Commands\Db;
 
+use Pails\Console\Command;
 
-use Phinx\Console\Command\Init;
-
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-class InitCommand extends Init
+class InitCommand extends Command
 {
-    protected function configure()
+    protected $name = 'db:init';
+
+    protected $description = '初始化数据库迁移的功能';
+
+    public function configure()
     {
+        parent::configure();
+
         $this->setName('db:init')
             ->setDescription('初始化数据库迁移')
             ->setHelp(sprintf(
@@ -18,23 +20,12 @@ class InitCommand extends Init
                 PHP_EOL,
                 PHP_EOL
             ));
+        //array_push($_SERVER['argv'], '--configuration=config/database.yml');
     }
 
-
-
-    /**
-     * Initializes the application.
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function handle()
     {
-        // get the migration path from the config
-        $path = getcwd() . DIRECTORY_SEPARATOR . 'config';
+        $path = $this->di->configPath();
         $path = realpath($path);
         if (!is_writable($path)) {
             throw new \InvalidArgumentException(sprintf(
@@ -63,6 +54,6 @@ class InitCommand extends Init
             ));
         }
 
-        $output->writeln('<info>created</info> .' . str_replace(getcwd(), '', $filePath));
+        $this->output->writeln('<info>created</info> .' . str_replace(getcwd(), '', $filePath));
     }
 } // End Init

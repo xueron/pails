@@ -3,7 +3,6 @@ namespace Pails\Console\Commands\Make;
 
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -18,12 +17,16 @@ class ServiceCommand extends Command
         $name = trim($this->argument('name'));
 
         $alias = trim($this->option('alias'));
-        if ($alias && $this->getDI()->has($alias)) {
+        if ($alias && $this->di->has($alias)) {
             throw new \LogicException("服务 $alias 已经存在");
         }
 
-        $className = Text::camelize($name) . 'Service';
-        $fileName = $this->getDI()->appPath() . '/Services/' . $className . '.php';
+        $className = $name . 'Service';
+        $pathName = $this->di->appPath() . '/Services/';
+        if (!file_exists($pathName)) {
+            @mkdir($pathName, 0755, true);
+        }
+        $fileName = $pathName . $className . '.php';
         if (file_exists($fileName)) {
             throw new \LogicException("文件 $fileName 已经存在");
         }
@@ -34,9 +37,9 @@ class ServiceCommand extends Command
 
         if ($alias) {
             // rewrite services.php config
-            $services = (array)$this->getDI()->getConfig('services', null, []);
+            $services = (array)$this->di->getConfig('services', null, []);
             $services[$alias] = 'App\\Services\\' . $className;
-            @file_put_contents($this->getDI()->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
+            @file_put_contents($this->di->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
         }
 
         $this->info("$name created at $fileName");

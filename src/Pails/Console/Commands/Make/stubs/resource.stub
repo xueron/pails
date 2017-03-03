@@ -23,6 +23,14 @@ class DummyClass extends DummyExtends
     }
 
     /**
+     * @Get("/{id:([0-9]+)}/edit")
+     */
+    public function editAction()
+    {
+
+    }
+
+    /**
      * @Get("/{id:([0-9]+)}")
      */
     public function showAction($id)
@@ -40,6 +48,7 @@ class DummyClass extends DummyExtends
 
     /**
      * @Put("/{id:([0-9]+)}")
+     * @Post("/{id:([0-9]+)}/edit")
      */
     public function updateAction($id)
     {
@@ -48,10 +57,10 @@ class DummyClass extends DummyExtends
 
     /**
      * @Delete("/{id:([0-9]+)}")
+     * @Post("/{id:([0-9]+)}/delete")
      */
     public function deleteAction($id)
     {
 
     }
 }
-

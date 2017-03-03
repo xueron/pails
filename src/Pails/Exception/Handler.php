@@ -6,15 +6,14 @@
 namespace Pails\Exception;
 
 use Exception;
-use Phalcon\DiInterface;
-use Phalcon\Mvc\User\Component;
+use Pails\Injectable;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
-class Handler extends Component
+class Handler extends Injectable
 {
     protected $debug = false;
 
@@ -27,15 +26,10 @@ class Handler extends Component
 
     /**
      * Create a new exception handler instance.
-     * @param DiInterface $di
      */
-    public function __construct(DiInterface $di = null)
+    public function __construct()
     {
         $this->debug = constant('APP_DEBUG') ?: false;
-
-        if (is_object($di)) {
-            $this->setDI($di);
-        }
     }
 
     /**
@@ -55,7 +49,7 @@ class Handler extends Component
 
             // log locally
             $log = sprintf("[%s] [%s] %s thrown in %s on line %d\n", $time, $class, $message, $file, $line);
-            error_log($log, 3, $this->getDI()->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
+            error_log($log, 3, $this->di->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
 
             // log to system
             $syslog = sprintf("[%s] %s thrown in %s on line %d", $class, $message, $file, $line);

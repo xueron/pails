@@ -1,12 +1,13 @@
 <?php
 namespace Pails\Console\Commands\Db;
 
-
 use Phinx\Console\Command\Create;
 
 class CreateCommand extends Create
 {
-    protected function configure()
+    use ExecuteTrait;
+
+    public function configure()
     {
         parent::configure();
 

@@ -19,7 +19,7 @@ class ListCommand extends Command
 
     public function handle()
     {
-        $router = $this->getDI()->getRouter();
+        $router = $this->di->getRouter();
         $router->handle('/');
 
         $routes = $router->getRoutes();
