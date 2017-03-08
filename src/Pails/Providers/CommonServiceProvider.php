@@ -61,9 +61,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'oss',
             function () {
-                $endpoint = $this->get("config")->get("oss.endpoint");
-                $accessId = $this->get("config")->get("oss.accessId");
-                $accessKey = $this->get("config")->get("oss.accessKey");
+                if (!$this['config']->get('oss.enable', false)) {
+                    throw new \LogicException("OSS is not enabled");
+                }
+                $endpoint = $this["config"]->get("oss.endpoint");
+                $accessId = $this["config"]->get("oss.accessId");
+                $accessKey = $this["config"]->get("oss.accessKey");
                 if (!$endpoint || !$accessId || !$accessKey) {
                     throw new \LogicException("请先配置MSN参数");
                 }
@@ -75,9 +78,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'mns',
             function () {
-                $endpoint = $this->get("config")->get("mns.endpoint");
-                $accessId = $this->get("config")->get("mns.accessId");
-                $accessKey = $this->get("config")->get("mns.accessKey");
+                if (!$this['config']->get('mns.enable', false)) {
+                    throw new \LogicException("MNS is not enabled");
+                }
+                $endpoint = $this["config"]->get("mns.endpoint");
+                $accessId = $this["config"]->get("mns.accessId");
+                $accessKey = $this["config"]->get("mns.accessKey");
                 if (!$endpoint || !$accessId || !$accessKey) {
                     throw new \LogicException("请先配置MSN参数");
                 }
@@ -99,13 +105,19 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'ossFs',
             function () {
-                $bucket = $this->get('config')->get('oss.bucket');
+                if (!$this['config']->get('oss.enable', false)) {
+                    throw new \LogicException("OSS is not enabled");
+                }
+                $bucket = $this["config"]->get('oss.bucket');
+                if (!$bucket) {
+                    throw new \LogicException("bucket is not set");
+                }
                 $adapter =  new AliOSS($bucket, $this['oss']);
                 return new Filesystem($adapter);
             }
         );
 
-        // queue
+        // queue, Usage: $queue = $this->di->get('queue', 'queueName');
         $di->set(
             'queue',
             Queue::class
@@ -118,7 +130,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
                 $fsList = [
                     'local' => $this['localFs']
                 ];
-                if ($this->get("config")->get('oss.enable')) {
+                if ($this["config"]->get('oss.enable')) {
                     $fsList['oss'] = $this['ossFs'];
                 }
                 return new MountManager($fsList);
@@ -129,10 +141,14 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'redis',
             function () {
-                $host = $this->get('config')->get('redis.host', 'localhost');
-                $port = $this->get('config')->get('redis.port', '6379');
-                $auth = $this->get('config')->get('redis.auth');
-                $persistent = $this->get('config')->get('redis.persistent');
+                if (!$this['config']->get('redis.enable', false)) {
+                    throw new \LogicException("redis is not enabled");
+                }
+
+                $host = $this["config"]->get('redis.host', 'localhost');
+                $port = $this["config"]->get('redis.port', '6379');
+                $auth = $this["config"]->get('redis.auth');
+                $persistent = $this["config"]->get('redis.persistent');
 
                 $redis = new \Redis();
                 $ok = false;

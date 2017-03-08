@@ -24,7 +24,10 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
  * @property \Pails\Plugins\Config $config
  * @property \Pails\Exception\Handler $exceptionHandler
  * @property \Phalcon\Security\Random $random
- * @property \Phalcon\Cache\Backend\File $cache
+ * @property \Phalcon\Cache\BackendInterface $fileCache
+ * @property \Phalcon\Cache\BackendInterface $redisCache
+ * @property \Phalcon\Cache\BackendInterface $memcachedCache
+ * @property \Phalcon\Cache\Multiple $cache
  * @property \Phalcon\Logger\Adapter\File $logger
  * @property \Phalcon\Logger\Adapter\File $errorLogger
  * @property \GuzzleHttp\Client $httpClient

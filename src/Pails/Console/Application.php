@@ -61,7 +61,9 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Db\SeedRunCommand::class,
         Commands\Db\StatusCommand::class,
         Commands\Db\TestCommand::class,
+
         Commands\Cache\ClearCommand::class,
+
         Commands\Mns\CreateQueueCommand::class,
         Commands\Mns\CreateTopicCommand::class,
         Commands\Mns\DeleteQueueCommand::class,
@@ -69,15 +71,22 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Mns\ListQueueCommand::class,
         Commands\Mns\ListTopicCommand::class,
         Commands\Mns\ListSubscriptionsCommand::class,
+        Commands\Mns\SubscribeCommand::class,
+        Commands\Mns\UnSubscribeCommand::class,
+
         Commands\Model\ClearCommand::class,
         Commands\Model\ClearMetaCommand::class,
         Commands\Model\ListCommand::class,
         Commands\Model\ShowCommand::class,
+
         Commands\Route\ListCommand::class,
         Commands\Route\ClearCommand::class,
+
         Commands\View\ClearCommand::class,
         Commands\View\ClearVoltCommand::class,
+
         Commands\Make\CommandCommand::class,
+        Commands\Make\ConfigCommand::class,
         Commands\Make\ModelCommand::class,
         Commands\Make\ControllerCommand::class,
         Commands\Make\ResourceCommand::class,
@@ -85,6 +94,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ProviderCommand::class,
         Commands\Make\ValidatorCommand::class,
         Commands\Make\WorkerCommand::class,
+
         Commands\Queue\ListenCommand::class,
     ];
 

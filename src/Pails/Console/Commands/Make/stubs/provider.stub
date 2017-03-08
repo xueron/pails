@@ -12,7 +12,7 @@ class DummyClass extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->getDI()->setShared(
+        $this->di->setShared(
             'dummyServiceName',
 
             function () {

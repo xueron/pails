@@ -5,10 +5,14 @@ use Pails\Plugins\VoltExtension;
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Annotations\Adapter\Files as FileAnnotations;
 use Phalcon\Cache\Backend\File as FileCache;
+use Phalcon\Cache\Backend\Redis as RedisCache;
+use Phalcon\Cache\Backend\Libmemcached as MemcachedCache;
 use Phalcon\Cache\Frontend\Data as DataFrontend;
+use Phalcon\Cache\Multiple as MultipleCache;
 use Phalcon\Cache\Frontend\Output as OutputFrontend;
 use Phalcon\Crypt;
 use Phalcon\Events\ManagerInterface;
+use Phalcon\Http\Response\Cookies;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Metadata\Files as FileMetaData;
@@ -18,6 +22,8 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Security\Random;
 use Phalcon\Session\Adapter\Files as FileSession;
+use Phalcon\Session\Adapter\Libmemcached as MemcachedSession;
+use Phalcon\Session\Adapter\Redis as RedisSession;
 
 class PailsServiceProvider extends AbstractServiceProvider
 {
@@ -42,31 +48,122 @@ class PailsServiceProvider extends AbstractServiceProvider
             }
         );
 
-        // cache
-        $di->setShared('cache', function () {
-            $frontCache = new DataFrontend([
-                "lifetime" => $this['config']->get('cache.lifetime', 3600),
-            ]);
+        // fileCache
+        $di->setShared(
+            'fileCache',
+            function () {
+                $frontCache = new DataFrontend([
+                    "lifetime" => $this['config']->get('cache.file.lifetime', 86400),
+                ]);
 
-            $cachePath = $this->tmpPath() . '/cache/data/';
-            if (!file_exists($cachePath)) {
-                @mkdir($cachePath, 0755, true);
+                $cachePath = $this->tmpPath() . '/cache/data/';
+                if (!file_exists($cachePath)) {
+                    @mkdir($cachePath, 0755, true);
+                }
+                $cache = new FileCache(
+                    $frontCache,
+                    [
+                        "prefix" => $this['config']->get('cache.file.prefix'),
+                        "cacheDir" => $cachePath
+                    ]
+                );
+                return $cache;
             }
-            $cache = new FileCache(
-                $frontCache,
-                [
-                    "cacheDir" => $cachePath
-                ]
-            );
-            return $cache;
-        });
+        );
 
-        // modelsCache, 设置模型缓存服务
+        // redisCache
+        $di->setShared(
+            'redisCache',
+            function () {
+                if (!$this['config']->get('cache.redis.enable', false)) {
+                    throw new \LogicException("redis cache is not enabled");
+                }
+
+                $frontCache = new DataFrontend([
+                    "lifetime" => $this['config']->get('cache.redis.lifetime', 3600),
+                ]);
+
+                $options = [
+                    "prefix" => $this['config']->get('cache.redis.prefix'),
+                    "host" => $this['config']->get('cache.redis.host'),
+                    "port" => $this['config']->get('cache.redis.port'),
+                    "persistent" => $this['config']->get('cache.redis.persistent'),
+                    "statsKey" => '_PHCR',
+                ];
+                if ($auth = $this['config']->get('cache.redis.auth')) {
+                    $options['auth'] = $auth;
+                }
+
+                $cache = new RedisCache($frontCache, $options);
+                return $cache;
+            }
+        );
+
+        // memcachedCache
+        $di->setShared(
+            'memcachedCache',
+            function () {
+                if (!$this['config']->get('cache.memcache.enable', false)) {
+                    throw new \LogicException("memcache cache is not enabled");
+                }
+
+                $frontCache = new DataFrontend([
+                    "lifetime" => $this['config']->get('cache.memcache.lifetime', 3600),
+                ]);
+
+                $cache = new MemcachedCache(
+                    $frontCache,
+                    [
+                        'servers' => [
+                            "host" => $this['config']->get('cache.memcache.host'),
+                            "port" => $this['config']->get('cache.memcache.port'),
+                            "weight" => 1
+                        ],
+                        'client' => [
+                            \Memcached::OPT_HASH => \Memcached::HASH_MD5,
+                            \Memcached::OPT_PREFIX_KEY => 'prefix.',
+                        ],
+                        "prefix" => $this['config']->get('cache.memcache.prefix'),
+                        "statsKey" => '_PHCM',
+                    ]
+                );
+                return $cache;
+            }
+        );
+
+        // cache, 多层Cache设置
+        $di->setShared(
+            'cache',
+            function () {
+                $backends = [
+                    $this['fileCache']
+                ];
+                if ($this['config']->get('cache.redis.enable', false)) {
+                    array_unshift($backends, $this['redisCache']);
+                }
+                if ($this['config']->get('cache.memcache.enable', false)) {
+                    array_unshift($backends, $this['memcachedCache']);
+                }
+                return new MultipleCache($backends);
+            }
+        );
+
+        // cookies
+        $di->setShared(
+            'cookies',
+            function () {
+                $cookies = new Cookies();
+                $cookies->useEncryption(true);
+                return $cookies;
+            }
+        );
+
+        // modelsCache, 设置模型缓存服务, 默认使用fileCache，可以在使用中指定cacheService，使用前面定义的memCache or redisCache
         $di->set(
             "modelsCache",
             function () {
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this['config']->get('cache.model.lifetime', 3600),
+                    "lifetime" => $this['config']->get('app.model.cache.lifetime', 3600),
                 ]);
 
                 $cachePath = $this->tmpPath() . '/cache/models/';
@@ -156,10 +253,39 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'session',
             function () {
-                $session = new FileSession();
-                if (!$session->isStarted()) {
+                $session = null;
+
+                if ($this['config']->get('session.adapter', 'file') == 'file') {
+                    $session = new FileSession($this['config']->get('session.options'));
+                }
+
+                if ($this['config']->get('session.adapter', 'file') == 'redis') {
+                    $session = new RedisSession($this['config']->get('session.options'));
+                }
+
+                if ($this['config']->get('session.adapter', 'file') == 'memcached') {
+                    $session = new MemcachedSession([
+                        'servers' => [
+                            [
+                                'host' => $this['config']->get('session.options.host', 'localhost'),
+                                'port' => $this['config']->get('session.options.port', 11211),
+                                'weight' => 1,
+                            ],
+                        ],
+                        'client' => [
+                            \Memcached::OPT_HASH => \Memcached::HASH_MD5,
+                            \Memcached::OPT_PREFIX_KEY => "prefix.",
+                        ],
+                        'lifetime' => $this['config']->get('session.options.lifetime', 3600),
+                        'prefix' => $this['config']->get('session.options.prefix', '_session_'),
+                        'uniqueId' => $this['config']->get('session.options.uniqueId', '_pails_app_'),
+                    ]);
+                }
+
+                if (is_object($session) && !$session->isStarted()) {
                     $session->start();
                 }
+
                 return $session;
             }
         );
@@ -179,14 +305,14 @@ class PailsServiceProvider extends AbstractServiceProvider
             }
         );
 
-        // viewCache
-        $di->set( // Not shared
+        // viewCache, Not shared
+        $di->set(
             "viewCache",
             function () {
                 // Cache data for one day by default
                 $frontCache = new OutputFrontend(
                     [
-                        "lifetime" => $this['config']->get('cache.view.lifetime', 86400),
+                        "lifetime" => $this['config']->get('app.view.cache.lifetime', 86400),
                     ]
                 );
 
@@ -234,6 +360,10 @@ class PailsServiceProvider extends AbstractServiceProvider
                 if ($baseUrl = $this['config']->get('url.base_url')) {
                     $url->setBaseUri($baseUrl);
                 }
+                if ($staticUrl = $this['config']->get('url.static_url')) {
+                    $url->setStaticBaseUri($staticUrl);
+                }
+                $url->setBasePath($this->basePath());
                 return $url;
             }
         );
