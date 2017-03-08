@@ -3,10 +3,7 @@
  * ClearCommand.php
  *
  */
-
-
 namespace Pails\Console\Commands\Cache;
-
 
 use Pails\Console\Command;
 
@@ -18,16 +15,11 @@ class ClearCommand extends Command
 
     public function handle()
     {
-        $cachePath = $this->di->tmpPath() . '/cache/data/';
-        if (!file_exists($cachePath)) {
-            $this->info("缓存目录 $cachePath 不存在");
-        } else {
-            foreach (new \DirectoryIterator($cachePath) as $cacheFile) {
-                if ($cacheFile->isFile()) {
-                    @unlink($cacheFile->getFilename());
-                }
-            }
+        $res = $this->cache->flush();
+        if ($res) {
             $this->info("缓存已经清空");
+        } else {
+            $this->info("缓存清理失败，请手工查看。");
         }
     }
 }

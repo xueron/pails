@@ -59,8 +59,7 @@ class ApiResponse extends Injectable
      */
     public function response(array $data, array $headers = [])
     {
-        $response = $this->getDI()->getShared('response');
-
+        $response = $this->response;
         $response->setJsonContent($data, JSON_UNESCAPED_UNICODE);
         $response->setStatusCode($this->getStatusCode());
         foreach ($headers as $name => $value) {
@@ -157,7 +156,7 @@ class ApiResponse extends Injectable
      */
     public function withItem($data, $transformer, $meta = [], array $headers = [])
     {
-        $data = $this->getDI()->get('fractal')->item($data, $transformer, null, $meta);
+        $data = $this->fractal->item($data, $transformer, null, $meta);
 
         return $this->withArray($data, $headers);
     }
@@ -173,7 +172,7 @@ class ApiResponse extends Injectable
      */
     public function withCollection($data, $transformer, $meta = [], array $headers = [])
     {
-        $data = $this->getDI()->get('fractal')->collection($data, $transformer, null, null, $meta);
+        $data = $this->fractal->collection($data, $transformer, null, null, $meta);
 
         return $this->withArray($data, $headers);
     }

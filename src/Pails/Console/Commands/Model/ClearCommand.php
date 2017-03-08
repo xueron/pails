@@ -11,18 +11,11 @@ class ClearCommand extends Command
 
     public function handle()
     {
-        $cachePath = $this->di->tmpPath() . '/cache/models/';
-        if (!file_exists($cachePath)) {
-            $this->info("缓存目录不存在");
-        } else {
-            foreach (new \DirectoryIterator($cachePath) as $cacheFile) {
-                if ($cacheFile->isFile()) {
-                    $filePath = $cacheFile->getPathname();
-                    @unlink($filePath);
-                    $this->line("$filePath deleted");
-                }
-            }
+        $res = $this->modelsCache->flush();
+        if ($res) {
             $this->info("缓存已经清空");
+        } else {
+            $this->info("缓存清理失败，请手工查看。");
         }
     }
 }
