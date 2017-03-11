@@ -65,7 +65,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller
      * @param ResponseInterface $response
      * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
-    private function convertResponse(ResponseInterface $response)
+    protected function convertResponse(ResponseInterface $response)
     {
         $this->response->setContent($response->getBody());
         $this->response->setStatusCode($response->getStatusCode());
