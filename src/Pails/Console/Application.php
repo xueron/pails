@@ -5,9 +5,7 @@ use Pails\ApplicationInterface;
 use Pails\Console\Commands;
 use Pails\InjectableTrait;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
 use Symfony\Component\Console\Application as ApplicationBase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,7 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Pails console application.
- *
  */
 abstract class Application extends ApplicationBase implements InjectionAwareInterface, ApplicationInterface, EventsAwareInterface
 {
@@ -94,6 +91,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Make\ProviderCommand::class,
         Commands\Make\ValidatorCommand::class,
         Commands\Make\WorkerCommand::class,
+        Commands\Make\ListenerCommand::class,
 
         Commands\Queue\ListenCommand::class,
     ];
@@ -188,7 +186,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     {
         $this->di->registerServices($this->providers);
 
-        // register services from services.php
+        // register services from providers.php
         $providers = (array)$this->di->getConfig('providers', null, []);
         $this->di->registerServices(array_values($providers));
 
@@ -196,6 +194,12 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         $services = (array)$this->di->getConfig('services', null, []);
         foreach ($services as $name => $class) {
             $this->getDI()->setShared($name, $class);
+        }
+
+        // register listeners from listeners.php
+        $listeners = (array)$this->di->getConfig('listeners', null, []);
+        foreach ($listeners as $event => $listener) {
+            $this->eventsManager->attach($event, $this->di->getShared($listener));
         }
 
         return $this;
@@ -245,7 +249,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     public function resolve($command)
     {
         $commandInstance = $this->di->get($command);
-        $commandInstance->setEventsManager($this->di->getEventsManager());
         return $this->add($commandInstance);
     }
 

@@ -18,6 +18,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 /**
  * Class Command
  *
+ * @property \Pails\Container|\Phalcon\Di $di
  * @property \Pails\Plugins\ApiResponse $apiResponse
  * @property \Pails\Plugins\Fractal $fractal
  * @property \Pails\Pluralizer $inflector
