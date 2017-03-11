@@ -48,9 +48,6 @@ class Listener extends Injectable
         // 获得队列
         $this->queue = $this->di->get(Queue::class, [$queueName]);
 
-        // 注册事件管理器
-        $this->setEventsManager($this->di->getEventsManager());
-
         // 注册异常处理器
         $this->exceptions = $this->di->get(Handler::class);
     }
@@ -162,7 +159,7 @@ class Listener extends Injectable
 
             $this->markJobAsFailedIfAlreadyExceedsMaxAttempts($job, (int) $options->maxTries);
 
-            $this->getDI()->getShared('queue:' . $this->queue->getName())->process($job, $options);
+            $this->di->getShared('queue:' . $this->queue->getName())->process($job, $options);
 
             $this->raiseAfterJobEvent($job);
 
@@ -259,11 +256,11 @@ class Listener extends Injectable
     {
         try {
 
-            $this->getEventsManager()->fire("listener:beforeGetJob", $this);
+            $this->eventsManager->fire("listener:beforeGetJob", $this);
 
             $job = $this->queue->pop($options);
 
-            $this->getEventsManager()->fire("listener:afterGetJob", $this, $job);
+            $this->eventsManager->fire("listener:afterGetJob", $this, $job);
 
             return $job;
 

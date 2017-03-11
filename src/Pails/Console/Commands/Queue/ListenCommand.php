@@ -80,52 +80,24 @@ class ListenCommand extends Command
     /**
      * Listen for the queue events in order to update the console output.
      *
+     * 可以通过挂载独立的事件监听方法处理这些事件
+     *
      * @return void
      */
     protected function listenForEvents()
     {
         // -- Listener的事件
-        $this->getEventsManager()->attach('listener:beforeDaemonLoop', function ($event, $source, $data) {
-            $this->writeOutput("before daemon loop", false);
-        });
-
-        $this->getEventsManager()->attach('listener:beforeGetJob', function ($event, $source, $data) {
-
-        });
-
-        $this->getEventsManager()->attach('listener:afterGetJob', function ($event, $source, $data) {
-            if ($data) {
-                print_r($data->getInstance()->getMessageBody());
-            };
-        });
-
-        $this->getEventsManager()->attach('listener:stop', function ($event, $source, $data) {
-
-        });
-
-        $this->getEventsManager()->attach('listener:afterDaemonLoop', function ($event, $source, $data) {
-
-        });
+        //listener:beforeDaemonLoop
+        //listener:beforeGetJob
+        //listener:afterGetJob
+        //listener:stop
+        //listener:afterDaemonLoop
 
         // -- Worker处理的事件
-
-        $this->getEventsManager()->attach('worker:beforeJobHandle', function ($event, $source, $data) {
-            $this->writeOutput($data->getPayload(), false);
-        });
-
-        $this->getEventsManager()->attach('worker:afterJobHandle', function ($event, $source, $data) {
-            $this->writeOutput($data->getPayload(), false);
-        });
-
-        $this->getEventsManager()->attach('worker:jobException', function ($event, $source, $data) {
-            $this->info("worker:jobException " . $data[1]->getMessage());
-        });
-
-        $this->getEventsManager()->attach('worker:jobFailed', function ($event, $source, $data) {
-            $this->writeOutput($data[0]->getPayload(), true);
-
-            $this->logFailedJob($data);
-        });
+        //worker:beforeJobHandle
+        //worker:afterJobHandle
+        //worker:jobException
+        //worker:jobFailed
     }
 
     /**

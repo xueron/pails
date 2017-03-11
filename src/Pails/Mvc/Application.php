@@ -18,7 +18,7 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
     {
         $this->di->registerServices($this->providers);
 
-        // register services from services.php
+        // register services from providers.php
         $providers = (array)$this->di->getConfig('providers', null, []);
         $this->di->registerServices(array_values($providers));
 
@@ -26,6 +26,12 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
         $services = (array)$this->di->getConfig('services', null, []);
         foreach ($services as $name => $class) {
             $this->di->setShared($name, $class);
+        }
+
+        // register listeners from listeners.php
+        $listeners = (array)$this->di->getConfig('listeners', null, []);
+        foreach ($listeners as $event => $listener) {
+            $this->eventsManager->attach($event, $this->di->getShared($listener));
         }
 
         return $this;

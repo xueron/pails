@@ -22,7 +22,6 @@ class RouterServiceProvider extends AbstractServiceProvider
                 // 定义注解路由
                 $router = new Annotations(false);
                 $router->removeExtraSlashes(true);
-                $router->setEventsManager($this->get('eventsManager'));
                 $router->setDefaultNamespace('App\\Http\\Controllers');
                 $router->setDefaultController('index');
                 $router->setDefaultAction('index');

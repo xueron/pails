@@ -7,6 +7,8 @@ use Phalcon\Events\ManagerInterface;
 /**
  * Class InjectableTrait
  * @package Pails
+ *
+ * @property \Phalcon\DiInterface $di
  */
 trait InjectableTrait
 {

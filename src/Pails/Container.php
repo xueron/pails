@@ -7,6 +7,7 @@ use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\Di;
+use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Http\Response;
 use Phalcon\Loader;
 use Phalcon\Version;
@@ -21,7 +22,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.4';
+    const VERSION = '3.0.6';
 
     /**
      * @var Loader $loader
@@ -43,6 +44,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
         Providers\CommonServiceProvider::class,
         Providers\DatabaseServiceProvider::class,
         Providers\RouterServiceProvider::class,
+        Providers\OAuth2ServiceProvider::class,
     ];
 
     /**
@@ -55,6 +57,10 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
         if ($basePath) {
             $this->setBasePath($basePath);
+        }
+
+        if (!$this->getInternalEventsManager() && ($eventsManager = $this->getEventsManager())) {
+            $this->setInternalEventsManager($eventsManager);
         }
 
         $this->registerAutoLoader();
@@ -358,5 +364,22 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     public function reportException(\Exception $e)
     {
         $this->getShared(Handler::class)->report($e);
+    }
+
+    /**
+     * Override DI's get() method, setEventsManager by default.
+     *
+     * @inheritdoc
+     */
+    public function get($name, $parameters = null)
+    {
+        $instance = parent::get($name, $parameters);
+
+        if (is_object($instance) && $instance instanceof EventsAwareInterface) {
+            if (!$instance->getEventsManager() && ($eventsManager = $this->getEventsManager())) {
+                $instance->setEventsManager($eventsManager);
+            }
+        }
+        return $instance;
     }
 }

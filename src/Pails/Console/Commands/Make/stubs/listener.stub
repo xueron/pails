@@ -1,0 +1,7 @@
+<?php
+namespace App\Listeners;
+
+class DummyClass extends \Pails\Injectable
+{
+
+}

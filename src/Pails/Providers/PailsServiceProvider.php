@@ -211,14 +211,12 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'dispatcher',
             function () {
-                /* @var ManagerInterface $eventsManager */
-                $eventsManager = $this['eventsManager'];
-                $eventsManager->attach('dispatch', new \Pails\Plugins\CustomRender());
-
                 $dispatcher = new Dispatcher();
-                $dispatcher->setEventsManager($eventsManager);
                 $dispatcher->setDefaultNamespace('App\\Http\\Controllers');
                 $dispatcher->setModelBinding(true);
+
+                // register event listener
+                $this['eventsManager']->attach('dispatch', new \Pails\Plugins\CustomRender());
 
                 return $dispatcher;
             }
@@ -295,7 +293,6 @@ class PailsServiceProvider extends AbstractServiceProvider
             'view',
             function () {
                 $view = new View();
-                $view->setEventsManager($this->getShared('eventsManager'));
                 $view->setViewsDir($this->viewsPath());
                 $view->registerEngines([
                     '.volt' => 'volt',

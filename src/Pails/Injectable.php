@@ -28,6 +28,9 @@ namespace Pails;
  * @property \League\Flysystem\FilesystemInterface $localFs
  * @property \League\Flysystem\FilesystemInterface $ossFs
  * @property \League\Flysystem\MountManager $filesystem
+ * @property \League\OAuth2\Server\AuthorizationServer $authServer
+ * @property \League\OAuth2\Server\ResourceServer $resourceServer
+ * @property \Pails\OAuth2\StorageServiceInterface $storageService
  * @property \Redis $redis
  * @property \Pails\Queue\Queue $queue
  *

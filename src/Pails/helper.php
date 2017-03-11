@@ -967,3 +967,19 @@ if (! function_exists('windows_os')) {
         return strtolower(substr(PHP_OS, 0, 3)) === 'win';
     }
 }
+
+if (! function_exists('seconds2interval')) {
+    /**
+     * Return a DateInterval from seconds.
+     *
+     * @param int $seconds
+     * @return bool|DateInterval
+     */
+    function seconds2interval($seconds) {
+        $d1 = new \DateTime();
+        $d2 = new \DateTime();
+        $d2->add(new \DateInterval('PT'.$seconds.'S'));
+
+        return $d2->diff($d1);
+    }
+}

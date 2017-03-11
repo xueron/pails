@@ -30,10 +30,11 @@
     "guzzlehttp/guzzle": "^6.2",
     "league/flysystem": "^1.0",
     "league/fractal": "^0.14",
+    "league/oauth2-server": "^5.1",
+    "psr/http-message": "^1.0",
     "robmorgan/phinx": "^0.6",
     "symfony/console": "^3.2",
-    "symfony/debug": "^3.2",
-    "symfony/process": "^3.2"
+    "symfony/debug": "^3.2"
   },
   "autoload": {
     "psr-4": {

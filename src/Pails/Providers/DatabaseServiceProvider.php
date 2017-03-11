@@ -12,7 +12,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
         $this->di->set(
             'db',
             function () {
-                $env = env('APP_ENV', 'development');
+                $env = $this->environment();
                 $yaml = Yaml::parse(@file_get_contents($this->configPath() . '/database.yml'));
                 if (!empty($yaml['environments'][$env])) {
                     $database = $yaml['environments'][$env];
@@ -27,10 +27,9 @@ class DatabaseServiceProvider extends AbstractServiceProvider
 
                     // debug sql
                     if ($this->get('config')->get('app.debug', false)) {
-                        $eventsManager = $this->getEventsManager();
                         $logger = new File($this->logPath() . '/db_query.log');
 
-                        $eventsManager->attach(
+                        $this['eventsManager']->attach(
                             'db',
                             function ($event, $connection) use ($logger) {
 
@@ -47,7 +46,6 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                                 }
                             }
                         );
-                        $db->setEventsManager($eventsManager);
                     }
 
                     return $db;

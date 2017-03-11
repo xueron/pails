@@ -5,11 +5,6 @@ use Pails\Injectable;
 
 abstract class Worker extends Injectable
 {
-    public function __construct()
-    {
-        $this->setEventsManager($this->di->getEventsManager());
-    }
-
     public function process(Job $job, ListenerOptions $options)
     {
         $res = $this->handle($job, $options);
