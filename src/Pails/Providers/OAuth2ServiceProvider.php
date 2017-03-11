@@ -1,6 +1,7 @@
 <?php
 namespace Pails\Providers;
 
+use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Server\ResourceServer;
 use Pails\OAuth2\Repositories\AccessTokenRepository;
 use Pails\OAuth2\Repositories\AuthCodeRepository;
@@ -116,6 +117,23 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
 
                 $resourceServer = new ResourceServer($accessTokenRepository, $publicKey);
                 return $resourceServer;
+            }
+        );
+
+        $this->di->setShared(
+            'authClient',
+
+            function () {
+                $provider = new GenericProvider([
+                    'clientId'                => $this['config']->get('oauth2.client.client_id'),
+                    'clientSecret'            => $this['config']->get('oauth2.client.client_secret'),
+                    'redirectUri'             => $this['config']->get('oauth2.client.redirect_url'),
+                    'urlAuthorize'            => $this['config']->get('oauth2.client.authorize_url'),
+                    'urlAccessToken'          => $this['config']->get('oauth2.client.access_token_url'),
+                    'urlResourceOwnerDetails' => $this['config']->get('oauth2.client.resource_owner_url'),
+                ]);
+
+                return $provider;
             }
         );
     }
