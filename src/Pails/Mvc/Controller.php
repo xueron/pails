@@ -33,6 +33,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property \League\OAuth2\Server\AuthorizationServer $authServer
  * @property \League\OAuth2\Server\ResourceServer $resourceServer
  * @property \Pails\OAuth2\StorageServiceInterface $storageService
+ * @property \League\OAuth2\Client\Provider\GenericProvider $authClient
  * @property \Redis $redis
  * @property \Pails\Queue\Queue $queue
  */

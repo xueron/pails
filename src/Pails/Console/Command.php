@@ -37,6 +37,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
  * @property \League\Flysystem\FilesystemInterface $localFs
  * @property \League\Flysystem\FilesystemInterface $ossFs
  * @property \League\Flysystem\MountManager $filesystem
+ * @property \League\OAuth2\Client\Provider\GenericProvider $authClient
  * @property \Redis $redis
  * @property \Pails\Queue\Queue $queue
  *

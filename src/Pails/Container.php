@@ -22,7 +22,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.6';
+    const VERSION = '3.0.7';
 
     /**
      * @var Loader $loader
