@@ -17,7 +17,7 @@ use Pails\Queue\Queue;
 
 class CommonServiceProvider extends AbstractServiceProvider implements ServiceProviderInterface
 {
-    function register()
+    public function register()
     {
         $di = $this->getDI();
 
@@ -62,14 +62,15 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'oss',
             function () {
                 if (!$this['config']->get('oss.enable', false)) {
-                    throw new \LogicException("OSS is not enabled");
+                    throw new \LogicException('OSS is not enabled');
                 }
-                $endpoint = $this["config"]->get("oss.endpoint");
-                $accessId = $this["config"]->get("oss.accessId");
-                $accessKey = $this["config"]->get("oss.accessKey");
+                $endpoint = $this['config']->get('oss.endpoint');
+                $accessId = $this['config']->get('oss.accessId');
+                $accessKey = $this['config']->get('oss.accessKey');
                 if (!$endpoint || !$accessId || !$accessKey) {
-                    throw new \LogicException("请先配置MSN参数");
+                    throw new \LogicException('请先配置MSN参数');
                 }
+
                 return new OssClient($accessId, $accessKey, $endpoint);
             }
         );
@@ -79,15 +80,16 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'mns',
             function () {
                 if (!$this['config']->get('mns.enable', false)) {
-                    throw new \LogicException("MNS is not enabled");
+                    throw new \LogicException('MNS is not enabled');
                 }
-                $endpoint = $this["config"]->get("mns.endpoint");
-                $accessId = $this["config"]->get("mns.accessId");
-                $accessKey = $this["config"]->get("mns.accessKey");
+                $endpoint = $this['config']->get('mns.endpoint');
+                $accessId = $this['config']->get('mns.accessId');
+                $accessKey = $this['config']->get('mns.accessKey');
                 if (!$endpoint || !$accessId || !$accessKey) {
-                    throw new \LogicException("请先配置MSN参数");
+                    throw new \LogicException('请先配置MSN参数');
                 }
                 $client = new MnsClient($endpoint, $accessId, $accessKey);
+
                 return $client;
             }
         );
@@ -97,6 +99,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'localFs',
             function () {
                 $adapter = new LocalAdapter($this->storagePath());
+
                 return new Filesystem($adapter);
             }
         );
@@ -106,13 +109,14 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'ossFs',
             function () {
                 if (!$this['config']->get('oss.enable', false)) {
-                    throw new \LogicException("OSS is not enabled");
+                    throw new \LogicException('OSS is not enabled');
                 }
-                $bucket = $this["config"]->get('oss.bucket');
+                $bucket = $this['config']->get('oss.bucket');
                 if (!$bucket) {
-                    throw new \LogicException("bucket is not set");
+                    throw new \LogicException('bucket is not set');
                 }
                 $adapter =  new AliOSS($bucket, $this['oss']);
+
                 return new Filesystem($adapter);
             }
         );
@@ -128,11 +132,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'filesystem',
             function () {
                 $fsList = [
-                    'local' => $this['localFs']
+                    'local' => $this['localFs'],
                 ];
-                if ($this["config"]->get('oss.enable')) {
+                if ($this['config']->get('oss.enable')) {
                     $fsList['oss'] = $this['ossFs'];
                 }
+
                 return new MountManager($fsList);
             }
         );
@@ -142,13 +147,13 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
             'redis',
             function () {
                 if (!$this['config']->get('redis.enable', false)) {
-                    throw new \LogicException("redis is not enabled");
+                    throw new \LogicException('redis is not enabled');
                 }
 
-                $host = $this["config"]->get('redis.host', 'localhost');
-                $port = $this["config"]->get('redis.port', '6379');
-                $auth = $this["config"]->get('redis.auth');
-                $persistent = $this["config"]->get('redis.persistent');
+                $host = $this['config']->get('redis.host', 'localhost');
+                $port = $this['config']->get('redis.port', '6379');
+                $auth = $this['config']->get('redis.auth');
+                $persistent = $this['config']->get('redis.persistent');
 
                 $redis = new \Redis();
                 $ok = false;
@@ -163,9 +168,10 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
                 if ($auth) {
                     $ok = $redis->auth($auth);
                     if (!$ok) {
-                        throw new \RuntimeException("Failed to authenticate with the Redisd server");
+                        throw new \RuntimeException('Failed to authenticate with the Redisd server');
                     }
                 }
+
                 return $redis;
             }
         );

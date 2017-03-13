@@ -1,7 +1,6 @@
 <?php
 /**
  * SeedRunCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class SeedRunCommand extends SeedRun
     {
         parent::configure();
 
-        $this->setName("seed:run");
-        $this->setDescription("执行数据库seed");
+        $this->setName('seed:run');
+        $this->setDescription('执行数据库seed');
     }
 }

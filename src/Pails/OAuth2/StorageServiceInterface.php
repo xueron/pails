@@ -1,7 +1,6 @@
 <?php
 /**
  * StorageInterface.php
- *
  */
 namespace Pails\OAuth2;
 
@@ -14,6 +13,7 @@ use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 
 /**
  * Interface StorageServiceInterface
+ *
  * @package Pails\OAuth2
  */
 interface StorageServiceInterface extends
@@ -24,5 +24,4 @@ interface StorageServiceInterface extends
     ScopeRepositoryInterface,
     UserRepositoryInterface
 {
-
 }

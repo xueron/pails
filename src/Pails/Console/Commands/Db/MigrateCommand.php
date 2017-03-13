@@ -1,7 +1,6 @@
 <?php
 /**
  * MigrateCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class MigrateCommand extends Migrate
     {
         parent::configure();
 
-        $this->setName("db:migrate");
-        $this->setDescription("执行数据库迁移");
+        $this->setName('db:migrate');
+        $this->setDescription('执行数据库迁移');
     }
 }

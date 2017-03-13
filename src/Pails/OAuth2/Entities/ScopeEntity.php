@@ -1,7 +1,6 @@
 <?php
 /**
  * ScopeEntity.php
- *
  */
 namespace Pails\OAuth2\Entities;
 
@@ -12,7 +11,7 @@ class ScopeEntity implements ScopeEntityInterface
 {
     use EntityTrait;
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         // TODO: Implement jsonSerialize() method.
     }

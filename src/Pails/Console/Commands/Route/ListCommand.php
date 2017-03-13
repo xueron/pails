@@ -1,21 +1,19 @@
 <?php
 /**
  * ListCommand.php
- *
  */
 
 
 namespace Pails\Console\Commands\Route;
-
 
 use Pails\Console\Command;
 use Phalcon\Text;
 
 class ListCommand extends Command
 {
-    protected $name = "route:list";
+    protected $name = 'route:list';
 
-    protected $description = "列出已经定义的路由";
+    protected $description = '列出已经定义的路由';
 
     public function handle()
     {

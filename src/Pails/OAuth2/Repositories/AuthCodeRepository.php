@@ -1,7 +1,6 @@
 <?php
 /**
  * AuthCodeRepository.php
- *
  */
 namespace Pails\OAuth2\Repositories;
 
@@ -10,12 +9,13 @@ use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
 /**
  * Class AuthCodeRepository
+ *
  * @package Pails\OAuth2\Repositories
  */
 class AuthCodeRepository extends BaseRepository implements AuthCodeRepositoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNewAuthCode()
     {
@@ -23,7 +23,7 @@ class AuthCodeRepository extends BaseRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
     {
@@ -31,7 +31,7 @@ class AuthCodeRepository extends BaseRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function revokeAuthCode($codeId)
     {
@@ -39,7 +39,7 @@ class AuthCodeRepository extends BaseRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isAuthCodeRevoked($codeId)
     {

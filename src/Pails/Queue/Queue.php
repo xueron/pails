@@ -6,6 +6,7 @@ use Pails\Injectable;
 
 /**
  * Class Queue
+ *
  * @package Pails\Queue
  */
 class Queue extends Injectable
@@ -22,6 +23,7 @@ class Queue extends Injectable
 
     /**
      * Queue constructor.
+     *
      * @param string $queueName
      */
     public function __construct(string $queueName)
@@ -48,8 +50,10 @@ class Queue extends Injectable
 
     /**
      * @param Job $job
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function delete(Job $job)
     {
@@ -58,7 +62,7 @@ class Queue extends Injectable
             $res = $this->queue->deleteMessage($job->getInstance()->getReceiptHandle());
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error("删除消息失败：" . $e->getMessage());
+            $this->logger->error('删除消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -69,8 +73,10 @@ class Queue extends Injectable
      *
      * @param $payload
      * @param ListenerOptions $options
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function push($payload, ListenerOptions $options)
     {
@@ -80,7 +86,7 @@ class Queue extends Injectable
             $res = $this->queue->sendMessage($request);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error("发送消息失败：" . $e->getMessage());
+            $this->logger->error('发送消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -90,8 +96,10 @@ class Queue extends Injectable
      * 取出一个消息
      *
      * @param ListenerOptions $options
-     * @return Job
+     *
      * @throws \Exception
+     *
+     * @return Job
      */
     public function pop(ListenerOptions $options)
     {
@@ -102,7 +110,7 @@ class Queue extends Injectable
                 $result = new Job($this, $res);
             }
         } catch (\Exception $e) {
-            $this->logger->error("获取消息队列失败：" . $e->getMessage());
+            $this->logger->error('获取消息队列失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -110,8 +118,10 @@ class Queue extends Injectable
 
     /**
      * @param $options
-     * @return Job
+     *
      * @throws \Exception
+     *
+     * @return Job
      */
     public function peek($options)
     {
@@ -122,7 +132,7 @@ class Queue extends Injectable
                 $result = new Job($this, $res);
             }
         } catch (\Exception $e) {
-            $this->logger->error("获取消息队列失败：" . $e->getMessage());
+            $this->logger->error('获取消息队列失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -133,8 +143,10 @@ class Queue extends Injectable
      *
      * @param Job $job
      * @param int $delay
-     * @return mixed
+     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function release(Job $job, int $delay)
     {
@@ -144,7 +156,7 @@ class Queue extends Injectable
             $res = $this->queue->changeMessageVisibility($job->getInstance()->getReceiptHandle(), $delay);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error("获取消息队列失败：" . $e->getMessage());
+            $this->logger->error('获取消息队列失败：' . $e->getMessage());
         } finally {
             return $result;
         }

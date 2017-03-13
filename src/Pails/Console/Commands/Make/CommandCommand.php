@@ -2,7 +2,6 @@
 namespace Pails\Console\Commands\Make;
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -35,9 +34,9 @@ class CommandCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite commands.php config
-        $commands = (array)$this->di->getConfig('commands', null, []);
+        $commands = (array) $this->di->getConfig('commands', null, []);
         $commands[$command] = 'App\\Console\\Commands\\' . $className;
-        @file_put_contents($this->di->configPath() . '/commands.php', "<?php return " . var_export($commands, true) . ";");
+        @file_put_contents($this->di->configPath() . '/commands.php', '<?php return ' . var_export($commands, true) . ';');
 
         $this->info("$name created at $fileName");
     }

@@ -1,15 +1,16 @@
 <?php
 namespace Pails\Queue;
+
 use AliyunMNS\Responses\PeekMessageResponse;
 use AliyunMNS\Responses\ReceiveMessageResponse;
 
 /**
  * Class Job
+ *
  * @package Pails\Queue\Job
  */
 class Job
 {
-
     /**
      * 消息实例，有些队列可能用到
      *
@@ -47,6 +48,7 @@ class Job
 
     /**
      * Job constructor.
+     *
      * @param $queue
      * @param $instance
      */
@@ -128,6 +130,7 @@ class Job
 
     /**
      * @param int $delay
+     *
      * @return mixed
      */
     public function release(int $delay)
@@ -169,8 +172,6 @@ class Job
 
     /**
      * Mark the job as "failed".
-     *
-     * @return void
      */
     public function markAsFailed()
     {

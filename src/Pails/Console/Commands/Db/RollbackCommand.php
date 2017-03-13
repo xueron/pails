@@ -1,7 +1,6 @@
 <?php
 /**
  * RollbackCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class RollbackCommand extends Rollback
     {
         parent::configure();
 
-        $this->setName("db:rollback");
-        $this->setDescription("回滚最后一个迁移，或者回滚到指定的迁移记录");
+        $this->setName('db:rollback');
+        $this->setDescription('回滚最后一个迁移，或者回滚到指定的迁移记录');
     }
 }

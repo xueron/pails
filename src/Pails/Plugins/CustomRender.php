@@ -7,12 +7,13 @@ use Phalcon\Mvc\DispatcherInterface;
 
 /**
  * Class CustomRender
+ *
  * @package Pails\Plugins
  */
 class CustomRender extends Injectable
 {
     /**
-     * @param EventInterface $event
+     * @param EventInterface      $event
      * @param DispatcherInterface $dispatcher
      */
     public function beforeExecuteRoute(EventInterface $event, DispatcherInterface $dispatcher)

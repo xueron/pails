@@ -13,7 +13,7 @@ class ClearMetaCommand extends Command
     {
         $cachePath = $this->di->tmpPath() . '/cache/metadata/';
         if (!file_exists($cachePath)) {
-            $this->info("缓存目录不存在");
+            $this->info('缓存目录不存在');
         } else {
             foreach (new \DirectoryIterator($cachePath) as $cacheFile) {
                 if ($cacheFile->isFile()) {
@@ -22,7 +22,7 @@ class ClearMetaCommand extends Command
                     $this->line("$filePath deleted");
                 }
             }
-            $this->info("缓存已经清空");
+            $this->info('缓存已经清空');
         }
     }
 }

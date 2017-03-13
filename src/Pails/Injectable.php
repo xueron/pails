@@ -8,6 +8,7 @@ namespace Pails;
 
 /**
  * Class Injectable
+ *
  * @package Pails
  *
  * @property \Pails\Plugins\ApiResponse $apiResponse
@@ -51,7 +52,7 @@ abstract class Injectable extends \Phalcon\Di\Injectable
         // 处理需要日志的信息
         $message = array_shift($args);
         if (is_resource($message)) {
-            $message = sprintf("resource-type=%s", get_resource_type($message));
+            $message = sprintf('resource-type=%s', get_resource_type($message));
         } elseif (is_object($message)) {
             $message = var_export($message, 1);
         } else {
@@ -76,9 +77,9 @@ abstract class Injectable extends \Phalcon\Di\Injectable
         }
 
         if (defined('APP_DEBUG') && APP_DEBUG) {
-            $message = sprintf("[%s::%s] %s [file=%s, line=%s]", $class, $function, $message, $file, $line);
+            $message = sprintf('[%s::%s] %s [file=%s, line=%s]', $class, $function, $message, $file, $line);
         } else {
-            $message = sprintf("[%s::%s] %s", $class, $function, $message);
+            $message = sprintf('[%s::%s] %s', $class, $function, $message);
         }
         array_unshift($args, $message);
 

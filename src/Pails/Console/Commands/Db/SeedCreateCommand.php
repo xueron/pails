@@ -1,7 +1,6 @@
 <?php
 /**
  * SeedCreateCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class SeedCreateCommand extends SeedCreate
     {
         parent::configure();
 
-        $this->setName("seed:create");
-        $this->setDescription("创建一个数据库seeder");
+        $this->setName('seed:create');
+        $this->setDescription('创建一个数据库seeder');
     }
 }

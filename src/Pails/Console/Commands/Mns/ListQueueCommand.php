@@ -40,7 +40,8 @@ class ListQueueCommand extends Command
          */
         $client = $this->mns;
         if (!$client) {
-            $this->error("请先配置阿里云MSN服务，并在DI里面注册");
+            $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -62,14 +63,14 @@ class ListQueueCommand extends Command
                     $queue['activeMessages'] = $attr->getActiveMessages();
                     $queue['inactiveMessages'] = $attr->getInactiveMessages();
                     $queue['delayMessages'] = $attr->getDelayMessages();
-                    $queue['createTime'] = date("Y-m-d H:i:s", $attr->getCreateTime());
-                    $queue['updateTime'] = date("Y-m-d H:i:s", $attr->getLastModifyTime());
-                    $queue['loggingEnabled'] = $attr->getLoggingEnabled() ? "Y" : "N";
+                    $queue['createTime'] = date('Y-m-d H:i:s', $attr->getCreateTime());
+                    $queue['updateTime'] = date('Y-m-d H:i:s', $attr->getLastModifyTime());
+                    $queue['loggingEnabled'] = $attr->getLoggingEnabled() ? 'Y' : 'N';
                     $data[] = $queue;
                 }
             }
-            $queueHeaders = ['Name', 'MaxSize', 'TTL', 'PoolWait', 'VisibilityTimeout', 'DelaySeconds', 'Active', "Inactive", "Delayed", "CreateTime", "UpdateTime", "EnableLog"];
-            $this->line("List of Queues:");
+            $queueHeaders = ['Name', 'MaxSize', 'TTL', 'PoolWait', 'VisibilityTimeout', 'DelaySeconds', 'Active', 'Inactive', 'Delayed', 'CreateTime', 'UpdateTime', 'EnableLog'];
+            $this->line('List of Queues:');
             $this->table($queueHeaders, $data);
         } catch (\Exception $e) {
             $this->error($e->getMessage());

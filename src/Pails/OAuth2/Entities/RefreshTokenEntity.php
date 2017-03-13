@@ -1,7 +1,6 @@
 <?php
 /**
  * RefreshTokenEntity.php
- *
  */
 namespace Pails\OAuth2\Entities;
 

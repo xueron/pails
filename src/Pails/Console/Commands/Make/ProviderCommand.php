@@ -1,7 +1,6 @@
 <?php
 namespace Pails\Console\Commands\Make;
 
-
 use Pails\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,9 +36,9 @@ class ProviderCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite services.php config
-        $providers = (array)$this->di->getConfig('providers', null, []);
+        $providers = (array) $this->di->getConfig('providers', null, []);
         $providers[$alias] = 'App\\Providers\\' . $className;
-        @file_put_contents($this->di->configPath() . '/providers.php', "<?php return " . var_export($providers, true) . ";");
+        @file_put_contents($this->di->configPath() . '/providers.php', '<?php return ' . var_export($providers, true) . ';');
 
         $this->info("$name created at $fileName");
     }

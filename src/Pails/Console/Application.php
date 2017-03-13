@@ -2,14 +2,13 @@
 namespace Pails\Console;
 
 use Pails\ApplicationInterface;
-use Pails\Console\Commands;
 use Pails\InjectableTrait;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Symfony\Component\Console\Application as ApplicationBase;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -100,7 +99,6 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
      * Class Constructor.
      *
      * Initialize the Pails console application.
-     *
      */
     public function __construct()
     {
@@ -113,15 +111,16 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     /**
      * Runs the current application.
      *
-     * @param InputInterface $input An Input instance
+     * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
-     * @return integer 0 if everything went fine, or an error code
+     *
+     * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         // always show the version information except when the user invokes the help
         // command as that already does it
-        if (false === $input->hasParameterOption(array('--help', '-h')) && null !== $input->getFirstArgument()) {
+        if (false === $input->hasParameterOption(['--help', '-h']) && null !== $input->getFirstArgument()) {
             $output->writeln($this->getLongVersion());
             $output->writeln('');
         }
@@ -160,8 +159,9 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     /**
      * Run an console command by name.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array  $parameters
+     *
      * @return int
      */
     public function call($command, array $parameters = [])
@@ -187,17 +187,17 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         $this->di->registerServices($this->providers);
 
         // register services from providers.php
-        $providers = (array)$this->di->getConfig('providers', null, []);
+        $providers = (array) $this->di->getConfig('providers', null, []);
         $this->di->registerServices(array_values($providers));
 
         // register services from services.php
-        $services = (array)$this->di->getConfig('services', null, []);
+        $services = (array) $this->di->getConfig('services', null, []);
         foreach ($services as $name => $class) {
             $this->getDI()->setShared($name, $class);
         }
 
         // register listeners from listeners.php
-        $listeners = (array)$this->di->getConfig('listeners', null, []);
+        $listeners = (array) $this->di->getConfig('listeners', null, []);
         foreach ($listeners as $event => $listener) {
             $this->eventsManager->attach($event, $this->di->getShared($listener));
         }
@@ -211,7 +211,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     public function init()
     {
         // load from config file
-        $commands = array_values((array)$this->di->getConfig('commands', null, []));
+        $commands = array_values((array) $this->di->getConfig('commands', null, []));
         $this->resolveCommands($commands);
 
         // load from Application.php
@@ -243,19 +243,22 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
     /**
      * Add a command, resolving through the application. 通过DI的自动注入功能，注入DI和事件管理器
      *
-     * @param  string  $command
+     * @param string $command
+     *
      * @return \Symfony\Component\Console\Command\Command
      */
     public function resolve($command)
     {
         $commandInstance = $this->di->get($command);
+
         return $this->add($commandInstance);
     }
 
     /**
      * Resolve an array of commands through the application.
      *
-     * @param  array|mixed  $commands
+     * @param array|mixed $commands
+     *
      * @return $this
      */
     public function resolveCommands($commands)

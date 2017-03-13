@@ -2,16 +2,15 @@
 namespace Pails\Providers;
 
 use Pails\Plugins\VoltExtension;
-use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Annotations\Adapter\Files as FileAnnotations;
+use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Cache\Backend\File as FileCache;
-use Phalcon\Cache\Backend\Redis as RedisCache;
 use Phalcon\Cache\Backend\Libmemcached as MemcachedCache;
+use Phalcon\Cache\Backend\Redis as RedisCache;
 use Phalcon\Cache\Frontend\Data as DataFrontend;
-use Phalcon\Cache\Multiple as MultipleCache;
 use Phalcon\Cache\Frontend\Output as OutputFrontend;
+use Phalcon\Cache\Multiple as MultipleCache;
 use Phalcon\Crypt;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\Dispatcher;
@@ -27,7 +26,7 @@ use Phalcon\Session\Adapter\Redis as RedisSession;
 
 class PailsServiceProvider extends AbstractServiceProvider
 {
-    function register()
+    public function register()
     {
         $di = $this->di;
 
@@ -40,10 +39,12 @@ class PailsServiceProvider extends AbstractServiceProvider
                     if (!file_exists($annotationsDir)) {
                         @mkdir($annotationsDir, 0755, true);
                     }
+
                     return new FileAnnotations([
-                        "annotationsDir" => $annotationsDir
+                        'annotationsDir' => $annotationsDir,
                     ]);
                 }
+
                 return new MemoryAnnotations();
             }
         );
@@ -53,7 +54,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             'fileCache',
             function () {
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this['config']->get('cache.file.lifetime', 86400),
+                    'lifetime' => $this['config']->get('cache.file.lifetime', 86400),
                 ]);
 
                 $cachePath = $this->tmpPath() . '/cache/data/';
@@ -63,10 +64,11 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $cache = new FileCache(
                     $frontCache,
                     [
-                        "prefix" => $this['config']->get('cache.file.prefix'),
-                        "cacheDir" => $cachePath
+                        'prefix' => $this['config']->get('cache.file.prefix'),
+                        'cacheDir' => $cachePath,
                     ]
                 );
+
                 return $cache;
             }
         );
@@ -76,25 +78,26 @@ class PailsServiceProvider extends AbstractServiceProvider
             'redisCache',
             function () {
                 if (!$this['config']->get('cache.redis.enable', false)) {
-                    throw new \LogicException("redis cache is not enabled");
+                    throw new \LogicException('redis cache is not enabled');
                 }
 
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this['config']->get('cache.redis.lifetime', 3600),
+                    'lifetime' => $this['config']->get('cache.redis.lifetime', 3600),
                 ]);
 
                 $options = [
-                    "prefix" => $this['config']->get('cache.redis.prefix'),
-                    "host" => $this['config']->get('cache.redis.host'),
-                    "port" => $this['config']->get('cache.redis.port'),
-                    "persistent" => $this['config']->get('cache.redis.persistent'),
-                    "statsKey" => '_PHCR',
+                    'prefix' => $this['config']->get('cache.redis.prefix'),
+                    'host' => $this['config']->get('cache.redis.host'),
+                    'port' => $this['config']->get('cache.redis.port'),
+                    'persistent' => $this['config']->get('cache.redis.persistent'),
+                    'statsKey' => '_PHCR',
                 ];
                 if ($auth = $this['config']->get('cache.redis.auth')) {
                     $options['auth'] = $auth;
                 }
 
                 $cache = new RedisCache($frontCache, $options);
+
                 return $cache;
             }
         );
@@ -104,29 +107,30 @@ class PailsServiceProvider extends AbstractServiceProvider
             'memcachedCache',
             function () {
                 if (!$this['config']->get('cache.memcache.enable', false)) {
-                    throw new \LogicException("memcache cache is not enabled");
+                    throw new \LogicException('memcache cache is not enabled');
                 }
 
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this['config']->get('cache.memcache.lifetime', 3600),
+                    'lifetime' => $this['config']->get('cache.memcache.lifetime', 3600),
                 ]);
 
                 $cache = new MemcachedCache(
                     $frontCache,
                     [
                         'servers' => [
-                            "host" => $this['config']->get('cache.memcache.host'),
-                            "port" => $this['config']->get('cache.memcache.port'),
-                            "weight" => 1
+                            'host' => $this['config']->get('cache.memcache.host'),
+                            'port' => $this['config']->get('cache.memcache.port'),
+                            'weight' => 1,
                         ],
                         'client' => [
                             \Memcached::OPT_HASH => \Memcached::HASH_MD5,
                             \Memcached::OPT_PREFIX_KEY => 'prefix.',
                         ],
-                        "prefix" => $this['config']->get('cache.memcache.prefix'),
-                        "statsKey" => '_PHCM',
+                        'prefix' => $this['config']->get('cache.memcache.prefix'),
+                        'statsKey' => '_PHCM',
                     ]
                 );
+
                 return $cache;
             }
         );
@@ -136,7 +140,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             'cache',
             function () {
                 $backends = [
-                    $this['fileCache']
+                    $this['fileCache'],
                 ];
                 if ($this['config']->get('cache.redis.enable', false)) {
                     array_unshift($backends, $this['redisCache']);
@@ -144,6 +148,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 if ($this['config']->get('cache.memcache.enable', false)) {
                     array_unshift($backends, $this['memcachedCache']);
                 }
+
                 return new MultipleCache($backends);
             }
         );
@@ -154,16 +159,17 @@ class PailsServiceProvider extends AbstractServiceProvider
             function () {
                 $cookies = new Cookies();
                 $cookies->useEncryption(true);
+
                 return $cookies;
             }
         );
 
         // modelsCache, 设置模型缓存服务, 默认使用fileCache，可以在使用中指定cacheService，使用前面定义的memCache or redisCache
         $di->set(
-            "modelsCache",
+            'modelsCache',
             function () {
                 $frontCache = new DataFrontend([
-                    "lifetime" => $this['config']->get('app.model.cache.lifetime', 3600),
+                    'lifetime' => $this['config']->get('app.model.cache.lifetime', 3600),
                 ]);
 
                 $cachePath = $this->tmpPath() . '/cache/models/';
@@ -173,26 +179,29 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $cache = new FileCache(
                     $frontCache,
                     [
-                        "cacheDir" => $cachePath
+                        'cacheDir' => $cachePath,
                     ]
                 );
+
                 return $cache;
             }
         );
 
         // modelsMetadata, 元数据管理
         $di->set(
-            "modelsMetadata",
+            'modelsMetadata',
             function () {
                 if ($this->environment() == 'production') {
                     $metaDataDir = $this->tmpPath() . '/cache/metadata';
                     if (!file_exists($metaDataDir)) {
                         @mkdir($metaDataDir, 0755, true);
                     }
+
                     return new FileMetaData([
-                        'metaDataDir' => $metaDataDir
+                        'metaDataDir' => $metaDataDir,
                     ]);
                 }
+
                 return new MemoryMetaData();
             }
         );
@@ -203,6 +212,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             function () {
                 $crypt = new Crypt();
                 $crypt->setKey($this['config']->get('app.key', '#1dj8$=dp?.ak//j1V$'));
+
                 return $crypt;
             }
         );
@@ -227,7 +237,8 @@ class PailsServiceProvider extends AbstractServiceProvider
             'logger',
             function () {
                 $date = date('Y-m-d');
-                $logFile = $this->logPath() . DIRECTORY_SEPARATOR . $date . ".log";
+                $logFile = $this->logPath() . DIRECTORY_SEPARATOR . $date . '.log';
+
                 return new FileLogger($logFile);
             }
         );
@@ -236,7 +247,8 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'errorLogger',
             function () {
-                $logFile = $this->logPath() . DIRECTORY_SEPARATOR . "error.log";
+                $logFile = $this->logPath() . DIRECTORY_SEPARATOR . 'error.log';
+
                 return new FileLogger($logFile);
             }
         );
@@ -272,7 +284,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                         ],
                         'client' => [
                             \Memcached::OPT_HASH => \Memcached::HASH_MD5,
-                            \Memcached::OPT_PREFIX_KEY => "prefix.",
+                            \Memcached::OPT_PREFIX_KEY => 'prefix.',
                         ],
                         'lifetime' => $this['config']->get('session.options.lifetime', 3600),
                         'prefix' => $this['config']->get('session.options.prefix', '_session_'),
@@ -296,20 +308,21 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $view->setViewsDir($this->viewsPath());
                 $view->registerEngines([
                     '.volt' => 'volt',
-                    '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
+                    '.phtml' => 'Phalcon\Mvc\View\Engine\Php',
                 ]);
+
                 return $view;
             }
         );
 
         // viewCache, Not shared
         $di->set(
-            "viewCache",
+            'viewCache',
             function () {
                 // Cache data for one day by default
                 $frontCache = new OutputFrontend(
                     [
-                        "lifetime" => $this['config']->get('app.view.cache.lifetime', 86400),
+                        'lifetime' => $this['config']->get('app.view.cache.lifetime', 86400),
                     ]
                 );
 
@@ -320,7 +333,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $cache = new FileCache(
                     $frontCache,
                     [
-                        "cacheDir" => $cachePath
+                        'cacheDir' => $cachePath,
                     ]
                 );
 
@@ -340,7 +353,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $volt->setOptions([
                     'compiledPath' => $compiledPath,
                     'compiledSeparator' => '_',
-                    'compileAlways' => $this['config']->get('app.debug', false)
+                    'compileAlways' => $this['config']->get('app.debug', false),
                 ]);
 
                 $volt->getCompiler()->addExtension(new VoltExtension());
@@ -361,6 +374,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                     $url->setStaticBaseUri($staticUrl);
                 }
                 $url->setBasePath($this->basePath());
+
                 return $url;
             }
         );

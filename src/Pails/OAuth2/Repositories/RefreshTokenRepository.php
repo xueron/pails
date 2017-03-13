@@ -1,7 +1,6 @@
 <?php
 /**
  * RefreshTokenRepository.php
- *
  */
 namespace Pails\OAuth2\Repositories;
 
@@ -10,12 +9,13 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 /**
  * Class RefreshTokenRepository
+ *
  * @package Pails\OAuth2\Repositories
  */
 class RefreshTokenRepository extends BaseRepository implements RefreshTokenRepositoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNewRefreshToken()
     {
@@ -23,7 +23,7 @@ class RefreshTokenRepository extends BaseRepository implements RefreshTokenRepos
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
     {
@@ -31,7 +31,7 @@ class RefreshTokenRepository extends BaseRepository implements RefreshTokenRepos
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function revokeRefreshToken($tokenId)
     {
@@ -39,7 +39,7 @@ class RefreshTokenRepository extends BaseRepository implements RefreshTokenRepos
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isRefreshTokenRevoked($tokenId)
     {

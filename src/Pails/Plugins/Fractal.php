@@ -3,7 +3,6 @@
  * Fractal.php
  *
  * a wrap for League\Fractal, to make data with transformers
- *
  */
 namespace Pails\Plugins;
 
@@ -15,6 +14,7 @@ use Pails\Injectable;
 
 /**
  * Class Fractal
+ *
  * @package Pails\Plugins
  */
 class Fractal extends Injectable
@@ -30,8 +30,9 @@ class Fractal extends Injectable
     /**
      * @param $data
      * @param $transformer
-     * @param null $resourceKey
+     * @param null  $resourceKey
      * @param array $meta
+     *
      * @return array
      */
     public function item($data, $transformer, $resourceKey = null, $meta = [])
@@ -53,9 +54,10 @@ class Fractal extends Injectable
     /**
      * @param $data
      * @param $transformer
-     * @param null $resourceKey
+     * @param null        $resourceKey
      * @param Cursor|null $cursor
-     * @param array $meta
+     * @param array       $meta
+     *
      * @return array
      */
     public function collection($data, $transformer, $resourceKey = null, Cursor $cursor = null, $meta = [])

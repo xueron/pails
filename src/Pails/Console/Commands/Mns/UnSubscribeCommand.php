@@ -33,7 +33,8 @@ class UnSubscribeCommand extends Command
 
         $client = $this->mns;
         if (!$client) {
-            $this->error("请先配置阿里云MSN服务，并在DI里面注册");
+            $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -42,10 +43,10 @@ class UnSubscribeCommand extends Command
         try {
             $res = $topic->unsubscribe($name);
             if ($res->isSucceed()) {
-                $this->line("取消订阅成功");
+                $this->line('取消订阅成功');
                 $this->output->newLine();
-                $this->call("mns:list-subscription", [
-                    'topic' => $topicName
+                $this->call('mns:list-subscription', [
+                    'topic' => $topicName,
                 ]);
             }
         } catch (\Exception $e) {

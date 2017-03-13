@@ -40,7 +40,8 @@ class ListTopicCommand extends Command
          */
         $client = $this->mns;
         if (!$client) {
-            $this->error("请先配置阿里云MSN服务，并在DI里面注册");
+            $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -56,16 +57,16 @@ class ListTopicCommand extends Command
 
                     $topic['maxSize'] = $attr->getMaximumMessageSize();
                     $topic['ttl'] = $attr->getMessageRetentionPeriod();
-                    $topic['createTime'] = date("Y-m-d H:i:s", $attr->getCreateTime());
-                    $topic['updateTime'] = date("Y-m-d H:i:s", $attr->getLastModifyTime());
-                    $topic['loggingEnabled'] = $attr->getLoggingEnabled() ? "Y" : "N";
+                    $topic['createTime'] = date('Y-m-d H:i:s', $attr->getCreateTime());
+                    $topic['updateTime'] = date('Y-m-d H:i:s', $attr->getLastModifyTime());
+                    $topic['loggingEnabled'] = $attr->getLoggingEnabled() ? 'Y' : 'N';
                     $data[] = $topic;
                 }
             }
 
 
-            $topicHeaders = ['Name', 'MaxSize', 'TTL', "CreateTime", "UpdateTime", "EnableLog"];
-            $this->line("List of Topics:");
+            $topicHeaders = ['Name', 'MaxSize', 'TTL', 'CreateTime', 'UpdateTime', 'EnableLog'];
+            $this->line('List of Topics:');
             $this->table($topicHeaders, $data);
         } catch (\Exception $e) {
             $this->error($e->getMessage());

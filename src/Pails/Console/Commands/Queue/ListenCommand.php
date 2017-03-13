@@ -39,8 +39,6 @@ class ListenCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle()
     {
@@ -81,8 +79,6 @@ class ListenCommand extends Command
      * Listen for the queue events in order to update the console output.
      *
      * 可以通过挂载独立的事件监听方法处理这些事件
-     *
-     * @return void
      */
     protected function listenForEvents()
     {
@@ -103,9 +99,8 @@ class ListenCommand extends Command
     /**
      * Write the status output for the queue worker.
      *
-     * @param  string $payload
-     * @param  bool $failed
-     * @return void
+     * @param string $payload
+     * @param bool   $failed
      */
     protected function writeOutput($payload, $failed)
     {
@@ -120,7 +115,7 @@ class ListenCommand extends Command
      * Store a failed job event.
      *
      * @param Job $job
-     * @return void
+     *
      * @internal param $payload
      */
     protected function logFailedJob(Job $job)

@@ -2,7 +2,6 @@
 namespace Pails\Console\Commands\Make;
 
 use Pails\Console\Command;
-use Phalcon\Text;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 

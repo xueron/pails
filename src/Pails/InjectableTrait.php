@@ -6,6 +6,7 @@ use Phalcon\Events\ManagerInterface;
 
 /**
  * Class InjectableTrait
+ *
  * @package Pails
  *
  * @property \Phalcon\DiInterface $di
@@ -38,6 +39,7 @@ trait InjectableTrait
         if (!is_object($this->_dependencyInjector)) {
             $this->_dependencyInjector = Container::getDefault();
         }
+
         return $this->_dependencyInjector;
     }
 
@@ -57,12 +59,15 @@ trait InjectableTrait
         if (!is_object($this->_eventsManager)) {
             $this->_eventsManager = $this->getDI()->getEventsManager();
         }
+
         return $this->_eventsManager;
     }
 
     /**
      * Magic method __get
+     *
      * @param $name
+     *
      * @return mixed
      */
     public function __get($name)
@@ -71,28 +76,32 @@ trait InjectableTrait
         if (!is_object($di)) {
             $di = Container::getDefault();
             if (!is_object($di)) {
-                throw new \RuntimeException("A dependency injection object is required to access the application services");
+                throw new \RuntimeException('A dependency injection object is required to access the application services');
             }
         }
 
         if ($di->has($name)) {
             $service = $di->getShared($name);
             $this->$name = $service;
+
             return $service;
         }
 
         if ($name == 'di') {
             $this->di = $di;
+
             return $di;
         }
 
         if ($name == 'persistent') {
             $persistent = $di->get('sessionBag', [get_class($this)]);
             $this->persistent = $persistent;
+
             return $persistent;
         }
 
         trigger_error("Access to undefined property $name");
-        return null;
+
+        return;
     }
 }
