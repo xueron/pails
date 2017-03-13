@@ -28,8 +28,8 @@ class Fractal extends Injectable
     }
 
     /**
-     * @param $data
-     * @param $transformer
+     * @param       $data
+     * @param       $transformer
      * @param null  $resourceKey
      * @param array $meta
      *
@@ -52,8 +52,8 @@ class Fractal extends Injectable
     }
 
     /**
-     * @param $data
-     * @param $transformer
+     * @param             $data
+     * @param             $transformer
      * @param null        $resourceKey
      * @param Cursor|null $cursor
      * @param array       $meta

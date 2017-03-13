@@ -115,7 +115,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
                 if (!$bucket) {
                     throw new \LogicException('bucket is not set');
                 }
-                $adapter =  new AliOSS($bucket, $this['oss']);
+                $adapter = new AliOSS($bucket, $this['oss']);
 
                 return new Filesystem($adapter);
             }

@@ -86,7 +86,7 @@ class ShowCommand extends Command
 
                 // output
                 $columnHeaders = ['Field', 'Type', 'Null', 'Key', 'Default', 'Extra'];
-                $indexHeaders  = ['Name', 'Type', 'Columns'];
+                $indexHeaders = ['Name', 'Type', 'Columns'];
 
                 $this->line("Columns of $modelTable");
                 $this->table($columnHeaders, $columnData);
@@ -115,23 +115,32 @@ class ShowCommand extends Command
     {
         switch ($type) {
             case Column::TYPE_INTEGER:
-                return 'int'; break;
+                return 'int';
+                break;
             case Column::TYPE_BIGINTEGER:
-                return 'int'; break;
+                return 'int';
+                break;
             case Column::TYPE_DECIMAL:
-                return 'decimal'; break;
+                return 'decimal';
+                break;
             case Column::TYPE_FLOAT:
-                return 'float'; break;
+                return 'float';
+                break;
             case Column::TYPE_DATE:
-                return 'date'; break;
+                return 'date';
+                break;
             case Column::TYPE_DATETIME:
-                return 'datetime'; break;
+                return 'datetime';
+                break;
             case Column::TYPE_VARCHAR:
-                return 'varchar'; break;
+                return 'varchar';
+                break;
             case Column::TYPE_CHAR:
-                return 'char'; break;
+                return 'char';
+                break;
             case Column::TYPE_TEXT:
-                return 'text'; break;
+                return 'text';
+                break;
             default:
                 return 'string';
         }

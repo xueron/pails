@@ -11,30 +11,30 @@ namespace Pails;
  *
  * @package Pails
  *
- * @property \Pails\Plugins\ApiResponse $apiResponse
- * @property \Pails\Plugins\Fractal $fractal
- * @property \Pails\Pluralizer $inflector
- * @property \Pails\Plugins\Config $config
- * @property \Pails\Exception\Handler $exceptionHandler
- * @property \Phalcon\Security\Random $random
- * @property \Phalcon\Cache\BackendInterface $fileCache
- * @property \Phalcon\Cache\BackendInterface $redisCache
- * @property \Phalcon\Cache\BackendInterface $memcachedCache
- * @property \Phalcon\Cache\Multiple $cache
- * @property \Phalcon\Logger\Adapter\File $logger
- * @property \Phalcon\Logger\Adapter\File $errorLogger
- * @property \GuzzleHttp\Client $httpClient
- * @property \AliyunMNS\Client $mns
- * @property \OSS\OssClient $oss
- * @property \League\Flysystem\FilesystemInterface $localFs
- * @property \League\Flysystem\FilesystemInterface $ossFs
- * @property \League\Flysystem\MountManager $filesystem
- * @property \League\OAuth2\Server\AuthorizationServer $authServer
- * @property \League\OAuth2\Server\ResourceServer $resourceServer
- * @property \Pails\OAuth2\StorageServiceInterface $storageService
+ * @property \Pails\Plugins\ApiResponse                     $apiResponse
+ * @property \Pails\Plugins\Fractal                         $fractal
+ * @property \Pails\Pluralizer                              $inflector
+ * @property \Pails\Plugins\Config                          $config
+ * @property \Pails\Exception\Handler                       $exceptionHandler
+ * @property \Phalcon\Security\Random                       $random
+ * @property \Phalcon\Cache\BackendInterface                $fileCache
+ * @property \Phalcon\Cache\BackendInterface                $redisCache
+ * @property \Phalcon\Cache\BackendInterface                $memcachedCache
+ * @property \Phalcon\Cache\Multiple                        $cache
+ * @property \Phalcon\Logger\Adapter\File                   $logger
+ * @property \Phalcon\Logger\Adapter\File                   $errorLogger
+ * @property \GuzzleHttp\Client                             $httpClient
+ * @property \AliyunMNS\Client                              $mns
+ * @property \OSS\OssClient                                 $oss
+ * @property \League\Flysystem\FilesystemInterface          $localFs
+ * @property \League\Flysystem\FilesystemInterface          $ossFs
+ * @property \League\Flysystem\MountManager                 $filesystem
+ * @property \League\OAuth2\Server\AuthorizationServer      $authServer
+ * @property \League\OAuth2\Server\ResourceServer           $resourceServer
+ * @property \Pails\OAuth2\StorageServiceInterface          $storageService
  * @property \League\OAuth2\Client\Provider\GenericProvider $authClient
- * @property \Redis $redis
- * @property \Pails\Queue\Queue $queue
+ * @property \Redis                                         $redis
+ * @property \Pails\Queue\Queue                             $queue
  *
  * @method \Phalcon\Logger\AdapterInterface error($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface info($message, array $context = [])

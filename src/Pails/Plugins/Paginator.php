@@ -50,14 +50,14 @@ class Paginator extends QueryBuilder
         }
         if ($this->_meta == null) {
             $this->_meta = [
-                'first' => $this->_paginator->first,
-                'before' => $this->_paginator->before,
-                'current' => $this->_paginator->current,
-                'last' => $this->_paginator->last,
-                'next' => $this->_paginator->next,
+                'first'       => $this->_paginator->first,
+                'before'      => $this->_paginator->before,
+                'current'     => $this->_paginator->current,
+                'last'        => $this->_paginator->last,
+                'next'        => $this->_paginator->next,
                 'total_pages' => $this->_paginator->total_pages,
                 'total_items' => $this->_paginator->total_items,
-                'limit' => $this->_paginator->limit,
+                'limit'       => $this->_paginator->limit,
             ];
         }
 

@@ -7,8 +7,6 @@
  *
  * @package     Pails
  *
- * @version     $Id: $
- *
  * @link        http://pails.xueron.com
  */
 
@@ -16,8 +14,6 @@ namespace Pails\Utils\Finance;
 
 /**
  * Class Calc
- *
- * @package Dowedo\Core\Utils
  */
 class Calc
 {

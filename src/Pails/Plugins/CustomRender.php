@@ -25,7 +25,7 @@ class CustomRender extends Injectable
             $namespace = substr($namespace, strlen($defaultNamespace));
         }
 
-        $parts   = array_filter(explode('\\', strtolower($namespace)));
+        $parts = array_filter(explode('\\', strtolower($namespace)));
         $parts[] = $dispatcher->getControllerName();
         $parts[] = $dispatcher->getActionName();
 
