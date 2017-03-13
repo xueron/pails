@@ -74,8 +74,8 @@ abstract class Controller extends \Phalcon\Mvc\Controller
     {
         $this->response->setContent($response->getBody());
         $this->response->setStatusCode($response->getStatusCode());
-        foreach ($response->getHeaders() as $name => $value) {
-            $this->response->setHeader($name, $value);
+        foreach ($response->getHeaders() as $name => $values) {
+            $this->response->setHeader($name, implode(', ', $values));
         }
 
         return $this->response;
