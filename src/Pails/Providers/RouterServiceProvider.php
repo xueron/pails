@@ -38,7 +38,7 @@ class RouterServiceProvider extends AbstractServiceProvider
                 // 定义404路由
                 $router->notFound([
                     'controller' => 'index',
-                    'action' => 'notfound',
+                    'action'     => 'notfound',
                 ]);
 
                 //

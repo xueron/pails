@@ -172,7 +172,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         }
 
         $values = with(isset($key) ? $this->pluck($key) : $this)
-                    ->sort()->values();
+            ->sort()->values();
 
         $middle = (int) floor($count / 2);
 
@@ -368,7 +368,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     {
         return $this->filter(function ($item) use ($key, $value, $strict) {
             return $strict ? data_get($item, $key) === $value
-                           : data_get($item, $key) == $value;
+                : data_get($item, $key) == $value;
         });
     }
 
@@ -1053,7 +1053,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         }
 
         $descending ? arsort($results, $options)
-                    : asort($results, $options);
+            : asort($results, $options);
 
         // Once we have sorted all of the keys in the array, we will loop through them
         // and grab the corresponding model so we can set the underlying items list

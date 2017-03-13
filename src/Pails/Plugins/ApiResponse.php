@@ -80,10 +80,10 @@ class ApiResponse extends Injectable
     {
         $status = $this->getStatusCode() == 200;
         $data = array_merge([
-            'status' => $status,
+            'status'  => $status,
             'success' => $status,
-            'code' => $this->getStatusCode(),
-            'msg' => 'success',
+            'code'    => $this->getStatusCode(),
+            'msg'     => 'success',
         ], $array);
 
         return $this->response($data, $headers);
@@ -97,8 +97,8 @@ class ApiResponse extends Injectable
      *     4XX 是客户端引起的错误，如参数不对、没有授权等等；
      *         更多的状态码，可以自定义；
      *
-     * @param $message
-     * @param $errorCode
+     * @param       $message
+     * @param       $errorCode
      * @param array $headers
      *
      * @return mixed
@@ -106,14 +106,14 @@ class ApiResponse extends Injectable
     public function withError($message, $errorCode = 500, array $headers = [])
     {
         $data = [
-            'status' => false,
+            'status'  => false,
             'success' => false,
-            'code' => $errorCode ?: $this->getStatusCode(),
-            'msg' => $message,
-            'error' => [
-                'code' => $errorCode,
+            'code'    => $errorCode ?: $this->getStatusCode(),
+            'msg'     => $message,
+            'error'   => [
+                'code'      => $errorCode,
                 'http_code' => $this->statusCode,
-                'message' => $message,
+                'message'   => $message,
             ],
         ];
 
@@ -131,10 +131,10 @@ class ApiResponse extends Injectable
     public function withSuccess($message = 'success', array $headers = [])
     {
         $data = [
-            'status' => true,
+            'status'  => true,
             'success' => true,
-            'code' => $this->getStatusCode(),
-            'msg' => $message,
+            'code'    => $this->getStatusCode(),
+            'msg'     => $message,
         ];
 
         return $this->response($data, $headers);
@@ -158,7 +158,7 @@ class ApiResponse extends Injectable
     /**
      * Response for one item
      *
-     * @param $data
+     * @param                                              $data
      * @param callable|\League\Fractal\TransformerAbstract $transformer
      * @param array                                        $meta
      * @param array                                        $headers
@@ -175,7 +175,7 @@ class ApiResponse extends Injectable
     /**
      * Response for collection of items
      *
-     * @param $data
+     * @param                                              $data
      * @param callable|\League\Fractal\TransformerAbstract $transformer
      * @param array                                        $meta
      * @param array                                        $headers

@@ -22,7 +22,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Pails Version
      */
-    const VERSION = '3.0.7';
+    const VERSION = '3.0.8';
 
     /**
      * @var Loader
@@ -299,7 +299,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * 获取配置. 自动注入到服务中
      *
-     * @param $section
+     * @param      $section
      * @param null $key
      * @param null $defaultValue
      *

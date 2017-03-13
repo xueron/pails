@@ -227,7 +227,7 @@ class Listener extends Injectable
      * Stop the process if necessary.
      *
      * @param ListenerOptions $options
-     * @param $lastRestart
+     * @param                 $lastRestart
      */
     protected function stopIfNecessary(ListenerOptions $options, $lastRestart)
     {

@@ -46,7 +46,7 @@ class Config extends Injectable implements \ArrayAccess
     }
 
     /**
-     * @param $key
+     * @param      $key
      * @param null $default
      *
      * @return mixed
@@ -59,7 +59,7 @@ class Config extends Injectable implements \ArrayAccess
     }
 
     /**
-     * @param $key
+     * @param      $key
      * @param null $value
      */
     public function set($key, $value = null)

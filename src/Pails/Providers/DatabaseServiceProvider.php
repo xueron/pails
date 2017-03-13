@@ -17,12 +17,12 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                 if (!empty($yaml['environments'][$env])) {
                     $database = $yaml['environments'][$env];
                     $db = new Mysql([
-                        'host' => $database['host'],
-                        'port' => $database['port'],
+                        'host'     => $database['host'],
+                        'port'     => $database['port'],
                         'username' => $database['user'],
                         'password' => $database['pass'],
-                        'dbname' => $database['name'],
-                        'charset' => $database['charset'],
+                        'dbname'   => $database['name'],
+                        'charset'  => $database['charset'],
                     ]);
 
                     // debug sql

@@ -64,7 +64,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $cache = new FileCache(
                     $frontCache,
                     [
-                        'prefix' => $this['config']->get('cache.file.prefix'),
+                        'prefix'   => $this['config']->get('cache.file.prefix'),
                         'cacheDir' => $cachePath,
                     ]
                 );
@@ -86,11 +86,11 @@ class PailsServiceProvider extends AbstractServiceProvider
                 ]);
 
                 $options = [
-                    'prefix' => $this['config']->get('cache.redis.prefix'),
-                    'host' => $this['config']->get('cache.redis.host'),
-                    'port' => $this['config']->get('cache.redis.port'),
+                    'prefix'     => $this['config']->get('cache.redis.prefix'),
+                    'host'       => $this['config']->get('cache.redis.host'),
+                    'port'       => $this['config']->get('cache.redis.port'),
                     'persistent' => $this['config']->get('cache.redis.persistent'),
-                    'statsKey' => '_PHCR',
+                    'statsKey'   => '_PHCR',
                 ];
                 if ($auth = $this['config']->get('cache.redis.auth')) {
                     $options['auth'] = $auth;
@@ -117,16 +117,16 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $cache = new MemcachedCache(
                     $frontCache,
                     [
-                        'servers' => [
-                            'host' => $this['config']->get('cache.memcache.host'),
-                            'port' => $this['config']->get('cache.memcache.port'),
+                        'servers'  => [
+                            'host'   => $this['config']->get('cache.memcache.host'),
+                            'port'   => $this['config']->get('cache.memcache.port'),
                             'weight' => 1,
                         ],
-                        'client' => [
-                            \Memcached::OPT_HASH => \Memcached::HASH_MD5,
+                        'client'   => [
+                            \Memcached::OPT_HASH       => \Memcached::HASH_MD5,
                             \Memcached::OPT_PREFIX_KEY => 'prefix.',
                         ],
-                        'prefix' => $this['config']->get('cache.memcache.prefix'),
+                        'prefix'   => $this['config']->get('cache.memcache.prefix'),
                         'statsKey' => '_PHCM',
                     ]
                 );
@@ -275,19 +275,19 @@ class PailsServiceProvider extends AbstractServiceProvider
 
                 if ($this['config']->get('session.adapter', 'file') == 'memcached') {
                     $session = new MemcachedSession([
-                        'servers' => [
+                        'servers'  => [
                             [
-                                'host' => $this['config']->get('session.options.host', 'localhost'),
-                                'port' => $this['config']->get('session.options.port', 11211),
+                                'host'   => $this['config']->get('session.options.host', 'localhost'),
+                                'port'   => $this['config']->get('session.options.port', 11211),
                                 'weight' => 1,
                             ],
                         ],
-                        'client' => [
-                            \Memcached::OPT_HASH => \Memcached::HASH_MD5,
+                        'client'   => [
+                            \Memcached::OPT_HASH       => \Memcached::HASH_MD5,
                             \Memcached::OPT_PREFIX_KEY => 'prefix.',
                         ],
                         'lifetime' => $this['config']->get('session.options.lifetime', 3600),
-                        'prefix' => $this['config']->get('session.options.prefix', '_session_'),
+                        'prefix'   => $this['config']->get('session.options.prefix', '_session_'),
                         'uniqueId' => $this['config']->get('session.options.uniqueId', '_pails_app_'),
                     ]);
                 }
@@ -307,7 +307,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 $view = new View();
                 $view->setViewsDir($this->viewsPath());
                 $view->registerEngines([
-                    '.volt' => 'volt',
+                    '.volt'  => 'volt',
                     '.phtml' => 'Phalcon\Mvc\View\Engine\Php',
                 ]);
 
@@ -351,9 +351,9 @@ class PailsServiceProvider extends AbstractServiceProvider
                 }
                 $volt = new Volt($this['view'], $this);
                 $volt->setOptions([
-                    'compiledPath' => $compiledPath,
+                    'compiledPath'      => $compiledPath,
                     'compiledSeparator' => '_',
-                    'compileAlways' => $this['config']->get('app.debug', false),
+                    'compileAlways'     => $this['config']->get('app.debug', false),
                 ]);
 
                 $volt->getCompiler()->addExtension(new VoltExtension());

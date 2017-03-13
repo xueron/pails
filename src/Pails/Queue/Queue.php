@@ -28,7 +28,7 @@ class Queue extends Injectable
      */
     public function __construct(string $queueName)
     {
-        $this->name  = $queueName;
+        $this->name = $queueName;
         $this->queue = $this->di->get('mns')->getQueueRef($queueName, false);
     }
 
@@ -71,7 +71,7 @@ class Queue extends Injectable
     /**
      * 发送一个消息
      *
-     * @param $payload
+     * @param                 $payload
      * @param ListenerOptions $options
      *
      * @throws \Exception

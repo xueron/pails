@@ -10,7 +10,7 @@ use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 PhalconModel::setup([
     'exceptionOnFailedSave' => true, // 启用异常
-    'ignoreUnknownColumns' => true,  // 忽略不存在的字段
+    'ignoreUnknownColumns'  => true,  // 忽略不存在的字段
 ]);
 
 abstract class Model extends PhalconModel
@@ -20,11 +20,11 @@ abstract class Model extends PhalconModel
         // 自动更新时间戳字段
         $this->addBehavior(new Timestampable([
                 'beforeValidationOnCreate' => [
-                    'field' => ['created_at', 'updated_at'],
+                    'field'  => ['created_at', 'updated_at'],
                     'format' => 'Y-m-d H:i:s',
                 ],
                 'beforeValidationOnUpdate' => [
-                    'field' => 'updated_at',
+                    'field'  => 'updated_at',
                     'format' => 'Y-m-d H:i:s',
                 ],
             ])
@@ -55,7 +55,7 @@ abstract class Model extends PhalconModel
     /**
      * 跟find()类似, 包含总数、页数、上一页、下一页等信息
      *
-     * @param $parameters
+     * @param     $parameters
      * @param int $limit
      * @param int $page
      *
@@ -84,8 +84,8 @@ abstract class Model extends PhalconModel
 
         $options = [
             'builder' => $builder,
-            'limit' => $limit,
-            'page' => $page,
+            'limit'   => $limit,
+            'page'    => $page,
         ];
 
         return $di->get('Pails\\Plugins\\Paginator', [$options]);

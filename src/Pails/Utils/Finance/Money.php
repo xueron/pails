@@ -2,11 +2,11 @@
 /**
  * This file is part of the Supreme Shop Middleware.
  *
- * @author Supreme NewMedia GmbH <entwicklung@supreme.de>
+ * @author    Supreme NewMedia GmbH <entwicklung@supreme.de>
  * @copyright 2012-2014 Supreme NewMedia GmbH
- * @license MIT License
+ * @license   MIT License
  *
- * @package Finance
+ * @package   Finance
  */
 
 namespace Pails\Utils\Finance;
