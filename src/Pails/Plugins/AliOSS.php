@@ -31,9 +31,9 @@ class AliOSS extends AbstractAdapter
     /**
      * Write a new file.
      *
-     * @param string $path
-     * @param string $contents
-     * @param Config $config Config object
+     * @param string $path     Object path
+     * @param string $contents Object Content
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -53,9 +53,9 @@ class AliOSS extends AbstractAdapter
     /**
      * Write a new file using a stream.
      *
-     * @param string   $path
-     * @param resource $resource
-     * @param Config   $config Config object
+     * @param string   $path     Object path
+     * @param resource $resource Stream Object content
+     * @param Config   $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -69,9 +69,9 @@ class AliOSS extends AbstractAdapter
     /**
      * Update a file.
      *
-     * @param string $path
-     * @param string $contents
-     * @param Config $config Config object
+     * @param string $path     Object path
+     * @param string $contents Object content
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -83,9 +83,9 @@ class AliOSS extends AbstractAdapter
     /**
      * Update a file using a stream.
      *
-     * @param string   $path
-     * @param resource $resource
-     * @param Config   $config Config object
+     * @param string   $path     Object path
+     * @param resource $resource Stream object content
+     * @param Config   $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
