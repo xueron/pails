@@ -1033,9 +1033,10 @@ if (!function_exists('seconds2interval')) {
     function seconds2interval($seconds)
     {
         $d1 = new \DateTime();
-        $d2 = new \DateTime();
+
+        $d2 = clone $d1;
         $d2->add(new \DateInterval('PT' . $seconds . 'S'));
 
-        return $d2->diff($d1);
+        return $d1->diff($d2);
     }
 }
