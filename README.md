@@ -1,1 +1,3 @@
+[![Style CI](https://styleci.io/repos/56280806/shield?branch=master)](https://styleci.io/repos/56280806/shield?branch=master) 
+
 Just a tools make things better. Inspired by rails. laravel. deployer. phinx. ...
