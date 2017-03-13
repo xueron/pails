@@ -1,7 +1,6 @@
 <?php
 /**
  * StatusCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class StatusCommand extends Status
     {
         parent::configure();
 
-        $this->setName("db:status");
-        $this->setDescription("显示数据库迁移状态");
+        $this->setName('db:status');
+        $this->setDescription('显示数据库迁移状态');
     }
 }

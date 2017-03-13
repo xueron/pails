@@ -1,7 +1,6 @@
 <?php
 /**
  * StatusCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class TestCommand extends Test
     {
         parent::configure();
 
-        $this->setName("db:test");
-        $this->setDescription("测试数据库配置");
+        $this->setName('db:test');
+        $this->setDescription('测试数据库配置');
     }
 }

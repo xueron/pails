@@ -1,7 +1,6 @@
 <?php
 /**
  * BreakpointCommand.php
- *
  */
 namespace Pails\Console\Commands\Db;
 
@@ -15,7 +14,7 @@ class BreakpointCommand extends Breakpoint
     {
         parent::configure();
 
-        $this->setName("db:breakpoint");
-        $this->setDescription("管理数据库迁移的断点");
+        $this->setName('db:breakpoint');
+        $this->setDescription('管理数据库迁移的断点');
     }
 }

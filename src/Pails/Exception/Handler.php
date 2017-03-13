@@ -1,16 +1,15 @@
 <?php
 /**
  * Handler.php
- *
  */
 namespace Pails\Exception;
 
 use Exception;
 use Pails\Injectable;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 class Handler extends Injectable
@@ -35,8 +34,7 @@ class Handler extends Injectable
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $e
-     * @return void
+     * @param \Exception $e
      */
     public function report(Exception $e)
     {
@@ -45,14 +43,14 @@ class Handler extends Injectable
             $message = addslashes($e->getMessage());
             $file = addslashes($e->getFile());
             $line = addslashes($e->getLine());
-            $time = date("c");
+            $time = date('c');
 
             // log locally
             $log = sprintf("[%s] [%s] %s thrown in %s on line %d\n", $time, $class, $message, $file, $line);
             error_log($log, 3, $this->di->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
 
             // log to system
-            $syslog = sprintf("[%s] %s thrown in %s on line %d", $class, $message, $file, $line);
+            $syslog = sprintf('[%s] %s thrown in %s on line %d', $class, $message, $file, $line);
             error_log($syslog);
         }
     }
@@ -60,18 +58,20 @@ class Handler extends Injectable
     /**
      * Determine if the exception should be reported.
      *
-     * @param  \Exception  $e
+     * @param \Exception $e
+     *
      * @return bool
      */
     public function shouldReport(Exception $e)
     {
-        return ! $this->shouldntReport($e);
+        return !$this->shouldntReport($e);
     }
 
     /**
      * Determine if the exception is in the "do not report" list.
      *
-     * @param  \Exception  $e
+     * @param \Exception $e
+     *
      * @return bool
      */
     protected function shouldntReport(Exception $e)
@@ -89,6 +89,7 @@ class Handler extends Injectable
 
     /**
      * Render an exception
+     *
      * @param Exception $e
      */
     public function render(Exception $e)
@@ -96,6 +97,7 @@ class Handler extends Injectable
         if ($this->isConsole()) {
             $output = new StreamOutput(fopen('php://stdout', 'w'));
             $output->setVerbosity($this->debug ? OutputInterface::VERBOSITY_DEBUG : OutputInterface::VERBOSITY_NORMAL);
+
             return $this->renderForConsole($output, $e);
         } else {
             return $this->renderForBrowser($e);
@@ -105,9 +107,8 @@ class Handler extends Injectable
     /**
      * Render an exception to the console.
      *
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \Exception  $e
-     * @return void
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Exception                                        $e
      */
     public function renderForConsole($output, Exception $e)
     {
@@ -118,7 +119,7 @@ class Handler extends Injectable
     {
         if ($this->isAjax()) {
             echo json_encode([
-                "error" => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         } else {
             if ($this->debug) {
@@ -136,11 +137,12 @@ class Handler extends Injectable
     public function isConsole()
     {
         $sapi_type = php_sapi_name();
+
         return substr($sapi_type, 0, 3) == 'cli';
     }
 
     public function isAjax()
     {
-        return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] === "XMLHttpRequest";
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
     }
 }

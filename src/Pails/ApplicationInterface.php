@@ -1,13 +1,12 @@
 <?php
 /**
  * ApplicationInterface.php
- *
  */
 namespace Pails;
 
-
 /**
  * Interface ApplicationInterface
+ *
  * @package Pails
  */
 interface ApplicationInterface

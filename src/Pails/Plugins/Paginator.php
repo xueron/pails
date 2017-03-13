@@ -1,7 +1,6 @@
 <?php
 /**
  * Paginator.php
- *
  */
 namespace Pails\Plugins;
 
@@ -23,11 +22,11 @@ class Paginator extends QueryBuilder
         if ($this->_paginator == null) {
             $this->_paginator = parent::getPaginate();
         }
+
         return $this->_paginator;
     }
 
     /**
-     * @return null
      */
     public function getData()
     {
@@ -37,6 +36,7 @@ class Paginator extends QueryBuilder
         if ($this->_data == null) {
             $this->_data = $this->_paginator->items;
         }
+
         return $this->_data;
     }
 
@@ -57,9 +57,10 @@ class Paginator extends QueryBuilder
                 'next' => $this->_paginator->next,
                 'total_pages' => $this->_paginator->total_pages,
                 'total_items' => $this->_paginator->total_items,
-                'limit' => $this->_paginator->limit
+                'limit' => $this->_paginator->limit,
             ];
         }
+
         return $this->_meta;
     }
 }

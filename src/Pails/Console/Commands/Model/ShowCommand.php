@@ -35,7 +35,7 @@ class ShowCommand extends Command
                     $indexType = $index->getType();
                     if ($indexType == 'PRIMARY') {
                         $pri = array_unique(array_merge($pri, $indexColumns));
-                    } else if ($indexType == 'UNIQUE') {
+                    } elseif ($indexType == 'UNIQUE') {
                         if (count($indexColumns) == 1) {
                             $uni[] = $indexColumns[0];
                         } else {

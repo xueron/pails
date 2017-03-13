@@ -1,7 +1,6 @@
 <?php
 /**
  * ProviderInterface.php
- *
  */
 namespace Pails\Providers;
 

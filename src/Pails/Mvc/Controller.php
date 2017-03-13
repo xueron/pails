@@ -1,9 +1,9 @@
 <?php
 /**
  * Controller.php
- *
  */
 namespace Pails\Mvc;
+
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -11,7 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Controller
+ *
  * @package Pails\Mvc
+ *
  * @property \Pails\Plugins\ApiResponse $apiResponse
  * @property \Pails\Plugins\Fractal $fractal
  * @property \Pails\Pluralizer $inflector
@@ -50,6 +52,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller
         $response = new Response();
         try {
             $this->resourceServer->validateAuthenticatedRequest($request);
+
             return true;
         } catch (OAuthServerException $exception) {
             return $this->convertResponse($exception->generateHttpResponse($response));
@@ -64,6 +67,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller
      * Convert Psr7 Response to Phalcon's response
      *
      * @param ResponseInterface $response
+     *
      * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
     protected function convertResponse(ResponseInterface $response)
@@ -73,6 +77,7 @@ abstract class Controller extends \Phalcon\Mvc\Controller
         foreach ($response->getHeaders() as $name => $value) {
             $this->response->setHeader($name, $value);
         }
+
         return $this->response;
     }
 }

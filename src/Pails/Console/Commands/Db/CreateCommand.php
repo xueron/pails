@@ -13,6 +13,6 @@ class CreateCommand extends Create
 
         $this->setName('db:create');
 
-        $this->setDescription("新建一个数据库迁移");
+        $this->setDescription('新建一个数据库迁移');
     }
 }

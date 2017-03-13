@@ -1,7 +1,6 @@
 <?php
 /**
  * AccessTokenRepository.php
- *
  */
 namespace Pails\OAuth2\Repositories;
 
@@ -11,12 +10,13 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
 /**
  * Class AccessTokenRepository
+ *
  * @package Pails\OAuth2\Repositories
  */
 class AccessTokenRepository extends BaseRepository implements AccessTokenRepositoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
     {
@@ -24,7 +24,7 @@ class AccessTokenRepository extends BaseRepository implements AccessTokenReposit
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
@@ -32,7 +32,7 @@ class AccessTokenRepository extends BaseRepository implements AccessTokenReposit
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function revokeAccessToken($tokenId)
     {
@@ -40,7 +40,7 @@ class AccessTokenRepository extends BaseRepository implements AccessTokenReposit
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isAccessTokenRevoked($tokenId)
     {

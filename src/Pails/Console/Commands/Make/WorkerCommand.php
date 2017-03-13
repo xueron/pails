@@ -1,7 +1,6 @@
 <?php
 namespace Pails\Console\Commands\Make;
 
-
 use Pails\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,9 +37,9 @@ class WorkerCommand extends Command
 
         if ($alias) {
             // rewrite services.php config
-            $services = (array)$this->di->getConfig('services', null, []);
+            $services = (array) $this->di->getConfig('services', null, []);
             $services[$alias] = 'App\\Workers\\' . $className;
-            @file_put_contents($this->di->configPath() . '/services.php', "<?php return " . var_export($services, true) . ";");
+            @file_put_contents($this->di->configPath() . '/services.php', '<?php return ' . var_export($services, true) . ';');
         }
 
         $this->info("$name created at $fileName");

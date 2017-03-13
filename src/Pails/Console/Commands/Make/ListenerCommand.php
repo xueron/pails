@@ -1,7 +1,6 @@
 <?php
 namespace Pails\Console\Commands\Make;
 
-
 use Pails\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,9 +33,9 @@ class ListenerCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite listeners.php config
-        $listeners = (array)$this->di->getConfig('listeners', null, []);
+        $listeners = (array) $this->di->getConfig('listeners', null, []);
         $listeners[$event] = 'App\\Listeners\\' . $className;
-        @file_put_contents($this->di->configPath() . '/listeners.php', "<?php return " . var_export($listeners, true) . ";");
+        @file_put_contents($this->di->configPath() . '/listeners.php', '<?php return ' . var_export($listeners, true) . ';');
 
         $this->info("$name created at $fileName");
     }

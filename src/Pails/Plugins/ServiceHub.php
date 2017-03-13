@@ -1,7 +1,6 @@
 <?php
 /**
  * ServiceHub.php
- *
  */
 namespace Pails\Plugins;
 
@@ -14,6 +13,7 @@ class ServiceHub extends Injectable
         if (!is_object($service)) {
             $service = $this->di->getShared($service);
         }
+
         return $service;
     }
 }

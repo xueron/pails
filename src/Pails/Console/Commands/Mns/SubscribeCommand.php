@@ -39,7 +39,7 @@ class SubscribeCommand extends Command
         $contentFormat = trim($this->option('content-format'));
 
         if (strlen($filter) > 16) {
-            throw new \LogicException("filter 长度不可以超过16个字符");
+            throw new \LogicException('filter 长度不可以超过16个字符');
         }
         if (!in_array($strategy, ['EXPONENTIAL_DECAY_RETRY', 'BACKOFF_RETRY'])) {
             throw new \LogicException("strategy 必须是\'EXPONENTIAL_DECAY_RETRY\' 或 \'BACKOFF_RETRY\'");
@@ -50,13 +50,14 @@ class SubscribeCommand extends Command
 
         $client = $this->mns;
         if (!$client) {
-            $this->error("请先配置阿里云MSN服务，并在DI里面注册");
+            $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
         //
         $topic = $client->getTopicRef($topicName);
-        if (! Text::startsWith($endpoint, 'http')) {
+        if (!Text::startsWith($endpoint, 'http')) {
             $endpoint = $topic->generateQueueEndpoint($endpoint);
         }
 
@@ -64,10 +65,10 @@ class SubscribeCommand extends Command
         try {
             $res = $topic->subscribe($attrs);
             if ($res->isSucceed()) {
-                $this->line("订阅成功");
+                $this->line('订阅成功');
                 $this->output->newLine();
-                $this->call("mns:list-subscription", [
-                    'topic' => $topicName
+                $this->call('mns:list-subscription', [
+                    'topic' => $topicName,
                 ]);
             }
         } catch (\Exception $e) {

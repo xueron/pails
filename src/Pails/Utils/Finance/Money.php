@@ -5,6 +5,7 @@
  * @author Supreme NewMedia GmbH <entwicklung@supreme.de>
  * @copyright 2012-2014 Supreme NewMedia GmbH
  * @license MIT License
+ *
  * @package Finance
  */
 
@@ -15,7 +16,6 @@ namespace Pails\Utils\Finance;
  */
 class Money
 {
-
     /**
      * Scale used for all calculations.
      *
@@ -336,7 +336,7 @@ class Money
                 $result = self::roundHalfToOdd($amount);
                 break;
             default:
-                throw new \InvalidArgumentException('Unknown rounding mode \''.$mode.'\'');
+                throw new \InvalidArgumentException('Unknown rounding mode \'' . $mode . '\'');
         }
 
         $result = bcdiv($result, $factor, self::BCSCALE);
@@ -715,7 +715,7 @@ class Money
         return $this->getCurrency() . ' ' . $this->format();
     }
 
-    public function format($decimals = 2 , $dec_point = '.' , $thousands_sep = ',' )
+    public function format($decimals = 2, $dec_point = '.', $thousands_sep = ',')
     {
         return number_format($this->getAmount(), $decimals, $dec_point, $thousands_sep);
     }
@@ -723,7 +723,7 @@ class Money
     /**
      * Is the current currency 'NONE'?
      *
-     * @return boolean
+     * @return bool
      */
     public function isCurrencyNone()
     {
@@ -735,14 +735,14 @@ class Money
      *
      * @param Money $money the money to add
      *
-     * @return Money
-     *
      * @throws \LogicException if the Currencies do not match
+     *
+     * @return Money
      */
     public function add(Money $money)
     {
         if (!$this->currency->equals($money->getCurrency())) {
-            throw new \LogicException($this.' does not match '.$money);
+            throw new \LogicException($this . ' does not match ' . $money);
         }
 
         $amount = bcadd($this->amount, $money->getAmount(), self::BCSCALE);
@@ -755,9 +755,9 @@ class Money
      *
      * @param mixed $factor the factor to divide by
      *
-     * @return Money
-     *
      * @throws \InvalidArgumentException if the $factor is not numeric
+     *
+     * @return Money
      */
     public function divide($factor)
     {
@@ -780,7 +780,7 @@ class Money
      *
      * @param Money $money the money to camplare with
      *
-     * @return boolean true if both amounts and currency are equal, false otherwise
+     * @return bool true if both amounts and currency are equal, false otherwise
      */
     public function equals(Money $money)
     {
@@ -796,9 +796,9 @@ class Money
      *
      * @param mixed $modulus the modulus to apply
      *
-     * @return Money
-     *
      * @throws \InvalidArgumentException if the $modulus is not numeric
+     *
+     * @return Money
      */
     public function modulus($modulus)
     {
@@ -816,9 +816,9 @@ class Money
      *
      * @param mixed $factor the factor to multiply with
      *
-     * @return Money
-     *
      * @throws \InvalidArgumentException if the $factor is not numeric
+     *
+     * @return Money
      */
     public function multiply($factor)
     {
@@ -836,9 +836,9 @@ class Money
      *
      * @param mixed $power the power to raise to
      *
-     * @return Money
-     *
      * @throws \InvalidArgumentException if the $power is not numeric
+     *
+     * @return Money
      */
     public function power($power)
     {
@@ -857,10 +857,10 @@ class Money
      * @param mixed $power   the power to raise to
      * @param mixed $modulus the modulus to apply
      *
-     * @return Money
-     *
      * @throws \InvalidArgumentException if the $power is not numeric
      * @throws \InvalidArgumentException if the $modulus is not numeric
+     *
+     * @return Money
      */
     public function powerModulus($power, $modulus)
     {
@@ -896,14 +896,14 @@ class Money
      *
      * @param Money $money the money to subtract
      *
-     * @return Money
-     *
      * @throws \LogicException if the Currencies do not match
+     *
+     * @return Money
      */
     public function subtract(Money $money)
     {
         if (!$this->currency->equals($money->getCurrency())) {
-            throw new \LogicException($this.' does not match '.$money);
+            throw new \LogicException($this . ' does not match ' . $money);
         }
 
         $amount = bcsub($this->amount, $money->getAmount(), self::BCSCALE);
@@ -927,6 +927,7 @@ class Money
      * 返回一个格式化的金额,标准两位小数
      *
      * @param $amount
+     *
      * @return string
      */
     public static function normalize($amount)
@@ -940,7 +941,7 @@ class Money
      *
      * @param Money $money the money to compare with
      *
-     * @return integer
+     * @return int
      */
     public function compare(Money $money)
     {
@@ -976,17 +977,19 @@ class Money
     {
         return bcmul($this->amount, '100', 0);
     }
-    
-    public function isNegative() {
+
+    public function isNegative()
+    {
         return $this->lessThan(Money::create(0));
     }
-    
-    public function isPositive() {
+
+    public function isPositive()
+    {
         return $this->greaterThan(Money::create(0));
     }
 
     public function lessThanOrEqual(Money $money)
     {
-       return $this->lessThan($money) || $this->equals($money);
+        return $this->lessThan($money) || $this->equals($money);
     }
 }

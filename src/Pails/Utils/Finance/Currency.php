@@ -5,6 +5,7 @@
  * @author Supreme NewMedia GmbH <entwicklung@supreme.de>
  * @copyright 2012-2014 Supreme NewMedia GmbH
  * @license MIT License
+ *
  * @package Finance
  */
 
@@ -15,7 +16,6 @@ namespace Pails\Utils\Finance;
  */
 class Currency
 {
-
     const ISO_STATUS_ACTIVE = 'ISO_STATUS_ACTIVE';
     const ISO_STATUS_WITHOUT_CURRENCY_CODE = 'ISO_STATUS_WITHOUT_CURRENCY_CODE';
     const ISO_STATUS_UNOFFICIAL = 'ISO_STATUS_UNOFFICIAL';
@@ -33,7 +33,7 @@ class Currency
      * 'ISO_STATUS_HISTORICAL'
      *
      * @var string one of 'ISO_STATUS_ACTIVE', 'ISO_STATUS_WITHOUT_CURRENCY_CODE', 'ISO_STATUS_UNOFFICIAL' or
-     * 'ISO_STATUS_HISTORICAL'
+     *             'ISO_STATUS_HISTORICAL'
      */
     private $isoStatus;
 
@@ -53,7 +53,7 @@ class Currency
 
     /**
      * The currency sign.
-     * 
+     *
      * @var string
      */
     private $sign;
@@ -61,8 +61,8 @@ class Currency
     /**
      * Creates a new instance.
      *
-     * @param string $code      the three-letter currency code
-     * @param string $isoStatus one of 'ISO_STATUS_ACTIVE', 'ISO_STATUS_WITHOUT_CURRENCY_CODE',
+     * @param string $code          the three-letter currency code
+     * @param string $isoStatus     one of 'ISO_STATUS_ACTIVE', 'ISO_STATUS_WITHOUT_CURRENCY_CODE',
      *                              'ISO_STATUS_UNOFFICIAL' or 'ISO_STATUS_HISTORICAL'
      * @param int    $decimalDigits the number of decimal places used for this currency
      * @param string $name          the name as specified in en.wikipedia.org
@@ -81,9 +81,9 @@ class Currency
      *
      * @param string $code the three-letter currency code
      *
-     * @return Currency
-     *
      * @throws \InvalidArgumentException if the code is unknown
+     *
+     * @return Currency
      */
     public static function valueOf($code = self::NONE)
     {
@@ -97,10 +97,10 @@ class Currency
 
             return new Currency($code, $isoStatus, $decimalDigits, $name, $sign);
         } else {
-            throw new \InvalidArgumentException('Unknown currency code \''.$code.'\'.');
+            throw new \InvalidArgumentException('Unknown currency code \'' . $code . '\'.');
         }
     }
-    
+
     public static function create($code = self::NONE)
     {
         return static::valueOf($code);
@@ -111,7 +111,7 @@ class Currency
      *
      * @param string $code the three-letter currency code
      *
-     * @return boolean
+     * @return bool
      */
     public static function isValidCode($code)
     {
@@ -133,9 +133,9 @@ class Currency
      *
      * @param string $code the three-letter currency code
      *
-     * @return array info about ISO Currency
-     *
      * @throws \InvalidArgumentException if currency code is unknown
+     *
+     * @return array info about ISO Currency
      */
     public static function getDetails($code)
     {
@@ -155,7 +155,7 @@ class Currency
         if (array_key_exists($code, $infos)) {
             return $infos[ $code ];
         }
-        throw new \InvalidArgumentException('Unknown \$code: '.$code);
+        throw new \InvalidArgumentException('Unknown \$code: ' . $code);
     }
 
     /**
@@ -194,7 +194,7 @@ class Currency
     /**
      * Whether the ISO Status is 'ISO_STATUS_ACTIVE'.
      *
-     * @return boolean if the status is 'ISO_STATUS_ACTIVE'
+     * @return bool if the status is 'ISO_STATUS_ACTIVE'
      */
     public function isActive()
     {
@@ -204,7 +204,7 @@ class Currency
     /**
      * Whether the ISO Status is 'ISO_STATUS_WITHOUT_CURRENCY_CODE'.
      *
-     * @return boolean if the status is 'ISO_STATUS_WITHOUT_CURRENCY_CODE'
+     * @return bool if the status is 'ISO_STATUS_WITHOUT_CURRENCY_CODE'
      */
     public function isWithoutCurrencyCode()
     {
@@ -214,7 +214,7 @@ class Currency
     /**
      * Whether the ISO Status is 'ISO_STATUS_UNOFFICIAL'.
      *
-     * @return boolean if the status is 'ISO_STATUS_UNOFFICIAL'
+     * @return bool if the status is 'ISO_STATUS_UNOFFICIAL'
      */
     public function isUnofficial()
     {
@@ -224,7 +224,7 @@ class Currency
     /**
      * Whether the ISO Status is 'ISO_STATUS_HISTORICAL'.
      *
-     * @return boolean if the status is 'ISO_STATUS_HISTORICAL'
+     * @return bool if the status is 'ISO_STATUS_HISTORICAL'
      */
     public function isHistorical()
     {
@@ -256,7 +256,7 @@ class Currency
      *
      * @param Currency $currency the currency to compare to
      *
-     * @return boolean true if the currency codes match, false otherwise
+     * @return bool true if the currency codes match, false otherwise
      */
     public function equals(Currency $currency)
     {
@@ -1673,1084 +1673,1084 @@ class Currency
      */
     public static function getInfoForCurrencies()
     {
-        return array(
-            self::CODE_AED => array(
+        return [
+            self::CODE_AED => [
                 'code' => self::CODE_AED,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'United Arab Emirates dirham',
-            ),
-            self::CODE_AFN => array(
+            ],
+            self::CODE_AFN => [
                 'code' => self::CODE_AFN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Afghan afghani',
-            ),
-            self::CODE_ALL => array(
+            ],
+            self::CODE_ALL => [
                 'code' => self::CODE_ALL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Albanian lek',
-            ),
-            self::CODE_AMD => array(
+            ],
+            self::CODE_AMD => [
                 'code' => self::CODE_AMD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Armenian dram',
-            ),
-            self::CODE_ANG => array(
+            ],
+            self::CODE_ANG => [
                 'code' => self::CODE_ANG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Netherlands Antillean guilder',
-            ),
-            self::CODE_AOA => array(
+            ],
+            self::CODE_AOA => [
                 'code' => self::CODE_AOA,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Angolan kwanza',
-            ),
-            self::CODE_ARS => array(
+            ],
+            self::CODE_ARS => [
                 'code' => self::CODE_ARS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Argentine peso',
-            ),
-            self::CODE_AUD => array(
+            ],
+            self::CODE_AUD => [
                 'code' => self::CODE_AUD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Australian dollar',
-            ),
-            self::CODE_AWG => array(
+            ],
+            self::CODE_AWG => [
                 'code' => self::CODE_AWG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Aruban florin',
-            ),
-            self::CODE_AZN => array(
+            ],
+            self::CODE_AZN => [
                 'code' => self::CODE_AZN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Azerbaijani manat',
-            ),
-            self::CODE_BAM => array(
+            ],
+            self::CODE_BAM => [
                 'code' => self::CODE_BAM,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bosnia and Herzegovina convertible mark',
-            ),
-            self::CODE_BBD => array(
+            ],
+            self::CODE_BBD => [
                 'code' => self::CODE_BBD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Barbados dollar',
-            ),
-            self::CODE_BDT => array(
+            ],
+            self::CODE_BDT => [
                 'code' => self::CODE_BDT,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bangladeshi taka',
-            ),
-            self::CODE_BGN => array(
+            ],
+            self::CODE_BGN => [
                 'code' => self::CODE_BGN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bulgarian lev',
-            ),
-            self::CODE_BHD => array(
+            ],
+            self::CODE_BHD => [
                 'code' => self::CODE_BHD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Bahraini dinar',
-            ),
-            self::CODE_BIF => array(
+            ],
+            self::CODE_BIF => [
                 'code' => self::CODE_BIF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Burundian franc',
-            ),
-            self::CODE_BMD => array(
+            ],
+            self::CODE_BMD => [
                 'code' => self::CODE_BMD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bermudian dollar (customarily known as Bermuda dollar)',
-            ),
-            self::CODE_BND => array(
+            ],
+            self::CODE_BND => [
                 'code' => self::CODE_BND,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Brunei dollar',
-            ),
-            self::CODE_BOB => array(
+            ],
+            self::CODE_BOB => [
                 'code' => self::CODE_BOB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Boliviano',
-            ),
-            self::CODE_BOV => array(
+            ],
+            self::CODE_BOV => [
                 'code' => self::CODE_BOV,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bolivian Mvdol (funds code)',
-            ),
-            self::CODE_BRL => array(
+            ],
+            self::CODE_BRL => [
                 'code' => self::CODE_BRL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian real',
-            ),
-            self::CODE_BSD => array(
+            ],
+            self::CODE_BSD => [
                 'code' => self::CODE_BSD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bahamian dollar',
-            ),
-            self::CODE_BTN => array(
+            ],
+            self::CODE_BTN => [
                 'code' => self::CODE_BTN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Bhutanese ngultrum',
-            ),
-            self::CODE_BWP => array(
+            ],
+            self::CODE_BWP => [
                 'code' => self::CODE_BWP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Botswana pula',
-            ),
-            self::CODE_BYR => array(
+            ],
+            self::CODE_BYR => [
                 'code' => self::CODE_BYR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Belarusian ruble',
-            ),
-            self::CODE_BZD => array(
+            ],
+            self::CODE_BZD => [
                 'code' => self::CODE_BZD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Belize dollar',
-            ),
-            self::CODE_CAD => array(
+            ],
+            self::CODE_CAD => [
                 'code' => self::CODE_CAD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Canadian dollar',
-            ),
-            self::CODE_CDF => array(
+            ],
+            self::CODE_CDF => [
                 'code' => self::CODE_CDF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Congolese franc',
-            ),
-            self::CODE_CHE => array(
+            ],
+            self::CODE_CHE => [
                 'code' => self::CODE_CHE,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'WIR Euro (complementary currency)',
-            ),
-            self::CODE_CHF => array(
+            ],
+            self::CODE_CHF => [
                 'code' => self::CODE_CHF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Swiss franc',
-            ),
-            self::CODE_CHW => array(
+            ],
+            self::CODE_CHW => [
                 'code' => self::CODE_CHW,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'WIR Franc (complementary currency)',
-            ),
-            self::CODE_CLF => array(
+            ],
+            self::CODE_CLF => [
                 'code' => self::CODE_CLF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Unidad de Fomento (funds code)',
-            ),
-            self::CODE_CLP => array(
+            ],
+            self::CODE_CLP => [
                 'code' => self::CODE_CLP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Chilean peso',
-            ),
-            self::CODE_CNY => array(
+            ],
+            self::CODE_CNY => [
                 'code' => self::CODE_CNY,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Chinese yuan',
-            ),
-            self::CODE_COP => array(
+            ],
+            self::CODE_COP => [
                 'code' => self::CODE_COP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Colombian peso',
-            ),
-            self::CODE_COU => array(
+            ],
+            self::CODE_COU => [
                 'code' => self::CODE_COU,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Unidad de Valor Real',
-            ),
-            self::CODE_CRC => array(
+            ],
+            self::CODE_CRC => [
                 'code' => self::CODE_CRC,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Costa Rican colon',
-            ),
-            self::CODE_CUC => array(
+            ],
+            self::CODE_CUC => [
                 'code' => self::CODE_CUC,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Cuban convertible peso',
-            ),
-            self::CODE_CUP => array(
+            ],
+            self::CODE_CUP => [
                 'code' => self::CODE_CUP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Cuban peso',
-            ),
-            self::CODE_CVE => array(
+            ],
+            self::CODE_CVE => [
                 'code' => self::CODE_CVE,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Cape Verde escudo',
-            ),
-            self::CODE_CZK => array(
+            ],
+            self::CODE_CZK => [
                 'code' => self::CODE_CZK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Czech koruna',
-            ),
-            self::CODE_DJF => array(
+            ],
+            self::CODE_DJF => [
                 'code' => self::CODE_DJF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Djiboutian franc',
-            ),
-            self::CODE_DKK => array(
+            ],
+            self::CODE_DKK => [
                 'code' => self::CODE_DKK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Danish krone',
-            ),
-            self::CODE_DOP => array(
+            ],
+            self::CODE_DOP => [
                 'code' => self::CODE_DOP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Dominican peso',
-            ),
-            self::CODE_DZD => array(
+            ],
+            self::CODE_DZD => [
                 'code' => self::CODE_DZD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Algerian dinar',
-            ),
-            self::CODE_EGP => array(
+            ],
+            self::CODE_EGP => [
                 'code' => self::CODE_EGP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Egyptian pound',
-            ),
-            self::CODE_ERN => array(
+            ],
+            self::CODE_ERN => [
                 'code' => self::CODE_ERN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Eritrean nakfa',
-            ),
-            self::CODE_ETB => array(
+            ],
+            self::CODE_ETB => [
                 'code' => self::CODE_ETB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Ethiopian birr',
-            ),
-            self::CODE_EUR => array(
+            ],
+            self::CODE_EUR => [
                 'code' => self::CODE_EUR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Euro',
-            ),
-            self::CODE_FJD => array(
+            ],
+            self::CODE_FJD => [
                 'code' => self::CODE_FJD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Fiji dollar',
-            ),
-            self::CODE_FKP => array(
+            ],
+            self::CODE_FKP => [
                 'code' => self::CODE_FKP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Falkland Islands pound',
-            ),
-            self::CODE_GBP => array(
+            ],
+            self::CODE_GBP => [
                 'code' => self::CODE_GBP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Pound sterling',
-            ),
-            self::CODE_GEL => array(
+            ],
+            self::CODE_GEL => [
                 'code' => self::CODE_GEL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Georgian lari',
-            ),
-            self::CODE_GHS => array(
+            ],
+            self::CODE_GHS => [
                 'code' => self::CODE_GHS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Ghanaian cedi',
-            ),
-            self::CODE_GIP => array(
+            ],
+            self::CODE_GIP => [
                 'code' => self::CODE_GIP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Gibraltar pound',
-            ),
-            self::CODE_GMD => array(
+            ],
+            self::CODE_GMD => [
                 'code' => self::CODE_GMD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Gambian dalasi',
-            ),
-            self::CODE_GNF => array(
+            ],
+            self::CODE_GNF => [
                 'code' => self::CODE_GNF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Guinean franc',
-            ),
-            self::CODE_GTQ => array(
+            ],
+            self::CODE_GTQ => [
                 'code' => self::CODE_GTQ,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Guatemalan quetzal',
-            ),
-            self::CODE_GYD => array(
+            ],
+            self::CODE_GYD => [
                 'code' => self::CODE_GYD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Guyanese dollar',
-            ),
-            self::CODE_HKD => array(
+            ],
+            self::CODE_HKD => [
                 'code' => self::CODE_HKD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Hong Kong dollar',
-            ),
-            self::CODE_HNL => array(
+            ],
+            self::CODE_HNL => [
                 'code' => self::CODE_HNL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Honduran lempira',
-            ),
-            self::CODE_HRK => array(
+            ],
+            self::CODE_HRK => [
                 'code' => self::CODE_HRK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Croatian kuna',
-            ),
-            self::CODE_HTG => array(
+            ],
+            self::CODE_HTG => [
                 'code' => self::CODE_HTG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Haitian gourde',
-            ),
-            self::CODE_HUF => array(
+            ],
+            self::CODE_HUF => [
                 'code' => self::CODE_HUF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Hungarian forint',
-            ),
-            self::CODE_IDR => array(
+            ],
+            self::CODE_IDR => [
                 'code' => self::CODE_IDR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Indonesian rupiah',
-            ),
-            self::CODE_ILS => array(
+            ],
+            self::CODE_ILS => [
                 'code' => self::CODE_ILS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Israeli new sheqel',
-            ),
-            self::CODE_INR => array(
+            ],
+            self::CODE_INR => [
                 'code' => self::CODE_INR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Indian rupee',
-            ),
-            self::CODE_IQD => array(
+            ],
+            self::CODE_IQD => [
                 'code' => self::CODE_IQD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Iraqi dinar',
-            ),
-            self::CODE_IRR => array(
+            ],
+            self::CODE_IRR => [
                 'code' => self::CODE_IRR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Iranian rial',
-            ),
-            self::CODE_ISK => array(
+            ],
+            self::CODE_ISK => [
                 'code' => self::CODE_ISK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Icelandic króna',
-            ),
-            self::CODE_JMD => array(
+            ],
+            self::CODE_JMD => [
                 'code' => self::CODE_JMD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Jamaican dollar',
-            ),
-            self::CODE_JOD => array(
+            ],
+            self::CODE_JOD => [
                 'code' => self::CODE_JOD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Jordanian dinar',
-            ),
-            self::CODE_JPY => array(
+            ],
+            self::CODE_JPY => [
                 'code' => self::CODE_JPY,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Japanese yen',
-            ),
-            self::CODE_KES => array(
+            ],
+            self::CODE_KES => [
                 'code' => self::CODE_KES,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Kenyan shilling',
-            ),
-            self::CODE_KGS => array(
+            ],
+            self::CODE_KGS => [
                 'code' => self::CODE_KGS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Kyrgyzstani som',
-            ),
-            self::CODE_KHR => array(
+            ],
+            self::CODE_KHR => [
                 'code' => self::CODE_KHR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Cambodian riel',
-            ),
-            self::CODE_KMF => array(
+            ],
+            self::CODE_KMF => [
                 'code' => self::CODE_KMF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Comoro franc',
-            ),
-            self::CODE_KPW => array(
+            ],
+            self::CODE_KPW => [
                 'code' => self::CODE_KPW,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'North Korean won',
-            ),
-            self::CODE_KRW => array(
+            ],
+            self::CODE_KRW => [
                 'code' => self::CODE_KRW,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'South Korean won',
-            ),
-            self::CODE_KWD => array(
+            ],
+            self::CODE_KWD => [
                 'code' => self::CODE_KWD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Kuwaiti dinar',
-            ),
-            self::CODE_KYD => array(
+            ],
+            self::CODE_KYD => [
                 'code' => self::CODE_KYD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Cayman Islands dollar',
-            ),
-            self::CODE_KZT => array(
+            ],
+            self::CODE_KZT => [
                 'code' => self::CODE_KZT,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Kazakhstani tenge',
-            ),
-            self::CODE_LAK => array(
+            ],
+            self::CODE_LAK => [
                 'code' => self::CODE_LAK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Lao kip',
-            ),
-            self::CODE_LBP => array(
+            ],
+            self::CODE_LBP => [
                 'code' => self::CODE_LBP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Lebanese pound',
-            ),
-            self::CODE_LKR => array(
+            ],
+            self::CODE_LKR => [
                 'code' => self::CODE_LKR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Sri Lankan rupee',
-            ),
-            self::CODE_LRD => array(
+            ],
+            self::CODE_LRD => [
                 'code' => self::CODE_LRD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Liberian dollar',
-            ),
-            self::CODE_LSL => array(
+            ],
+            self::CODE_LSL => [
                 'code' => self::CODE_LSL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Lesotho loti',
-            ),
-            self::CODE_LTL => array(
+            ],
+            self::CODE_LTL => [
                 'code' => self::CODE_LTL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Lithuanian litas',
-            ),
-            self::CODE_LVL => array(
+            ],
+            self::CODE_LVL => [
                 'code' => self::CODE_LVL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Latvian lats',
-            ),
-            self::CODE_LYD => array(
+            ],
+            self::CODE_LYD => [
                 'code' => self::CODE_LYD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Libyan dinar',
-            ),
-            self::CODE_MAD => array(
+            ],
+            self::CODE_MAD => [
                 'code' => self::CODE_MAD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Moroccan dirham',
-            ),
-            self::CODE_MDL => array(
+            ],
+            self::CODE_MDL => [
                 'code' => self::CODE_MDL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Moldovan leu',
-            ),
-            self::CODE_MGA => array(
+            ],
+            self::CODE_MGA => [
                 'code' => self::CODE_MGA,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Malagasy ariary',
-            ),
-            self::CODE_MKD => array(
+            ],
+            self::CODE_MKD => [
                 'code' => self::CODE_MKD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Macedonian denar',
-            ),
-            self::CODE_MMK => array(
+            ],
+            self::CODE_MMK => [
                 'code' => self::CODE_MMK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Myanma kyat',
-            ),
-            self::CODE_MNT => array(
+            ],
+            self::CODE_MNT => [
                 'code' => self::CODE_MNT,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Mongolian tugrik',
-            ),
-            self::CODE_MOP => array(
+            ],
+            self::CODE_MOP => [
                 'code' => self::CODE_MOP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Macanese pataca',
-            ),
-            self::CODE_MRO => array(
+            ],
+            self::CODE_MRO => [
                 'code' => self::CODE_MRO,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Mauritanian ouguiya',
-            ),
-            self::CODE_MUR => array(
+            ],
+            self::CODE_MUR => [
                 'code' => self::CODE_MUR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Mauritian rupee',
-            ),
-            self::CODE_MVR => array(
+            ],
+            self::CODE_MVR => [
                 'code' => self::CODE_MVR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Maldivian rufiyaa',
-            ),
-            self::CODE_MWK => array(
+            ],
+            self::CODE_MWK => [
                 'code' => self::CODE_MWK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Malawian kwacha',
-            ),
-            self::CODE_MXN => array(
+            ],
+            self::CODE_MXN => [
                 'code' => self::CODE_MXN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Mexican peso',
-            ),
-            self::CODE_MXV => array(
+            ],
+            self::CODE_MXV => [
                 'code' => self::CODE_MXV,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Mexican Unidad de Inversion (UDI) (funds code)',
-            ),
-            self::CODE_MYR => array(
+            ],
+            self::CODE_MYR => [
                 'code' => self::CODE_MYR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Malaysian ringgit',
-            ),
-            self::CODE_MZN => array(
+            ],
+            self::CODE_MZN => [
                 'code' => self::CODE_MZN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Mozambican metical',
-            ),
-            self::CODE_NAD => array(
+            ],
+            self::CODE_NAD => [
                 'code' => self::CODE_NAD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Namibian dollar',
-            ),
-            self::CODE_NGN => array(
+            ],
+            self::CODE_NGN => [
                 'code' => self::CODE_NGN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Nigerian naira',
-            ),
-            self::CODE_NIO => array(
+            ],
+            self::CODE_NIO => [
                 'code' => self::CODE_NIO,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Nicaraguan córdoba',
-            ),
-            self::CODE_NOK => array(
+            ],
+            self::CODE_NOK => [
                 'code' => self::CODE_NOK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Norwegian krone',
-            ),
-            self::CODE_NPR => array(
+            ],
+            self::CODE_NPR => [
                 'code' => self::CODE_NPR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Nepalese rupee',
-            ),
-            self::CODE_NZD => array(
+            ],
+            self::CODE_NZD => [
                 'code' => self::CODE_NZD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'New Zealand dollar',
-            ),
-            self::CODE_OMR => array(
+            ],
+            self::CODE_OMR => [
                 'code' => self::CODE_OMR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Omani rial',
-            ),
-            self::CODE_PAB => array(
+            ],
+            self::CODE_PAB => [
                 'code' => self::CODE_PAB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Panamanian balboa',
-            ),
-            self::CODE_PEN => array(
+            ],
+            self::CODE_PEN => [
                 'code' => self::CODE_PEN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Peruvian nuevo sol',
-            ),
-            self::CODE_PGK => array(
+            ],
+            self::CODE_PGK => [
                 'code' => self::CODE_PGK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Papua New Guinean kina',
-            ),
-            self::CODE_PHP => array(
+            ],
+            self::CODE_PHP => [
                 'code' => self::CODE_PHP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Philippine peso',
-            ),
-            self::CODE_PKR => array(
+            ],
+            self::CODE_PKR => [
                 'code' => self::CODE_PKR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Pakistani rupee',
-            ),
-            self::CODE_PLN => array(
+            ],
+            self::CODE_PLN => [
                 'code' => self::CODE_PLN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Polish złoty',
-            ),
-            self::CODE_PYG => array(
+            ],
+            self::CODE_PYG => [
                 'code' => self::CODE_PYG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Paraguayan guaraní',
-            ),
-            self::CODE_QAR => array(
+            ],
+            self::CODE_QAR => [
                 'code' => self::CODE_QAR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Qatari riyal',
-            ),
-            self::CODE_RON => array(
+            ],
+            self::CODE_RON => [
                 'code' => self::CODE_RON,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Romanian new leu',
-            ),
-            self::CODE_RSD => array(
+            ],
+            self::CODE_RSD => [
                 'code' => self::CODE_RSD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Serbian dinar',
-            ),
-            self::CODE_RUB => array(
+            ],
+            self::CODE_RUB => [
                 'code' => self::CODE_RUB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Russian rouble',
-            ),
-            self::CODE_RWF => array(
+            ],
+            self::CODE_RWF => [
                 'code' => self::CODE_RWF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Rwandan franc',
-            ),
-            self::CODE_SAR => array(
+            ],
+            self::CODE_SAR => [
                 'code' => self::CODE_SAR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Saudi riyal',
-            ),
-            self::CODE_SBD => array(
+            ],
+            self::CODE_SBD => [
                 'code' => self::CODE_SBD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Solomon Islands dollar',
-            ),
-            self::CODE_SCR => array(
+            ],
+            self::CODE_SCR => [
                 'code' => self::CODE_SCR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Seychelles rupee',
-            ),
-            self::CODE_SDG => array(
+            ],
+            self::CODE_SDG => [
                 'code' => self::CODE_SDG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Sudanese pound',
-            ),
-            self::CODE_SEK => array(
+            ],
+            self::CODE_SEK => [
                 'code' => self::CODE_SEK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Swedish krona/kronor',
-            ),
-            self::CODE_SGD => array(
+            ],
+            self::CODE_SGD => [
                 'code' => self::CODE_SGD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Singapore dollar',
-            ),
-            self::CODE_SHP => array(
+            ],
+            self::CODE_SHP => [
                 'code' => self::CODE_SHP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Saint Helena pound',
-            ),
-            self::CODE_SLL => array(
+            ],
+            self::CODE_SLL => [
                 'code' => self::CODE_SLL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Sierra Leonean leone',
-            ),
-            self::CODE_SOS => array(
+            ],
+            self::CODE_SOS => [
                 'code' => self::CODE_SOS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Somali shilling',
-            ),
-            self::CODE_SRD => array(
+            ],
+            self::CODE_SRD => [
                 'code' => self::CODE_SRD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Surinamese dollar',
-            ),
-            self::CODE_SSP => array(
+            ],
+            self::CODE_SSP => [
                 'code' => self::CODE_SSP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'South Sudanese pound',
-            ),
-            self::CODE_STD => array(
+            ],
+            self::CODE_STD => [
                 'code' => self::CODE_STD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'São Tomé and Príncipe dobra',
-            ),
-            self::CODE_SYP => array(
+            ],
+            self::CODE_SYP => [
                 'code' => self::CODE_SYP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Syrian pound',
-            ),
-            self::CODE_SZL => array(
+            ],
+            self::CODE_SZL => [
                 'code' => self::CODE_SZL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Swazi lilangeni',
-            ),
-            self::CODE_THB => array(
+            ],
+            self::CODE_THB => [
                 'code' => self::CODE_THB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Thai baht',
-            ),
-            self::CODE_TJS => array(
+            ],
+            self::CODE_TJS => [
                 'code' => self::CODE_TJS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Tajikistani somoni',
-            ),
-            self::CODE_TMT => array(
+            ],
+            self::CODE_TMT => [
                 'code' => self::CODE_TMT,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Turkmenistani manat',
-            ),
-            self::CODE_TND => array(
+            ],
+            self::CODE_TND => [
                 'code' => self::CODE_TND,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 3,
                 'name' => 'Tunisian dinar',
-            ),
-            self::CODE_TOP => array(
+            ],
+            self::CODE_TOP => [
                 'code' => self::CODE_TOP,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Tongan paʻanga',
-            ),
-            self::CODE_TRY => array(
+            ],
+            self::CODE_TRY => [
                 'code' => self::CODE_TRY,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Turkish lira',
-            ),
-            self::CODE_TTD => array(
+            ],
+            self::CODE_TTD => [
                 'code' => self::CODE_TTD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Trinidad and Tobago dollar',
-            ),
-            self::CODE_TWD => array(
+            ],
+            self::CODE_TWD => [
                 'code' => self::CODE_TWD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'New Taiwan dollar',
-            ),
-            self::CODE_TZS => array(
+            ],
+            self::CODE_TZS => [
                 'code' => self::CODE_TZS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Tanzanian shilling',
-            ),
-            self::CODE_UAH => array(
+            ],
+            self::CODE_UAH => [
                 'code' => self::CODE_UAH,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Ukrainian hryvnia',
-            ),
-            self::CODE_UGX => array(
+            ],
+            self::CODE_UGX => [
                 'code' => self::CODE_UGX,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Ugandan shilling',
-            ),
-            self::CODE_USD => array(
+            ],
+            self::CODE_USD => [
                 'code' => self::CODE_USD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'United States dollar',
                 'sign' => '$',
-            ),
-            self::CODE_USN => array(
+            ],
+            self::CODE_USN => [
                 'code' => self::CODE_USN,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'United States dollar (next day) (funds code)',
-            ),
-            self::CODE_USS => array(
+            ],
+            self::CODE_USS => [
                 'code' => self::CODE_USS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'United States dollar (same day) (funds code) (one source[who?] claims it is no longer used, '
-                          .'but it is still on the ISO 4217-MA list)',
-            ),
-            self::CODE_UYI => array(
+                          . 'but it is still on the ISO 4217-MA list)',
+            ],
+            self::CODE_UYI => [
                 'code' => self::CODE_UYI,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Uruguay Peso en Unidades Indexadas (URUIURUI) (funds code)',
-            ),
-            self::CODE_UYU => array(
+            ],
+            self::CODE_UYU => [
                 'code' => self::CODE_UYU,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Uruguayan peso',
-            ),
-            self::CODE_UZS => array(
+            ],
+            self::CODE_UZS => [
                 'code' => self::CODE_UZS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Uzbekistan som',
-            ),
-            self::CODE_VEF => array(
+            ],
+            self::CODE_VEF => [
                 'code' => self::CODE_VEF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Venezuelan bolívar fuerte',
-            ),
-            self::CODE_VND => array(
+            ],
+            self::CODE_VND => [
                 'code' => self::CODE_VND,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Vietnamese đồng',
-            ),
-            self::CODE_VUV => array(
+            ],
+            self::CODE_VUV => [
                 'code' => self::CODE_VUV,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Vanuatu vatu',
-            ),
-            self::CODE_WST => array(
+            ],
+            self::CODE_WST => [
                 'code' => self::CODE_WST,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Samoan tala',
-            ),
-            self::CODE_XAF => array(
+            ],
+            self::CODE_XAF => [
                 'code' => self::CODE_XAF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'CFA franc BEAC',
-            ),
-            self::CODE_XAG => array(
+            ],
+            self::CODE_XAG => [
                 'code' => self::CODE_XAG,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Silver (one troy ounce)',
-            ),
-            self::CODE_XAU => array(
+            ],
+            self::CODE_XAU => [
                 'code' => self::CODE_XAU,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Gold (one troy ounce)',
-            ),
-            self::CODE_XBA => array(
+            ],
+            self::CODE_XBA => [
                 'code' => self::CODE_XBA,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'European Composite Unit (EURCO) (bond market unit)',
-            ),
-            self::CODE_XBB => array(
+            ],
+            self::CODE_XBB => [
                 'code' => self::CODE_XBB,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'European Monetary Unit (E.M.U.-6) (bond market unit)',
-            ),
-            self::CODE_XBC => array(
+            ],
+            self::CODE_XBC => [
                 'code' => self::CODE_XBC,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'European Unit of Account 9 (E.U.A.-9) (bond market unit)',
-            ),
-            self::CODE_XBD => array(
+            ],
+            self::CODE_XBD => [
                 'code' => self::CODE_XBD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'European Unit of Account 17 (E.U.A.-17) (bond market unit)',
-            ),
-            self::CODE_XCD => array(
+            ],
+            self::CODE_XCD => [
                 'code' => self::CODE_XCD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'East Caribbean dollar',
-            ),
-            self::CODE_XDR => array(
+            ],
+            self::CODE_XDR => [
                 'code' => self::CODE_XDR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Special drawing rights',
-            ),
-            self::CODE_XFU => array(
+            ],
+            self::CODE_XFU => [
                 'code' => self::CODE_XFU,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'UIC franc (special settlement currency)',
-            ),
-            self::CODE_XOF => array(
+            ],
+            self::CODE_XOF => [
                 'code' => self::CODE_XOF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'CFA Franc BCEAO',
-            ),
-            self::CODE_XPD => array(
+            ],
+            self::CODE_XPD => [
                 'code' => self::CODE_XPD,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Palladium (one troy ounce)',
-            ),
-            self::CODE_XPF => array(
+            ],
+            self::CODE_XPF => [
                 'code' => self::CODE_XPF,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'CFP franc',
-            ),
-            self::CODE_XPT => array(
+            ],
+            self::CODE_XPT => [
                 'code' => self::CODE_XPT,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Platinum (one troy ounce)',
-            ),
-            self::CODE_XTS => array(
+            ],
+            self::CODE_XTS => [
                 'code' => self::CODE_XTS,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'Code reserved for testing purposes',
-            ),
-            self::CODE_XXX => array(
+            ],
+            self::CODE_XXX => [
                 'code' => self::CODE_XXX,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 0,
                 'name' => 'No currency',
-            ),
-            self::CODE_YER => array(
+            ],
+            self::CODE_YER => [
                 'code' => self::CODE_YER,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Yemeni rial',
-            ),
-            self::CODE_ZAR => array(
+            ],
+            self::CODE_ZAR => [
                 'code' => self::CODE_ZAR,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'South African rand',
-            ),
-            self::CODE_ZMK => array(
+            ],
+            self::CODE_ZMK => [
                 'code' => self::CODE_ZMK,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Zambian kwacha',
-            ),
-            self::CODE_ZWL => array(
+            ],
+            self::CODE_ZWL => [
                 'code' => self::CODE_ZWL,
                 'isoStatus' => self::ISO_STATUS_ACTIVE,
                 'decimalDigits' => 2,
                 'name' => 'Zimbabwe dollar',
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -2760,50 +2760,50 @@ class Currency
      */
     public static function getInfoForCurrenciesWithoutCurrencyCode()
     {
-        return array(
-            self::WITHOUT_CURRENCY_CODE_GGP => array(
+        return [
+            self::WITHOUT_CURRENCY_CODE_GGP => [
                 'code' => self::WITHOUT_CURRENCY_CODE_GGP,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Guernsey pound',
-            ),
-            self::WITHOUT_CURRENCY_CODE_JEP => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_JEP => [
                 'code' => self::WITHOUT_CURRENCY_CODE_JEP,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Jersey pound',
-            ),
-            self::WITHOUT_CURRENCY_CODE_IMP => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_IMP => [
                 'code' => self::WITHOUT_CURRENCY_CODE_IMP,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Isle of Man pound also Manx pound',
-            ),
-            self::WITHOUT_CURRENCY_CODE_KRI => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_KRI => [
                 'code' => self::WITHOUT_CURRENCY_CODE_KRI,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Kiribati dollar',
-            ),
-            self::WITHOUT_CURRENCY_CODE_SLS => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_SLS => [
                 'code' => self::WITHOUT_CURRENCY_CODE_SLS,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Somaliland shilling',
-            ),
-            self::WITHOUT_CURRENCY_CODE_PRB => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_PRB => [
                 'code' => self::WITHOUT_CURRENCY_CODE_PRB,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Transnistrian ruble',
-            ),
-            self::WITHOUT_CURRENCY_CODE_TVD => array(
+            ],
+            self::WITHOUT_CURRENCY_CODE_TVD => [
                 'code' => self::WITHOUT_CURRENCY_CODE_TVD,
                 'isoStatus' => self::ISO_STATUS_WITHOUT_CURRENCY_CODE,
                 'decimalDigits' => 2,
                 'name' => 'Tuvalu dollar',
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -2813,14 +2813,14 @@ class Currency
      */
     public static function getInfoForCurrenciesWithUnofficialCode()
     {
-        return array(
-            self::UNOFFICIAL_BTC => array(
+        return [
+            self::UNOFFICIAL_BTC => [
                 'code' => self::UNOFFICIAL_BTC,
                 'isoStatus' => self::ISO_STATUS_UNOFFICIAL,
                 'decimalDigits' => 0,
                 'name' => 'Bitcoin',
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -2830,566 +2830,566 @@ class Currency
      */
     public static function getInfoForCurrenciesWithHistoricalCode()
     {
-        return array(
-            self::HISTORICAL_ADF => array(
+        return [
+            self::HISTORICAL_ADF => [
                 'code' => self::HISTORICAL_ADF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Andorran franc (1:1 peg to the French franc)',
-            ),
-            self::HISTORICAL_ADP => array(
+            ],
+            self::HISTORICAL_ADP => [
                 'code' => self::HISTORICAL_ADP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Andorran peseta (1:1 peg to the Spanish peseta)',
-            ),
-            self::HISTORICAL_ATS => array(
+            ],
+            self::HISTORICAL_ATS => [
                 'code' => self::HISTORICAL_ATS,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Austrian schilling',
-            ),
-            self::HISTORICAL_BEF => array(
+            ],
+            self::HISTORICAL_BEF => [
                 'code' => self::HISTORICAL_BEF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 1,
                 'name' => 'Belgian franc (currency union with LUF)',
-            ),
-            self::HISTORICAL_CYP => array(
+            ],
+            self::HISTORICAL_CYP => [
                 'code' => self::HISTORICAL_CYP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Cypriot pound',
-            ),
-            self::HISTORICAL_DEM => array(
+            ],
+            self::HISTORICAL_DEM => [
                 'code' => self::HISTORICAL_DEM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'German mark',
-            ),
-            self::HISTORICAL_EEK => array(
+            ],
+            self::HISTORICAL_EEK => [
                 'code' => self::HISTORICAL_EEK,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Estonian kroon',
-            ),
-            self::HISTORICAL_ESP => array(
+            ],
+            self::HISTORICAL_ESP => [
                 'code' => self::HISTORICAL_ESP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Spanish peseta',
-            ),
-            self::HISTORICAL_FIM => array(
+            ],
+            self::HISTORICAL_FIM => [
                 'code' => self::HISTORICAL_FIM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Finnish markka',
-            ),
-            self::HISTORICAL_FRF => array(
+            ],
+            self::HISTORICAL_FRF => [
                 'code' => self::HISTORICAL_FRF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'French franc',
-            ),
-            self::HISTORICAL_GRD => array(
+            ],
+            self::HISTORICAL_GRD => [
                 'code' => self::HISTORICAL_GRD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Greek drachma',
-            ),
-            self::HISTORICAL_IEP => array(
+            ],
+            self::HISTORICAL_IEP => [
                 'code' => self::HISTORICAL_IEP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Irish pound (punt in Irish language)',
-            ),
-            self::HISTORICAL_ITL => array(
+            ],
+            self::HISTORICAL_ITL => [
                 'code' => self::HISTORICAL_ITL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Italian lira',
-            ),
-            self::HISTORICAL_LUF => array(
+            ],
+            self::HISTORICAL_LUF => [
                 'code' => self::HISTORICAL_LUF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 1,
                 'name' => 'Luxembourg franc (currency union with BEF)',
-            ),
-            self::HISTORICAL_MCF => array(
+            ],
+            self::HISTORICAL_MCF => [
                 'code' => self::HISTORICAL_MCF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 1,
                 'name' => 'Monegasque franc (currency union with FRF)',
-            ),
-            self::HISTORICAL_MAF => array(
+            ],
+            self::HISTORICAL_MAF => [
                 'code' => self::HISTORICAL_MAF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Moroccan franc',
-            ),
-            self::HISTORICAL_MTL => array(
+            ],
+            self::HISTORICAL_MTL => [
                 'code' => self::HISTORICAL_MTL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Maltese lira',
-            ),
-            self::HISTORICAL_NLG => array(
+            ],
+            self::HISTORICAL_NLG => [
                 'code' => self::HISTORICAL_NLG,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Netherlands guilder',
-            ),
-            self::HISTORICAL_PTE => array(
+            ],
+            self::HISTORICAL_PTE => [
                 'code' => self::HISTORICAL_PTE,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Portuguese escudo',
-            ),
-            self::HISTORICAL_SIT => array(
+            ],
+            self::HISTORICAL_SIT => [
                 'code' => self::HISTORICAL_SIT,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 1,
                 'name' => 'Slovenian tolar',
-            ),
-            self::HISTORICAL_SKK => array(
+            ],
+            self::HISTORICAL_SKK => [
                 'code' => self::HISTORICAL_SKK,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 1,
                 'name' => 'Slovak koruna',
-            ),
-            self::HISTORICAL_SML => array(
+            ],
+            self::HISTORICAL_SML => [
                 'code' => self::HISTORICAL_SML,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'San Marinese lira (currency union with ITL and VAL)',
-            ),
-            self::HISTORICAL_VAL => array(
+            ],
+            self::HISTORICAL_VAL => [
                 'code' => self::HISTORICAL_VAL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Vatican lira (currency union with ITL and SML)',
-            ),
-            self::HISTORICAL_XEU => array(
+            ],
+            self::HISTORICAL_XEU => [
                 'code' => self::HISTORICAL_XEU,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'European Currency Unit (1 XEU = 1 EUR)',
-            ),
-            self::HISTORICAL_AFA => array(
+            ],
+            self::HISTORICAL_AFA => [
                 'code' => self::HISTORICAL_AFA,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Afghan afghani',
-            ),
-            self::HISTORICAL_AON => array(
+            ],
+            self::HISTORICAL_AON => [
                 'code' => self::HISTORICAL_AON,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Angolan new kwanza',
-            ),
-            self::HISTORICAL_AOR => array(
+            ],
+            self::HISTORICAL_AOR => [
                 'code' => self::HISTORICAL_AOR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Angolan kwanza readjustado',
-            ),
-            self::HISTORICAL_ARL => array(
+            ],
+            self::HISTORICAL_ARL => [
                 'code' => self::HISTORICAL_ARL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Argentine peso ley',
-            ),
-            self::HISTORICAL_ARP => array(
+            ],
+            self::HISTORICAL_ARP => [
                 'code' => self::HISTORICAL_ARP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Argentine peso argentino',
-            ),
-            self::HISTORICAL_ARA => array(
+            ],
+            self::HISTORICAL_ARA => [
                 'code' => self::HISTORICAL_ARA,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Argentine austral',
-            ),
-            self::HISTORICAL_AZM => array(
+            ],
+            self::HISTORICAL_AZM => [
                 'code' => self::HISTORICAL_AZM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Azerbaijani manat',
-            ),
-            self::HISTORICAL_BGL => array(
+            ],
+            self::HISTORICAL_BGL => [
                 'code' => self::HISTORICAL_BGL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Bulgarian lev A/99',
-            ),
-            self::HISTORICAL_BOP => array(
+            ],
+            self::HISTORICAL_BOP => [
                 'code' => self::HISTORICAL_BOP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Bolivian peso',
-            ),
-            self::HISTORICAL_BRB => array(
+            ],
+            self::HISTORICAL_BRB => [
                 'code' => self::HISTORICAL_BRB,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian cruzeiro novo',
-            ),
-            self::HISTORICAL_BRC => array(
+            ],
+            self::HISTORICAL_BRC => [
                 'code' => self::HISTORICAL_BRC,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian cruzado',
-            ),
-            self::HISTORICAL_BRE => array(
+            ],
+            self::HISTORICAL_BRE => [
                 'code' => self::HISTORICAL_BRE,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian cruzeiro',
-            ),
-            self::HISTORICAL_BRN => array(
+            ],
+            self::HISTORICAL_BRN => [
                 'code' => self::HISTORICAL_BRN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian cruzado novo',
-            ),
-            self::HISTORICAL_BRR => array(
+            ],
+            self::HISTORICAL_BRR => [
                 'code' => self::HISTORICAL_BRR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Brazilian cruzeiro real',
-            ),
-            self::HISTORICAL_CLE => array(
+            ],
+            self::HISTORICAL_CLE => [
                 'code' => self::HISTORICAL_CLE,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Chilean escudo',
-            ),
-            self::HISTORICAL_CSD => array(
+            ],
+            self::HISTORICAL_CSD => [
                 'code' => self::HISTORICAL_CSD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Serbian dinar',
-            ),
-            self::HISTORICAL_CSK => array(
+            ],
+            self::HISTORICAL_CSK => [
                 'code' => self::HISTORICAL_CSK,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Czechoslovak koruna',
-            ),
-            self::HISTORICAL_DDM => array(
+            ],
+            self::HISTORICAL_DDM => [
                 'code' => self::HISTORICAL_DDM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'East German Mark of the GDR (East Germany)',
-            ),
-            self::HISTORICAL_ECS => array(
+            ],
+            self::HISTORICAL_ECS => [
                 'code' => self::HISTORICAL_ECS,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Ecuadorian sucre',
-            ),
-            self::HISTORICAL_ECV => array(
+            ],
+            self::HISTORICAL_ECV => [
                 'code' => self::HISTORICAL_ECV,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Ecuador Unidad de Valor Constante (funds code) (discontinued)',
-            ),
-            self::HISTORICAL_GQE => array(
+            ],
+            self::HISTORICAL_GQE => [
                 'code' => self::HISTORICAL_GQE,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Equatorial Guinean ekwele',
-            ),
-            self::HISTORICAL_ESA => array(
+            ],
+            self::HISTORICAL_ESA => [
                 'code' => self::HISTORICAL_ESA,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Spanish peseta (account A)',
-            ),
-            self::HISTORICAL_ESB => array(
+            ],
+            self::HISTORICAL_ESB => [
                 'code' => self::HISTORICAL_ESB,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Spanish peseta (account B)',
-            ),
-            self::HISTORICAL_GNE => array(
+            ],
+            self::HISTORICAL_GNE => [
                 'code' => self::HISTORICAL_GNE,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Guinean syli',
-            ),
-            self::HISTORICAL_GHC => array(
+            ],
+            self::HISTORICAL_GHC => [
                 'code' => self::HISTORICAL_GHC,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Ghanaian cedi',
-            ),
-            self::HISTORICAL_GWP => array(
+            ],
+            self::HISTORICAL_GWP => [
                 'code' => self::HISTORICAL_GWP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Guinea-Bissau peso',
-            ),
-            self::HISTORICAL_ILP => array(
+            ],
+            self::HISTORICAL_ILP => [
                 'code' => self::HISTORICAL_ILP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 3,
                 'name' => 'Israeli lira',
-            ),
-            self::HISTORICAL_ILR => array(
+            ],
+            self::HISTORICAL_ILR => [
                 'code' => self::HISTORICAL_ILR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Israeli shekel',
-            ),
-            self::HISTORICAL_ISJ => array(
+            ],
+            self::HISTORICAL_ISJ => [
                 'code' => self::HISTORICAL_ISJ,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Icelandic old krona',
-            ),
-            self::HISTORICAL_LAJ => array(
+            ],
+            self::HISTORICAL_LAJ => [
                 'code' => self::HISTORICAL_LAJ,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Lao kip',
-            ),
-            self::HISTORICAL_MGF => array(
+            ],
+            self::HISTORICAL_MGF => [
                 'code' => self::HISTORICAL_MGF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Malagasy franc',
-            ),
-            self::HISTORICAL_MKN => array(
+            ],
+            self::HISTORICAL_MKN => [
                 'code' => self::HISTORICAL_MKN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Old Macedonian denar A/93',
-            ),
-            self::HISTORICAL_MLF => array(
+            ],
+            self::HISTORICAL_MLF => [
                 'code' => self::HISTORICAL_MLF,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Mali franc',
-            ),
-            self::HISTORICAL_MVQ => array(
+            ],
+            self::HISTORICAL_MVQ => [
                 'code' => self::HISTORICAL_MVQ,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Maldivian rupee',
-            ),
-            self::HISTORICAL_MXP => array(
+            ],
+            self::HISTORICAL_MXP => [
                 'code' => self::HISTORICAL_MXP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Mexican peso',
-            ),
-            self::HISTORICAL_MZM => array(
+            ],
+            self::HISTORICAL_MZM => [
                 'code' => self::HISTORICAL_MZM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Mozambican metical',
-            ),
-            self::HISTORICAL_NFD => array(
+            ],
+            self::HISTORICAL_NFD => [
                 'code' => self::HISTORICAL_NFD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Newfoundland dollar',
-            ),
-            self::HISTORICAL_PEH => array(
+            ],
+            self::HISTORICAL_PEH => [
                 'code' => self::HISTORICAL_PEH,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Peruvian sol',
-            ),
-            self::HISTORICAL_PEI => array(
+            ],
+            self::HISTORICAL_PEI => [
                 'code' => self::HISTORICAL_PEI,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Peruvian inti',
-            ),
-            self::HISTORICAL_PLZ => array(
+            ],
+            self::HISTORICAL_PLZ => [
                 'code' => self::HISTORICAL_PLZ,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Polish zloty A/94',
-            ),
-            self::HISTORICAL_ROL => array(
+            ],
+            self::HISTORICAL_ROL => [
                 'code' => self::HISTORICAL_ROL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Romanian leu A/05',
-            ),
-            self::HISTORICAL_RUR => array(
+            ],
+            self::HISTORICAL_RUR => [
                 'code' => self::HISTORICAL_RUR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Russian rouble A/97',
-            ),
-            self::HISTORICAL_SDD => array(
+            ],
+            self::HISTORICAL_SDD => [
                 'code' => self::HISTORICAL_SDD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Sudanese dinar',
-            ),
-            self::HISTORICAL_SDP => array(
+            ],
+            self::HISTORICAL_SDP => [
                 'code' => self::HISTORICAL_SDP,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Sudanese old pound',
-            ),
-            self::HISTORICAL_SRG => array(
+            ],
+            self::HISTORICAL_SRG => [
                 'code' => self::HISTORICAL_SRG,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Suriname guilder',
-            ),
-            self::HISTORICAL_SUR => array(
+            ],
+            self::HISTORICAL_SUR => [
                 'code' => self::HISTORICAL_SUR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Soviet Union rouble',
-            ),
-            self::HISTORICAL_SVC => array(
+            ],
+            self::HISTORICAL_SVC => [
                 'code' => self::HISTORICAL_SVC,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Salvadoran colón',
-            ),
-            self::HISTORICAL_TJR => array(
+            ],
+            self::HISTORICAL_TJR => [
                 'code' => self::HISTORICAL_TJR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Tajikistani ruble',
-            ),
-            self::HISTORICAL_TMM => array(
+            ],
+            self::HISTORICAL_TMM => [
                 'code' => self::HISTORICAL_TMM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Turkmenistani manat',
-            ),
-            self::HISTORICAL_TRL => array(
+            ],
+            self::HISTORICAL_TRL => [
                 'code' => self::HISTORICAL_TRL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Turkish lira A/05',
-            ),
-            self::HISTORICAL_UAK => array(
+            ],
+            self::HISTORICAL_UAK => [
                 'code' => self::HISTORICAL_UAK,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Ukrainian karbovanets',
-            ),
-            self::HISTORICAL_UGS => array(
+            ],
+            self::HISTORICAL_UGS => [
                 'code' => self::HISTORICAL_UGS,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Ugandan shilling A/87',
-            ),
-            self::HISTORICAL_UYN => array(
+            ],
+            self::HISTORICAL_UYN => [
                 'code' => self::HISTORICAL_UYN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Uruguay old peso',
-            ),
-            self::HISTORICAL_VEB => array(
+            ],
+            self::HISTORICAL_VEB => [
                 'code' => self::HISTORICAL_VEB,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Venezuelan bolívar',
-            ),
-            self::HISTORICAL_XFO => array(
+            ],
+            self::HISTORICAL_XFO => [
                 'code' => self::HISTORICAL_XFO,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'Gold franc (special settlement currency)',
-            ),
-            self::HISTORICAL_YDD => array(
+            ],
+            self::HISTORICAL_YDD => [
                 'code' => self::HISTORICAL_YDD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'South Yemeni dinar',
-            ),
-            self::HISTORICAL_YUD => array(
+            ],
+            self::HISTORICAL_YUD => [
                 'code' => self::HISTORICAL_YUD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_YUN => array(
+            ],
+            self::HISTORICAL_YUN => [
                 'code' => self::HISTORICAL_YUN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_YUR => array(
+            ],
+            self::HISTORICAL_YUR => [
                 'code' => self::HISTORICAL_YUR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_YUO => array(
+            ],
+            self::HISTORICAL_YUO => [
                 'code' => self::HISTORICAL_YUO,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_YUG => array(
+            ],
+            self::HISTORICAL_YUG => [
                 'code' => self::HISTORICAL_YUG,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_YUM => array(
+            ],
+            self::HISTORICAL_YUM => [
                 'code' => self::HISTORICAL_YUM,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Yugoslav dinar',
-            ),
-            self::HISTORICAL_ZAL => array(
+            ],
+            self::HISTORICAL_ZAL => [
                 'code' => self::HISTORICAL_ZAL,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 0,
                 'name' => 'South African financial rand (funds code) (discontinued)',
-            ),
-            self::HISTORICAL_ZRN => array(
+            ],
+            self::HISTORICAL_ZRN => [
                 'code' => self::HISTORICAL_ZRN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Zaïrean new zaïre',
-            ),
-            self::HISTORICAL_ZRZ => array(
+            ],
+            self::HISTORICAL_ZRZ => [
                 'code' => self::HISTORICAL_ZRZ,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 3,
                 'name' => 'Zaïrean zaïre',
-            ),
-            self::HISTORICAL_ZWC => array(
+            ],
+            self::HISTORICAL_ZWC => [
                 'code' => self::HISTORICAL_ZWC,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Rhodesian dollar',
-            ),
-            self::HISTORICAL_ZWD => array(
+            ],
+            self::HISTORICAL_ZWD => [
                 'code' => self::HISTORICAL_ZWD,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Zimbabwean dollar A/06',
-            ),
-            self::HISTORICAL_ZWN => array(
+            ],
+            self::HISTORICAL_ZWN => [
                 'code' => self::HISTORICAL_ZWN,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Zimbabwean dollar A/08',
-            ),
-            self::HISTORICAL_ZWR => array(
+            ],
+            self::HISTORICAL_ZWR => [
                 'code' => self::HISTORICAL_ZWR,
                 'isoStatus' => self::ISO_STATUS_HISTORICAL,
                 'decimalDigits' => 2,
                 'name' => 'Zimbabwean dollar A/09',
-            )
-        );
+            ],
+        ];
     }
 
     /**

@@ -2,6 +2,12 @@
 namespace Pails\Providers;
 
 use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Grant\AuthCodeGrant;
+use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Grant\ImplicitGrant;
+use League\OAuth2\Server\Grant\PasswordGrant;
+use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
 use Pails\OAuth2\Repositories\AccessTokenRepository;
 use Pails\OAuth2\Repositories\AuthCodeRepository;
@@ -9,19 +15,11 @@ use Pails\OAuth2\Repositories\ClientRepository;
 use Pails\OAuth2\Repositories\RefreshTokenRepository;
 use Pails\OAuth2\Repositories\ScopeRepository;
 use Pails\OAuth2\Repositories\UserRepository;
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Grant\AuthCodeGrant;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\ImplicitGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
 
 class OAuth2ServiceProvider extends AbstractServiceProvider
 {
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -116,6 +114,7 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
                 $publicKey = $this['config']->get('oauth2.public_key');
 
                 $resourceServer = new ResourceServer($accessTokenRepository, $publicKey);
+
                 return $resourceServer;
             }
         );

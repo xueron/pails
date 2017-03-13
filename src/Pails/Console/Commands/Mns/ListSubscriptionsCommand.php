@@ -2,7 +2,6 @@
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
-use AliyunMNS\Requests\ListTopicRequest;
 use Pails\Console\Command;
 
 class ListSubscriptionsCommand extends Command
@@ -43,7 +42,8 @@ class ListSubscriptionsCommand extends Command
          */
         $client = $this->mns;
         if (!$client) {
-            $this->error("请先配置阿里云MSN服务，并在DI里面注册");
+            $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -53,7 +53,6 @@ class ListSubscriptionsCommand extends Command
             $res = $topic->listSubscription($max, $prefix, $next);
             if ($res->isSucceed()) {
                 foreach ($res->getSubscriptionNames() as $subscriptionName) {
-
                     $subscription['name'] = $subscriptionName;
 
                     $attr = $topic->getSubscriptionAttribute($subscriptionName)->getSubscriptionAttributes();
@@ -61,14 +60,14 @@ class ListSubscriptionsCommand extends Command
                     $subscription['endpoint'] = $attr->getEndpoint();
                     $subscription['strategy'] = $attr->getStrategy();
                     $subscription['contentFormat'] = $attr->getContentFormat();
-                    $subscription['createTime'] = date("Y-m-d H:i:s", $attr->getCreateTime());
-                    $subscription['updateTime'] = date("Y-m-d H:i:s", $attr->getLastModifyTime());
+                    $subscription['createTime'] = date('Y-m-d H:i:s', $attr->getCreateTime());
+                    $subscription['updateTime'] = date('Y-m-d H:i:s', $attr->getLastModifyTime());
                     $data[] = $subscription;
                 }
             }
 
 
-            $subscriptionHeaders = ['Name', 'Endpoint', 'Strategy', 'ContentFormat', "CreateTime", "UpdateTime"];
+            $subscriptionHeaders = ['Name', 'Endpoint', 'Strategy', 'ContentFormat', 'CreateTime', 'UpdateTime'];
             $this->line("List of Subscriptions for Topic: $topicName");
             $this->table($subscriptionHeaders, $data);
         } catch (\Exception $e) {

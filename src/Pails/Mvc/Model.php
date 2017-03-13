@@ -1,7 +1,6 @@
 <?php
 /**
  * Model.php
- *
  */
 namespace Pails\Mvc;
 
@@ -16,25 +15,25 @@ PhalconModel::setup([
 
 abstract class Model extends PhalconModel
 {
-
     public function initialize()
     {
         // 自动更新时间戳字段
         $this->addBehavior(new Timestampable([
                 'beforeValidationOnCreate' => [
                     'field' => ['created_at', 'updated_at'],
-                    'format' => 'Y-m-d H:i:s'
+                    'format' => 'Y-m-d H:i:s',
                 ],
                 'beforeValidationOnUpdate' => [
                     'field' => 'updated_at',
-                    'format' => 'Y-m-d H:i:s'
-                ]
+                    'format' => 'Y-m-d H:i:s',
+                ],
             ])
         );
     }
 
     /**
      * @param array $data
+     *
      * @return static
      */
     public static function make($data = [])
@@ -49,6 +48,7 @@ abstract class Model extends PhalconModel
 
         //
         $model = new static($data);
+
         return $model;
     }
 
@@ -58,8 +58,8 @@ abstract class Model extends PhalconModel
      * @param $parameters
      * @param int $limit
      * @param int $page
+     *
      * @return \Pails\Plugins\Paginator
-
      */
     public static function list($parameters = null, $page = 1, $limit = 20)
     {
@@ -83,11 +83,11 @@ abstract class Model extends PhalconModel
         }
 
         $options = [
-            "builder" => $builder,
-            "limit" => $limit,
-            "page" => $page
+            'builder' => $builder,
+            'limit' => $limit,
+            'page' => $page,
         ];
 
-        return $di->get("Pails\\Plugins\\Paginator", [$options]);
+        return $di->get('Pails\\Plugins\\Paginator', [$options]);
     }
 }

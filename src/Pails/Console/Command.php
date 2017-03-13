@@ -5,15 +5,15 @@ namespace Pails\Console;
 use Pails\InjectableTrait;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Events\EventsAwareInterface;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Class Command
@@ -127,8 +127,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
 
     /**
      * Configure the console command using a fluent definition.
-     *
-     * @return void
      */
     protected function configureUsingFluentDefinition()
     {
@@ -147,8 +145,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
 
     /**
      * Specify the arguments and options on the command.
-     *
-     * @return void
      */
     protected function specifyParameters()
     {
@@ -167,8 +163,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Run the console command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
      * @return int
      */
     public function run(InputInterface $input, OutputInterface $output)
@@ -183,8 +180,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Execute the console command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
      * @return mixed
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -202,8 +200,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Call another console command.
      *
-     * @param  string $command
-     * @param  array $arguments
+     * @param string $command
+     * @param array  $arguments
+     *
      * @return int
      */
     public function call($command, array $arguments = [])
@@ -218,8 +217,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Call another console command silently.
      *
-     * @param  string $command
-     * @param  array $arguments
+     * @param string $command
+     * @param array  $arguments
+     *
      * @return int
      */
     public function callSilent($command, array $arguments = [])
@@ -234,7 +234,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Determine if the given argument is present.
      *
-     * @param  string|int $name
+     * @param string|int $name
+     *
      * @return bool
      */
     public function hasArgument($name)
@@ -245,7 +246,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Get the value of a command argument.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string|array
      */
     public function argument($key = null)
@@ -260,7 +262,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Determine if the given option is present.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function hasOption($name)
@@ -271,7 +274,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Get the value of a command option.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string|array
      */
     public function option($key = null)
@@ -286,8 +290,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Confirm a question with the user.
      *
-     * @param  string $question
-     * @param  bool $default
+     * @param string $question
+     * @param bool   $default
+     *
      * @return bool
      */
     public function confirm($question, $default = false)
@@ -298,8 +303,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Prompt the user for input.
      *
-     * @param  string $question
-     * @param  string $default
+     * @param string $question
+     * @param string $default
+     *
      * @return string
      */
     public function ask($question, $default = null)
@@ -310,9 +316,10 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Prompt the user for input with auto completion.
      *
-     * @param  string $question
-     * @param  array $choices
-     * @param  string $default
+     * @param string $question
+     * @param array  $choices
+     * @param string $default
+     *
      * @return string
      */
     public function anticipate($question, array $choices, $default = null)
@@ -323,9 +330,10 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Prompt the user for input with auto completion.
      *
-     * @param  string $question
-     * @param  array $choices
-     * @param  string $default
+     * @param string $question
+     * @param array  $choices
+     * @param string $default
+     *
      * @return string
      */
     public function askWithCompletion($question, array $choices, $default = null)
@@ -340,8 +348,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Prompt the user for input but hide the answer from the console.
      *
-     * @param  string $question
-     * @param  bool $fallback
+     * @param string $question
+     * @param bool   $fallback
+     *
      * @return string
      */
     public function secret($question, $fallback = true)
@@ -356,11 +365,12 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Give the user a single choice from an array of answers.
      *
-     * @param  string $question
-     * @param  array $choices
-     * @param  string $default
-     * @param  mixed $attempts
-     * @param  bool $multiple
+     * @param string $question
+     * @param array  $choices
+     * @param string $default
+     * @param mixed  $attempts
+     * @param bool   $multiple
+     *
      * @return string
      */
     public function choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
@@ -375,10 +385,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Format input to textual table.
      *
-     * @param  array $headers
-     * @param  array $rows
-     * @param  string $style
-     * @return void
+     * @param array  $headers
+     * @param array  $rows
+     * @param string $style
      */
     public function table(array $headers, $rows, $style = 'default')
     {
@@ -390,9 +399,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as information output.
      *
-     * @param  string $string
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param null|int|string $verbosity
      */
     public function info($string, $verbosity = null)
     {
@@ -402,10 +410,9 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as standard output.
      *
-     * @param  string $string
-     * @param  string $style
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param string          $style
+     * @param null|int|string $verbosity
      */
     public function line($string, $style = null, $verbosity = null)
     {
@@ -417,9 +424,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as comment output.
      *
-     * @param  string $string
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param null|int|string $verbosity
      */
     public function comment($string, $verbosity = null)
     {
@@ -429,9 +435,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as question output.
      *
-     * @param  string $string
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param null|int|string $verbosity
      */
     public function question($string, $verbosity = null)
     {
@@ -441,9 +446,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as error output.
      *
-     * @param  string $string
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param null|int|string $verbosity
      */
     public function error($string, $verbosity = null)
     {
@@ -453,9 +457,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Write a string as warning output.
      *
-     * @param  string $string
-     * @param  null|int|string $verbosity
-     * @return void
+     * @param string          $string
+     * @param null|int|string $verbosity
      */
     public function warn($string, $verbosity = null)
     {
@@ -471,7 +474,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
-     * @param  string|int $level
+     * @param string|int $level
+     *
      * @return int
      */
     protected function parseVerbosity($level = null)
@@ -489,7 +493,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
      * Set the verbosity level.
      *
      * @param string|int $level
-     * @return void
      */
     protected function setVerbosity($level)
     {

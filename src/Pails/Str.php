@@ -19,9 +19,8 @@ class Str
     /**
      * Register a custom macro.
      *
-     * @param  string    $name
-     * @param  callable  $macro
-     * @return void
+     * @param string   $name
+     * @param callable $macro
      */
     public static function macro($name, callable $macro)
     {
@@ -31,7 +30,8 @@ class Str
     /**
      * Checks if macro is registered.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return bool
      */
     public static function hasMacro($name)
@@ -42,15 +42,16 @@ class Str
     /**
      * Dynamically handle calls to the class.
      *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return mixed
+     * @param string $method
+     * @param array  $parameters
      *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
-        if (! static::hasMacro($method)) {
+        if (!static::hasMacro($method)) {
             throw new BadMethodCallException("Method {$method} does not exist.");
         }
 
@@ -64,15 +65,16 @@ class Str
     /**
      * Dynamically handle calls to the class.
      *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return mixed
+     * @param string $method
+     * @param array  $parameters
      *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function __call($method, $parameters)
     {
-        if (! static::hasMacro($method)) {
+        if (!static::hasMacro($method)) {
             throw new BadMethodCallException("Method {$method} does not exist.");
         }
 
@@ -107,7 +109,8 @@ class Str
     /**
      * Transliterate a UTF-8 value to ASCII.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function ascii($value)
@@ -122,7 +125,8 @@ class Str
     /**
      * Convert a value to camel case.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function camel($value)
@@ -137,8 +141,9 @@ class Str
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     public static function contains($haystack, $needles)
@@ -155,8 +160,9 @@ class Str
     /**
      * Determine if a given string ends with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     public static function endsWith($haystack, $needles)
@@ -173,22 +179,24 @@ class Str
     /**
      * Cap a string with a single instance of a given value.
      *
-     * @param  string  $value
-     * @param  string  $cap
+     * @param string $value
+     * @param string $cap
+     *
      * @return string
      */
     public static function finish($value, $cap)
     {
         $quoted = preg_quote($cap, '/');
 
-        return preg_replace('/(?:'.$quoted.')+$/u', '', $value).$cap;
+        return preg_replace('/(?:' . $quoted . ')+$/u', '', $value) . $cap;
     }
 
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param  string  $pattern
-     * @param  string  $value
+     * @param string $pattern
+     * @param string $value
+     *
      * @return bool
      */
     public static function is($pattern, $value)
@@ -204,13 +212,14 @@ class Str
         // pattern such as "library/*", making any string check convenient.
         $pattern = str_replace('\*', '.*', $pattern);
 
-        return (bool) preg_match('#^'.$pattern.'\z#u', $value);
+        return (bool) preg_match('#^' . $pattern . '\z#u', $value);
     }
 
     /**
      * Return the length of the given string.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return int
      */
     public static function length($value)
@@ -221,9 +230,10 @@ class Str
     /**
      * Limit the number of characters in a string.
      *
-     * @param  string  $value
-     * @param  int     $limit
-     * @param  string  $end
+     * @param string $value
+     * @param int    $limit
+     * @param string $end
+     *
      * @return string
      */
     public static function limit($value, $limit = 100, $end = '...')
@@ -232,13 +242,14 @@ class Str
             return $value;
         }
 
-        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')).$end;
+        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
     }
 
     /**
      * Convert the given string to lower-case.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function lower($value)
@@ -249,27 +260,29 @@ class Str
     /**
      * Limit the number of words in a string.
      *
-     * @param  string  $value
-     * @param  int     $words
-     * @param  string  $end
+     * @param string $value
+     * @param int    $words
+     * @param string $end
+     *
      * @return string
      */
     public static function words($value, $words = 100, $end = '...')
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (! isset($matches[0]) || static::length($value) === static::length($matches[0])) {
+        if (!isset($matches[0]) || static::length($value) === static::length($matches[0])) {
             return $value;
         }
 
-        return rtrim($matches[0]).$end;
+        return rtrim($matches[0]) . $end;
     }
 
     /**
      * Parse a Class@method style callback into class and method.
      *
-     * @param  string  $callback
-     * @param  string  $default
+     * @param string $callback
+     * @param string $default
+     *
      * @return array
      */
     public static function parseCallback($callback, $default)
@@ -280,8 +293,9 @@ class Str
     /**
      * Get the plural form of an English word.
      *
-     * @param  string  $value
-     * @param  int     $count
+     * @param string $value
+     * @param int    $count
+     *
      * @return string
      */
     public static function plural($value, $count = 2)
@@ -292,7 +306,8 @@ class Str
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param  int  $length
+     * @param int $length
+     *
      * @return string
      */
     public static function random($length = 16)
@@ -313,7 +328,8 @@ class Str
     /**
      * Generate a more truly "random" bytes.
      *
-     * @param  int  $length
+     * @param int $length
+     *
      * @return string
      *
      * @deprecated since version 5.2. Use random_bytes instead.
@@ -328,7 +344,8 @@ class Str
      *
      * Should not be considered sufficient for cryptography, etc.
      *
-     * @param  int  $length
+     * @param int $length
+     *
      * @return string
      */
     public static function quickRandom($length = 16)
@@ -345,8 +362,9 @@ class Str
      *
      * Note: Adapted from Symfony\Component\Security\Core\Util\StringUtils.
      *
-     * @param  string  $knownString
-     * @param  string  $userInput
+     * @param string $knownString
+     * @param string $userInput
+     *
      * @return bool
      *
      * @deprecated since version 5.2. Use hash_equals instead.
@@ -359,9 +377,10 @@ class Str
     /**
      * Replace the first occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
      * @return string
      */
     public static function replaceFirst($search, $replace, $subject)
@@ -378,9 +397,10 @@ class Str
     /**
      * Replace the last occurrence of a given value in the string.
      *
-     * @param  string  $search
-     * @param  string  $replace
-     * @param  string  $subject
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
      * @return string
      */
     public static function replaceLast($search, $replace, $subject)
@@ -397,7 +417,8 @@ class Str
     /**
      * Convert the given string to upper-case.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function upper($value)
@@ -408,7 +429,8 @@ class Str
     /**
      * Convert the given string to title case.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function title($value)
@@ -419,7 +441,8 @@ class Str
     /**
      * Get the singular form of an English word.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function singular($value)
@@ -430,8 +453,9 @@ class Str
     /**
      * Generate a URL friendly "slug" from a given string.
      *
-     * @param  string  $title
-     * @param  string  $separator
+     * @param string $title
+     * @param string $separator
+     *
      * @return string
      */
     public static function slug($title, $separator = '-')
@@ -441,13 +465,13 @@ class Str
         // Convert all dashes/underscores into separator
         $flip = $separator == '-' ? '_' : '-';
 
-        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($flip) . ']+!u', $separator, $title);
 
         // Remove all characters that are not the separator, letters, numbers, or whitespace.
-        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
+        $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', mb_strtolower($title));
 
         // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($separator) . '\s]+!u', $separator, $title);
 
         return trim($title, $separator);
     }
@@ -455,8 +479,9 @@ class Str
     /**
      * Convert a string to snake case.
      *
-     * @param  string  $value
-     * @param  string  $delimiter
+     * @param string $value
+     * @param string $delimiter
+     *
      * @return string
      */
     public static function snake($value, $delimiter = '_')
@@ -467,10 +492,10 @@ class Str
             return static::$snakeCache[$key][$delimiter];
         }
 
-        if (! ctype_lower($value)) {
+        if (!ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', $value);
 
-            $value = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1'.$delimiter, $value));
+            $value = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $value));
         }
 
         return static::$snakeCache[$key][$delimiter] = $value;
@@ -479,8 +504,9 @@ class Str
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     public static function startsWith($haystack, $needles)
@@ -497,7 +523,8 @@ class Str
     /**
      * Convert a value to studly caps case.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public static function studly($value)
@@ -516,9 +543,10 @@ class Str
     /**
      * Returns the portion of string specified by the start and length parameters.
      *
-     * @param  string  $string
-     * @param  int  $start
-     * @param  int|null  $length
+     * @param string   $string
+     * @param int      $start
+     * @param int|null $length
+     *
      * @return string
      */
     public static function substr($string, $start, $length = null)
@@ -529,12 +557,13 @@ class Str
     /**
      * Make a string's first character uppercase.
      *
-     * @param  string  $string
+     * @param string $string
+     *
      * @return string
      */
     public static function ucfirst($string)
     {
-        return static::upper(static::substr($string, 0, 1)).static::substr($string, 1);
+        return static::upper(static::substr($string, 0, 1)) . static::substr($string, 1);
     }
 
     /**

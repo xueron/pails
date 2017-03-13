@@ -28,17 +28,17 @@ class RouterServiceProvider extends AbstractServiceProvider
 
                 $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->path('Http/Controllers')), \RecursiveIteratorIterator::SELF_FIRST);
                 foreach ($iterator as $item) {
-                    if (Text::endsWith($item, "Controller.php", false)) {
-                        $name = str_replace([$this->path('Http/Controllers') . DIRECTORY_SEPARATOR, "Controller.php"], "", $item);
-                        $name = str_replace(DIRECTORY_SEPARATOR, "\\", $name);
+                    if (Text::endsWith($item, 'Controller.php', false)) {
+                        $name = str_replace([$this->path('Http/Controllers') . DIRECTORY_SEPARATOR, 'Controller.php'], '', $item);
+                        $name = str_replace(DIRECTORY_SEPARATOR, '\\', $name);
                         $router->addResource('App\\Http\\Controllers\\' . $name);
                     }
                 }
 
                 // 定义404路由
                 $router->notFound([
-                    "controller" => "index",
-                    "action" => "notfound"
+                    'controller' => 'index',
+                    'action' => 'notfound',
                 ]);
 
                 //
@@ -47,4 +47,3 @@ class RouterServiceProvider extends AbstractServiceProvider
         );
     }
 }
-

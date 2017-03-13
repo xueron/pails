@@ -1,9 +1,9 @@
 <?php
 namespace Pails\Providers;
 
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Logger\Adapter\File;
 use Symfony\Component\Yaml\Yaml;
-use Phalcon\Db\Adapter\Pdo\Mysql;
 
 class DatabaseServiceProvider extends AbstractServiceProvider
 {
@@ -16,14 +16,14 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                 $yaml = Yaml::parse(@file_get_contents($this->configPath() . '/database.yml'));
                 if (!empty($yaml['environments'][$env])) {
                     $database = $yaml['environments'][$env];
-                    $db = new Mysql(array(
-                        "host" => $database['host'],
-                        "port" => $database['port'],
-                        "username" => $database['user'],
-                        "password" => $database['pass'],
-                        "dbname" => $database['name'],
+                    $db = new Mysql([
+                        'host' => $database['host'],
+                        'port' => $database['port'],
+                        'username' => $database['user'],
+                        'password' => $database['pass'],
+                        'dbname' => $database['name'],
                         'charset' => $database['charset'],
-                    ));
+                    ]);
 
                     // debug sql
                     if ($this->get('config')->get('app.debug', false)) {
@@ -32,11 +32,10 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                         $this['eventsManager']->attach(
                             'db',
                             function ($event, $connection) use ($logger) {
-
                                 if ($event->getType() == 'beforeQuery') {
                                     $sqlVariables = $connection->getSQLVariables();
                                     if (count($sqlVariables)) {
-                                        $query = str_replace(array('%', '?'), array('%%', "'%s'"), $connection->getSQLStatement());
+                                        $query = str_replace(['%', '?'], ['%%', "'%s'"], $connection->getSQLStatement());
                                         $query = vsprintf($query, $sqlVariables);
 
                                         $logger->log($query, \Phalcon\Logger::INFO);
@@ -50,7 +49,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
 
                     return $db;
                 } else {
-                    throw new \RuntimeException("no database config found. please check config file exists or APP_ENV is configed");
+                    throw new \RuntimeException('no database config found. please check config file exists or APP_ENV is configed');
                 }
             }
         );

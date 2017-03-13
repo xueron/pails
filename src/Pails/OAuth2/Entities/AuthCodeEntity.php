@@ -1,7 +1,6 @@
 <?php
 /**
  * AuthCodeEntity.php
- *
  */
 namespace Pails\OAuth2\Entities;
 

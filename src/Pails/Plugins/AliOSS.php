@@ -14,7 +14,7 @@ class AliOSS extends AbstractAdapter
     protected $bucket;
 
     /**
-     * @var OSSClient $client
+     * @var OSSClient
      */
     protected $client;
 
@@ -33,7 +33,7 @@ class AliOSS extends AbstractAdapter
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -43,17 +43,19 @@ class AliOSS extends AbstractAdapter
         if (!is_null($result)) {
             $type = 'file';
             $size = strlen($contents);
+
             return compact('contents', 'type', 'size', 'path');
         }
+
         return false;
     }
 
     /**
      * Write a new file using a stream.
      *
-     * @param string $path
+     * @param string   $path
      * @param resource $resource
-     * @param Config $config Config object
+     * @param Config   $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -69,7 +71,7 @@ class AliOSS extends AbstractAdapter
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -81,9 +83,9 @@ class AliOSS extends AbstractAdapter
     /**
      * Update a file using a stream.
      *
-     * @param string $path
+     * @param string   $path
      * @param resource $resource
-     * @param Config $config Config object
+     * @param Config   $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -110,6 +112,7 @@ class AliOSS extends AbstractAdapter
                 return true;
             }
         }
+
         return false;
     }
 
@@ -127,6 +130,7 @@ class AliOSS extends AbstractAdapter
         if (is_null($result)) {
             return false;
         }
+
         return true;
     }
 
@@ -156,10 +160,11 @@ class AliOSS extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        if (substr($dirname, -1 , 1) != '/') {
+        if (substr($dirname, -1, 1) != '/') {
             $dirname = $dirname . '/';
         }
         $result = $this->client->deleteObject($this->bucket, $dirname);
+
         return true;
     }
 
@@ -219,8 +224,10 @@ class AliOSS extends AbstractAdapter
 
         if ($contents != null) {
             $res = ['path' => $path, 'contents' => $contents];
+
             return $res;
         }
+
         return false;
     }
 
@@ -239,8 +246,10 @@ class AliOSS extends AbstractAdapter
             $stream = fopen('php://temp', 'w+b');
             fwrite($stream, $contents);
             rewind($stream);
+
             return ['path' => $path, 'stream' => $stream];
         }
+
         return false;
     }
 
@@ -248,7 +257,7 @@ class AliOSS extends AbstractAdapter
      * List contents of a directory.
      *
      * @param string $directory
-     * @param bool $recursive
+     * @param bool   $recursive
      *
      * @return array
      */
@@ -321,8 +330,8 @@ class AliOSS extends AbstractAdapter
      * Builds the normalized output array from a object.
      *
      * @param string $path
-     * @return array|boolean
      *
+     * @return array|bool
      */
     protected function normalizeMetaData($path)
     {
@@ -330,6 +339,7 @@ class AliOSS extends AbstractAdapter
         if (is_null($meta)) {
             return false;
         }
+
         return [
             'path'      => $path,
             'timestamp' => strtotime($meta[strtolower('Last-Modified')]),

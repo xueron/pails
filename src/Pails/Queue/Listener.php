@@ -4,16 +4,16 @@ namespace Pails\Queue;
 use Exception;
 use Pails\Exception\Handler;
 use Pails\Injectable;
-use Throwable;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
 /**
  * Class Listener
+ *
  * @package Pails\Queue
  */
 class Listener extends Injectable
 {
-
     /**
      * @var Queue
      */
@@ -55,8 +55,7 @@ class Listener extends Injectable
     /**
      * Listen to the given queue in a loop.
      *
-     * @param  ListenerOptions $options
-     * @return void
+     * @param ListenerOptions $options
      */
     public function daemon(ListenerOptions $options)
     {
@@ -64,13 +63,13 @@ class Listener extends Injectable
 
         $lastRestart = $this->getTimestampOfLastQueueRestart();
 
-        $this->getEventsManager()->fire("listener:beforeDaemonLoop", $this);
+        $this->getEventsManager()->fire('listener:beforeDaemonLoop', $this);
 
         while (true) {
             // Before reserving any jobs, we will make sure this queue is not paused and
             // if it is we will just pause this worker for a given amount of time and
             // make sure we do not need to kill this worker process off completely.
-            if (! $this->daemonShouldRun($options)) {
+            if (!$this->daemonShouldRun($options)) {
                 echo "parsed\n";
                 $this->pauseWorker($options, $lastRestart);
 
@@ -99,14 +98,13 @@ class Listener extends Injectable
             $this->stopIfNecessary($options, $lastRestart);
         }
 
-        $this->getEventsManager()->fire("listener:afterDaemonLoop", $this);
+        $this->getEventsManager()->fire('listener:afterDaemonLoop', $this);
     }
 
     /**
      * Process the next job on the queue.
      *
-     * @param  ListenerOptions $options
-     * @return void
+     * @param ListenerOptions $options
      */
     public function runNextJob(ListenerOptions $options)
     {
@@ -125,9 +123,8 @@ class Listener extends Injectable
     /**
      * Process the given job.
      *
-     * @param  Job $job
-     * @param  ListenerOptions $options
-     * @return void
+     * @param Job             $job
+     * @param ListenerOptions $options
      */
     protected function runJob(Job $job, ListenerOptions $options)
     {
@@ -143,9 +140,8 @@ class Listener extends Injectable
     /**
      * Process a given job from the queue.
      *
-     * @param  Job $job
-     * @param  ListenerOptions $options
-     * @return void
+     * @param Job             $job
+     * @param ListenerOptions $options
      *
      * @throws \Throwable
      */
@@ -162,7 +158,6 @@ class Listener extends Injectable
             $this->di->getShared('queue:' . $this->queue->getName())->process($job, $options);
 
             $this->raiseAfterJobEvent($job);
-
         } catch (Exception $e) {
             $this->handleJobException($job, $options, $e);
         } catch (Throwable $e) {
@@ -173,9 +168,8 @@ class Listener extends Injectable
     /**
      * Register the worker timeout handler (PHP 7.1+).
      *
-     * @param  Job $job
-     * @param  ListenerOptions $options
-     * @return void
+     * @param Job             $job
+     * @param ListenerOptions $options
      */
     protected function registerTimeoutHandler(Job $job, ListenerOptions $options)
     {
@@ -194,8 +188,9 @@ class Listener extends Injectable
     /**
      * Get the appropriate timeout for the given job.
      *
-     * @param  Job|null $job
-     * @param  ListenerOptions $options
+     * @param Job|null        $job
+     * @param ListenerOptions $options
+     *
      * @return int
      */
     protected function timeoutForJob(Job $job, ListenerOptions $options)
@@ -206,7 +201,8 @@ class Listener extends Injectable
     /**
      * Determine if the daemon should process on this iteration.
      *
-     * @param  ListenerOptions $options
+     * @param ListenerOptions $options
+     *
      * @return bool
      */
     protected function daemonShouldRun(ListenerOptions $options)
@@ -217,9 +213,8 @@ class Listener extends Injectable
     /**
      * Pause the worker for the current loop.
      *
-     * @param  ListenerOptions $options
-     * @param  int $lastRestart
-     * @return void
+     * @param ListenerOptions $options
+     * @param int             $lastRestart
      */
     protected function pauseWorker(ListenerOptions $options, $lastRestart)
     {
@@ -231,7 +226,7 @@ class Listener extends Injectable
     /**
      * Stop the process if necessary.
      *
-     * @param  ListenerOptions $options
+     * @param ListenerOptions $options
      * @param $lastRestart
      */
     protected function stopIfNecessary(ListenerOptions $options, $lastRestart)
@@ -249,21 +244,21 @@ class Listener extends Injectable
 
     /**
      * Get the next job from the queue connection.
+     *
      * @param ListenerOptions $options
+     *
      * @return Job
      */
     protected function getNextJob(ListenerOptions $options)
     {
         try {
-
-            $this->eventsManager->fire("listener:beforeGetJob", $this);
+            $this->eventsManager->fire('listener:beforeGetJob', $this);
 
             $job = $this->queue->pop($options);
 
-            $this->eventsManager->fire("listener:afterGetJob", $this, $job);
+            $this->eventsManager->fire('listener:afterGetJob', $this, $job);
 
             return $job;
-
         } catch (Exception $e) {
             $this->exceptions->report($e);
         } catch (Throwable $e) {
@@ -274,10 +269,9 @@ class Listener extends Injectable
     /**
      * Handle an exception that occurred while the job was running.
      *
-     * @param  Job $job
-     * @param  ListenerOptions $options
-     * @param  \Exception $e
-     * @return void
+     * @param Job             $job
+     * @param ListenerOptions $options
+     * @param \Exception      $e
      *
      * @throws \Exception
      */
@@ -287,7 +281,7 @@ class Listener extends Injectable
             // First, we will go ahead and mark the job as failed if it will exceed the maximum
             // attempts it is allowed to run the next time we process it. If so we will just
             // go ahead and mark it as failed now so we do not have to release this again.
-            $this->markJobAsFailedIfWillExceedMaxAttempts($job, (int)$options->maxTries, $e);
+            $this->markJobAsFailedIfWillExceedMaxAttempts($job, (int) $options->maxTries, $e);
 
             $this->raiseExceptionOccurredJobEvent($job, $e);
         } finally {
@@ -304,9 +298,8 @@ class Listener extends Injectable
      *
      * This will likely be because the job previously exceeded a timeout.
      *
-     * @param  Job $job
-     * @param  int $maxTries
-     * @return void
+     * @param Job $job
+     * @param int $maxTries
      */
     protected function markJobAsFailedIfAlreadyExceedsMaxAttempts(Job $job, $maxTries)
     {
@@ -322,10 +315,9 @@ class Listener extends Injectable
     /**
      * Mark the given job as failed if it has exceeded the maximum allowed attempts.
      *
-     * @param  Job $job
-     * @param  int $maxTries
-     * @param  \Exception $e
-     * @return void
+     * @param Job        $job
+     * @param int        $maxTries
+     * @param \Exception $e
      */
     protected function markJobAsFailedIfWillExceedMaxAttempts(Job $job, $maxTries, $e)
     {
@@ -341,9 +333,8 @@ class Listener extends Injectable
      *
      * Mark the given job as failed and remove job from queue and raise the relevant event.
      *
-     * @param  Job $job
-     * @param  \Exception $e
-     * @return void
+     * @param Job        $job
+     * @param \Exception $e
      */
     protected function failJob(Job $job, $e = null)
     {
@@ -354,15 +345,14 @@ class Listener extends Injectable
                 $job->delete();
             }
         } finally {
-            $this->raiseFailedJobEvent($job, $e ?: new \Exception("Job failed"));
+            $this->raiseFailedJobEvent($job, $e ?: new \Exception('Job failed'));
         }
     }
 
     /**
      * Raise the before queue job event.
      *
-     * @param  Job $job
-     * @return void
+     * @param Job $job
      */
     protected function raiseBeforeJobEvent(Job $job)
     {
@@ -372,8 +362,7 @@ class Listener extends Injectable
     /**
      * Raise the after queue job event.
      *
-     * @param  Job $job
-     * @return void
+     * @param Job $job
      */
     protected function raiseAfterJobEvent(Job $job)
     {
@@ -383,9 +372,8 @@ class Listener extends Injectable
     /**
      * Raise the exception occurred queue job event.
      *
-     * @param  Job $job
-     * @param  \Exception $e
-     * @return void
+     * @param Job        $job
+     * @param \Exception $e
      */
     protected function raiseExceptionOccurredJobEvent(Job $job, $e)
     {
@@ -395,9 +383,8 @@ class Listener extends Injectable
     /**
      * Raise the failed queue job event.
      *
-     * @param  Job $job
-     * @param  \Exception $e
-     * @return void
+     * @param Job        $job
+     * @param \Exception $e
      */
     protected function raiseFailedJobEvent(Job $job, $e)
     {
@@ -407,7 +394,8 @@ class Listener extends Injectable
     /**
      * Determine if the queue worker should restart.
      *
-     * @param  int|null $lastRestart
+     * @param int|null $lastRestart
+     *
      * @return bool
      */
     protected function queueShouldRestart($lastRestart)
@@ -429,8 +417,6 @@ class Listener extends Injectable
 
     /**
      * Enable async signals for the process.
-     *
-     * @return void
      */
     protected function listenForSignals()
     {
@@ -465,7 +451,8 @@ class Listener extends Injectable
     /**
      * Determine if the memory limit has been exceeded.
      *
-     * @param  int $memoryLimit
+     * @param int $memoryLimit
+     *
      * @return bool
      */
     protected function memoryExceeded($memoryLimit)
@@ -476,8 +463,7 @@ class Listener extends Injectable
     /**
      * Stop listening and bail out of the script.
      *
-     * @param  int $status
-     * @return void
+     * @param int $status
      */
     protected function stop($status = 0)
     {
@@ -489,8 +475,7 @@ class Listener extends Injectable
     /**
      * Kill the process.
      *
-     * @param  int $status
-     * @return void
+     * @param int $status
      */
     protected function kill($status = 0)
     {
@@ -504,8 +489,7 @@ class Listener extends Injectable
     /**
      * Sleep the script for a given number of seconds.
      *
-     * @param  int $seconds
-     * @return void
+     * @param int $seconds
      */
     protected function sleep($seconds)
     {

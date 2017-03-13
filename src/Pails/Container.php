@@ -3,7 +3,6 @@ namespace Pails;
 
 use Pails\Console\Application as ConsoleApplication;
 use Pails\Exception\Handler;
-use Pails\Providers;
 use Pails\Providers\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\Di;
@@ -15,6 +14,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 /**
  * Class Application - 扩展Di,作为核心容器。类似laravel的 Application。
+ *
  * @package Pails
  */
 class Container extends Di\FactoryDefault implements ContainerInterface
@@ -25,7 +25,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     const VERSION = '3.0.7';
 
     /**
-     * @var Loader $loader
+     * @var Loader
      */
     protected $loader;
 
@@ -49,6 +49,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
     /**
      * Application constructor.
+     *
      * @param null $basePath
      */
     public function __construct($basePath = null)
@@ -79,11 +80,13 @@ class Container extends Di\FactoryDefault implements ContainerInterface
         if (!$env) {
             $env = 'development';
         }
+
         return $env;
     }
 
     /**
      * 注册服务列表
+     *
      * @param array $serviceProviders
      */
     public function registerServices($serviceProviders = [])
@@ -95,7 +98,9 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
     /**
      * 注册一个服务
+     *
      * @param ServiceProviderInterface $serviceProvider
+     *
      * @return $this
      */
     public function registerService(ServiceProviderInterface $serviceProvider)
@@ -107,7 +112,6 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
     /**
      * 注册loader。
-     *
      */
     protected function registerAutoLoader()
     {
@@ -117,7 +121,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
         // Register App
         $this->loader->registerNamespaces([
-            'App' => $this->appPath()
+            'App' => $this->appPath(),
         ])->register();
 
         return $this;
@@ -127,6 +131,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      * Register namespaces. Append to exists.
      *
      * @param $namespaces
+     *
      * @return $this
      */
     public function registerNamespaces($namespaces)
@@ -141,6 +146,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      *
      * @param $namespace
      * @param $path
+     *
      * @return $this
      */
     public function registerNamespace($namespace, $path)
@@ -173,7 +179,8 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Set the base path for the application.
      *
-     * @param  string $basePath
+     * @param string $basePath
+     *
      * @return $this
      */
     public function setBasePath($basePath)
@@ -187,11 +194,13 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      * Get the path to the application "app" directory.
      *
      * @param string $dir
+     *
      * @return string
      */
     public function path($dir = '')
     {
         $path = $this->basePath . DIRECTORY_SEPARATOR . 'app';
+
         return $dir == '' ? $path : $path . DIRECTORY_SEPARATOR . rtrim($dir, '\/');
     }
 
@@ -199,6 +208,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      * Get the base path of the current Pails application.
      *
      * @param string $dir
+     *
      * @return string
      */
     public function basePath($dir = '')
@@ -292,6 +302,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
      * @param $section
      * @param null $key
      * @param null $defaultValue
+     *
      * @return array|mixed
      */
     public function getConfig($section, $key = null, $defaultValue = null)
@@ -302,6 +313,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
             if ($key) {
                 return $service->get($key, $defaultValue);
             }
+
             return $service;
         }
 
@@ -316,6 +328,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
             if ($key) {
                 return $service->get($key, $defaultValue);
             }
+
             return $service;
         } else {
             return $defaultValue;
@@ -324,6 +337,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
 
     /**
      * @param $appClass
+     *
      * @throws \Error
      * @throws \Exception
      * @throws \Phalcon\Exception
@@ -369,7 +383,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
     /**
      * Override DI's get() method, setEventsManager by default.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($name, $parameters = null)
     {
@@ -380,6 +394,7 @@ class Container extends Di\FactoryDefault implements ContainerInterface
                 $instance->setEventsManager($eventsManager);
             }
         }
+
         return $instance;
     }
 }

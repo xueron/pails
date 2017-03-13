@@ -13,9 +13,9 @@ class ClearCommand extends Command
     {
         $res = $this->modelsCache->flush();
         if ($res) {
-            $this->info("缓存已经清空");
+            $this->info('缓存已经清空');
         } else {
-            $this->info("缓存清理失败，请手工查看。");
+            $this->info('缓存清理失败，请手工查看。');
         }
     }
 }
