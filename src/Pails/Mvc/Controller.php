@@ -4,9 +4,10 @@
  */
 namespace Pails\Mvc;
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Pails\Exception;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -44,22 +45,23 @@ abstract class Controller extends \Phalcon\Mvc\Controller
     /**
      * Preform oauth resource authenticate
      *
-     * @return bool|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     * @return RequestInterface
+     *
+     * @throws \Pails\Exception
      */
     public function authenticate()
     {
         $request = ServerRequest::fromGlobals();
-        $response = new Response();
         try {
-            $this->resourceServer->validateAuthenticatedRequest($request);
-
-            return true;
+            return $this->resourceServer->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {
-            return $this->convertResponse($exception->generateHttpResponse($response));
+            $message = $exception->getMessage();
+            if ($hint = $exception->getHint()) {
+                $message .= ' (' . $hint . ')';
+            }
+            throw Exception::clientException($message, $exception->getHttpStatusCode(), $exception->getErrorType(), $exception->getHttpStatusCode());
         } catch (\Exception $exception) {
-            return $this->convertResponse(
-                (new OAuthServerException($exception->getMessage(), 0, 'unknown_error', 500))
-                    ->generateHttpResponse($response));
+            throw Exception::serverException($exception->getMessage(), $exception->getCode());
         }
     }
 
