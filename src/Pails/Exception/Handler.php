@@ -12,8 +12,16 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
+/**
+ * Class Handler
+ *
+ * @package Pails\Exception
+ */
 class Handler extends Injectable
 {
+    /**
+     * @var bool
+     */
     protected $debug = false;
 
     /**
@@ -115,12 +123,13 @@ class Handler extends Injectable
         (new ConsoleApplication)->renderException($e, $output);
     }
 
+    /**
+     * @param \Exception $e
+     */
     public function renderForBrowser(Exception $e)
     {
-        if ($this->isAjax()) {
-            echo json_encode([
-                'error' => $e->getMessage(),
-            ]);
+        if ($this->expectJson()) {
+            $this->apiResponse->withError($e->getMessage(), $e->getCode())->send();
         } else {
             if ($this->debug) {
                 $debug = new \Phalcon\Debug();
@@ -129,11 +138,14 @@ class Handler extends Injectable
             } else {
                 $e = FlattenException::create($e);
                 $handler = new SymfonyExceptionHandler($this->debug);
-                echo $handler->getHtml($e);
+                $this->response->setContent($handler->getHtml($e))->send();
             }
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isConsole()
     {
         $sapi_type = php_sapi_name();
@@ -141,8 +153,27 @@ class Handler extends Injectable
         return substr($sapi_type, 0, 3) == 'cli';
     }
 
-    public function isAjax()
+    /**
+     * @return bool
+     */
+    public function expectJson()
     {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+        return $this->request->isAjax()
+            || $this->wantJson()
+            || $this->request->getHeader('X-PJAX')
+            || preg_match('/\/api\//i', $this->request->getURI());
+    }
+
+    /**
+     * @return bool
+     */
+    public function wantJson()
+    {
+        foreach ($this->request->getAcceptableContent() as $accept) {
+            if (preg_match('/[\/\+]json/i', $accept)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

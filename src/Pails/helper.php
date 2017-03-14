@@ -1033,9 +1033,28 @@ if (!function_exists('seconds2interval')) {
     function seconds2interval($seconds)
     {
         $d1 = new \DateTime();
-        $d2 = new \DateTime();
+
+        $d2 = clone $d1;
         $d2->add(new \DateInterval('PT' . $seconds . 'S'));
 
-        return $d2->diff($d1);
+        return $d1->diff($d2);
+    }
+}
+
+if (!function_exists('getallheaders')) {
+    /**
+     * Return all http headers
+     *
+     * @return string[]
+     */
+    function getallheaders()
+    {
+        $headers = [];
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+        return $headers;
     }
 }
