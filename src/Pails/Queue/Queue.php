@@ -19,7 +19,7 @@ class Queue extends Injectable
     /**
      * @var \AliyunMNS\Queue
      */
-    protected $queue;
+    protected $_queue;
 
     /**
      * Queue constructor.
@@ -29,7 +29,7 @@ class Queue extends Injectable
     public function __construct(string $queueName)
     {
         $this->name = $queueName;
-        $this->queue = $this->di->get('mns')->getQueueRef($queueName, false);
+        $this->_queue = $this->mns->getQueueRef($queueName, false);
     }
 
     /**
@@ -45,13 +45,11 @@ class Queue extends Injectable
      */
     public function getQueue()
     {
-        return $this->queue;
+        return $this->_queue;
     }
 
     /**
      * @param Job $job
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -59,7 +57,7 @@ class Queue extends Injectable
     {
         $result = false;
         try {
-            $res = $this->queue->deleteMessage($job->getInstance()->getReceiptHandle());
+            $res = $this->_queue->deleteMessage($job->getInstance()->getReceiptHandle());
             $result = $res->isSucceed();
         } catch (\Exception $e) {
             $this->logger->error('删除消息失败：' . $e->getMessage());
@@ -74,8 +72,6 @@ class Queue extends Injectable
      * @param                 $payload
      * @param ListenerOptions $options
      *
-     * @throws \Exception
-     *
      * @return bool
      */
     public function push($payload, ListenerOptions $options)
@@ -83,7 +79,7 @@ class Queue extends Injectable
         $result = false;
         $request = new SendMessageRequest($payload, $options->delay);
         try {
-            $res = $this->queue->sendMessage($request);
+            $res = $this->_queue->sendMessage($request);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
             $this->logger->error('发送消息失败：' . $e->getMessage());
@@ -97,15 +93,13 @@ class Queue extends Injectable
      *
      * @param ListenerOptions $options
      *
-     * @throws \Exception
-     *
      * @return Job
      */
     public function pop(ListenerOptions $options)
     {
         $result = null;
         try {
-            $res = $this->queue->receiveMessage($options->timeout);
+            $res = $this->_queue->receiveMessage($options->timeout);
             if ($res->isSucceed()) {
                 $result = new Job($this, $res);
             }
@@ -117,17 +111,13 @@ class Queue extends Injectable
     }
 
     /**
-     * @param $options
-     *
-     * @throws \Exception
-     *
      * @return Job
      */
-    public function peek($options)
+    public function peek()
     {
         $result = null;
         try {
-            $res = $this->queue->peekMessage($options->timeout);
+            $res = $this->_queue->peekMessage();
             if ($res->isSucceed()) {
                 $result = new Job($this, $res);
             }
@@ -144,8 +134,6 @@ class Queue extends Injectable
      * @param Job $job
      * @param int $delay
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function release(Job $job, int $delay)
@@ -153,7 +141,7 @@ class Queue extends Injectable
         $result = false;
         $delay = $delay < 1 ? 1 : $delay;
         try {
-            $res = $this->queue->changeMessageVisibility($job->getInstance()->getReceiptHandle(), $delay);
+            $res = $this->_queue->changeMessageVisibility($job->getInstance()->getReceiptHandle(), $delay);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
             $this->logger->error('获取消息队列失败：' . $e->getMessage());

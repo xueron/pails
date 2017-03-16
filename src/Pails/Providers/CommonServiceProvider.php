@@ -9,11 +9,13 @@ use League\Flysystem\MountManager;
 use OSS\OssClient;
 use Pails\Exception\Handler;
 use Pails\Plugins\AliOSS;
+use Pails\Plugins\ApiClient;
 use Pails\Plugins\ApiResponse;
 use Pails\Plugins\Config;
 use Pails\Plugins\Fractal;
 use Pails\Pluralizer;
 use Pails\Queue\Queue;
+use Pails\Queue\Topic;
 
 class CommonServiceProvider extends AbstractServiceProvider implements ServiceProviderInterface
 {
@@ -25,6 +27,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'apiResponse',
             ApiResponse::class
+        );
+
+        // apiClient
+        $di->setShared(
+            'apiClient',
+            ApiClient::class
         );
 
         // config
@@ -125,6 +133,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->set(
             'queue',
             Queue::class
+        );
+
+        // topic, Usage: $topic = $this->di->get('topic', 'topicName');
+        $di->set(
+            'topic',
+            Topic::class
         );
 
         // filesystem

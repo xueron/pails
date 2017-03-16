@@ -7,7 +7,6 @@ namespace Pails\Mvc;
 use GuzzleHttp\Psr7\ServerRequest;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Pails\Exception;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -16,6 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * @package Pails\Mvc
  *
  * @property \Pails\Plugins\ApiResponse                     $apiResponse
+ * @property \Pails\Plugins\ApiClient                       $apiClient
  * @property \Pails\Plugins\Fractal                         $fractal
  * @property \Pails\Pluralizer                              $inflector
  * @property \Pails\Plugins\Config                          $config
@@ -45,9 +45,9 @@ abstract class Controller extends \Phalcon\Mvc\Controller
     /**
      * Preform oauth resource authenticate
      *
-     * @return RequestInterface
-     *
      * @throws \Pails\Exception
+     *
+     * @return \Psr\Http\Message\RequestInterface
      */
     public function authenticate()
     {

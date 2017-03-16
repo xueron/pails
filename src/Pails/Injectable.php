@@ -12,6 +12,7 @@ namespace Pails;
  * @package Pails
  *
  * @property \Pails\Plugins\ApiResponse                     $apiResponse
+ * @property \Pails\Plugins\ApiClient                       $apiClient
  * @property \Pails\Plugins\Fractal                         $fractal
  * @property \Pails\Pluralizer                              $inflector
  * @property \Pails\Plugins\Config                          $config
@@ -35,6 +36,7 @@ namespace Pails;
  * @property \League\OAuth2\Client\Provider\GenericProvider $authClient
  * @property \Redis                                         $redis
  * @property \Pails\Queue\Queue                             $queue
+ * @property \Pails\Queue\Topic                             $topic
  *
  * @method \Phalcon\Logger\AdapterInterface error($message, array $context = [])
  * @method \Phalcon\Logger\AdapterInterface info($message, array $context = [])
