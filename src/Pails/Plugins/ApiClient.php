@@ -4,10 +4,8 @@
  */
 namespace Pails\Plugins;
 
-use GuzzleHttp\Promise;
 use League\OAuth2\Client\Token\AccessToken;
 use Pails\Injectable;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -15,18 +13,12 @@ use Psr\Http\Message\UriInterface;
  *
  * @package Pails\Plugins
  *
- * @method ResponseInterface get(string | UriInterface $uri, array $options = [])
- * @method ResponseInterface head(string | UriInterface $uri, array $options = [])
- * @method ResponseInterface put(string | UriInterface $uri, array $options = [])
- * @method ResponseInterface post(string | UriInterface $uri, array $options = [])
- * @method ResponseInterface patch(string | UriInterface $uri, array $options = [])
- * @method ResponseInterface delete(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface getAsync(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface headAsync(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface putAsync(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface postAsync(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface patchAsync(string | UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface deleteAsync(string | UriInterface $uri, array $options = [])
+ * @method mixed get(string | UriInterface $uri, array $options = [])
+ * @method mixed head(string | UriInterface $uri, array $options = [])
+ * @method mixed put(string | UriInterface $uri, array $options = [])
+ * @method mixed post(string | UriInterface $uri, array $options = [])
+ * @method mixed patch(string | UriInterface $uri, array $options = [])
+ * @method mixed delete(string | UriInterface $uri, array $options = [])
  */
 class ApiClient extends Injectable
 {
@@ -39,9 +31,7 @@ class ApiClient extends Injectable
         }
         $uri = $args[0];
         $opts = isset($args[1]) ? $args[1] : [];
-        $res = substr($method, -5) === 'Async'
-            ? $this->requestAsync(substr($method, 0, -5), $uri, $opts)
-            : $this->request($method, $uri, $opts);
+        $res = $this->request($method, $uri, $opts);
 
         return \GuzzleHttp\json_decode((string) $res->getBody());
     }
@@ -55,9 +45,9 @@ class ApiClient extends Injectable
      */
     public function request($method, $url, $options)
     {
-        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken());
 
-        return $this->httpClient->send($request);
+        return $this->httpClient->send($request, $options);
     }
 
     /**
@@ -69,9 +59,9 @@ class ApiClient extends Injectable
      */
     public function requestAsync($method, $url, $options)
     {
-        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken());
 
-        return $this->httpClient->sendAsync($request);
+        return $this->httpClient->sendAsync($request, $options);
     }
 
     /**
