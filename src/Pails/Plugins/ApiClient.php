@@ -15,18 +15,18 @@ use Psr\Http\Message\UriInterface;
  *
  * @package Pails\Plugins
  *
- * @method ResponseInterface get(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface head(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface put(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface post(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface patch(string|UriInterface $uri, array $options = [])
- * @method ResponseInterface delete(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface getAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface headAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface putAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface postAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface patchAsync(string|UriInterface $uri, array $options = [])
- * @method Promise\PromiseInterface deleteAsync(string|UriInterface $uri, array $options = [])
+ * @method ResponseInterface get(string | UriInterface $uri, array $options = [])
+ * @method ResponseInterface head(string | UriInterface $uri, array $options = [])
+ * @method ResponseInterface put(string | UriInterface $uri, array $options = [])
+ * @method ResponseInterface post(string | UriInterface $uri, array $options = [])
+ * @method ResponseInterface patch(string | UriInterface $uri, array $options = [])
+ * @method ResponseInterface delete(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface getAsync(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface headAsync(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface putAsync(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface postAsync(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface patchAsync(string | UriInterface $uri, array $options = [])
+ * @method Promise\PromiseInterface deleteAsync(string | UriInterface $uri, array $options = [])
  */
 class ApiClient extends Injectable
 {
@@ -37,15 +37,13 @@ class ApiClient extends Injectable
         if (count($args) < 1) {
             throw new \InvalidArgumentException('Magic request methods require a URI and optional options array');
         }
-
         $uri = $args[0];
         $opts = isset($args[1]) ? $args[1] : [];
-
         $res = substr($method, -5) === 'Async'
             ? $this->requestAsync(substr($method, 0, -5), $uri, $opts)
             : $this->request($method, $uri, $opts);
 
-        return \GuzzleHttp\json_decode((string)$res->getBody());
+        return \GuzzleHttp\json_decode((string) $res->getBody());
     }
 
     /**
@@ -58,6 +56,7 @@ class ApiClient extends Injectable
     public function request($method, $url, $options)
     {
         $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+
         return $this->httpClient->send($request);
     }
 
@@ -71,6 +70,7 @@ class ApiClient extends Injectable
     public function requestAsync($method, $url, $options)
     {
         $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+
         return $this->httpClient->sendAsync($request);
     }
 
@@ -90,6 +90,7 @@ class ApiClient extends Injectable
         $accessToken = $this->authClient->getAccessToken('client_credentials');
         $ttl = $accessToken->getExpires() - time();
         $this->cache->save(static::SESSION_ACCESS_TOKEN_KEY, $accessToken, $ttl);
+
         return $accessToken;
     }
 }

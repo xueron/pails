@@ -20,7 +20,6 @@ if (!function_exists('app')) {
         if (!$app = Di::getDefault()) {
             throw new \RuntimeException('Application not initialized');
         }
-
         if (!is_null($name)) {
             return $app->get($name, $parameters);
         }
@@ -28,7 +27,6 @@ if (!function_exists('app')) {
         return $app;
     }
 }
-
 if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
@@ -41,29 +39,23 @@ if (!function_exists('env')) {
     function env($key, $default = null)
     {
         $value = getenv($key);
-
         if ($value === false) {
             return value($default);
         }
-
         switch (strtolower($value)) {
             case 'true':
             case '(true)':
                 return true;
-
             case 'false':
             case '(false)':
                 return false;
-
             case 'empty':
             case '(empty)':
                 return '';
-
             case 'null':
             case '(null)':
                 return;
         }
-
         if (Text::startsWith($value, '"') && Text::endsWith($value, '"')) {
             return substr($value, 1, -1);
         }
@@ -71,7 +63,6 @@ if (!function_exists('env')) {
         return $value;
     }
 }
-
 if (!function_exists('value')) {
     /**
      * Return the default value of the given value.
@@ -85,7 +76,6 @@ if (!function_exists('value')) {
         return $value instanceof Closure ? $value() : $value;
     }
 }
-
 if (!function_exists('with')) {
     /**
      * Return the given object. Useful for chaining.
@@ -99,7 +89,6 @@ if (!function_exists('with')) {
         return $object;
     }
 }
-
 if (!function_exists('is_json')) {
     /**
      * 判断一个字符串是否是合法的json字符串
@@ -119,7 +108,6 @@ if (!function_exists('is_json')) {
         return false;
     }
 }
-
 if (!function_exists('append_config')) {
     /**
      * Assign high numeric IDs to a config item to force appending.
@@ -131,11 +119,9 @@ if (!function_exists('append_config')) {
     function append_config(array $array)
     {
         $start = 9999;
-
         foreach ($array as $key => $value) {
             if (is_numeric($key)) {
                 $start++;
-
                 $array[$start] = Arr::pull($array, $key);
             }
         }
@@ -143,7 +129,6 @@ if (!function_exists('append_config')) {
         return $array;
     }
 }
-
 if (!function_exists('array_add')) {
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.
@@ -159,7 +144,6 @@ if (!function_exists('array_add')) {
         return Arr::add($array, $key, $value);
     }
 }
-
 if (!function_exists('array_build')) {
     /**
      * Build a new array using a callback.
@@ -176,7 +160,6 @@ if (!function_exists('array_build')) {
         return Arr::build($array, $callback);
     }
 }
-
 if (!function_exists('array_collapse')) {
     /**
      * Collapse an array of arrays into a single array.
@@ -190,7 +173,6 @@ if (!function_exists('array_collapse')) {
         return Arr::collapse($array);
     }
 }
-
 if (!function_exists('array_divide')) {
     /**
      * Divide an array into two arrays. One with keys and the other with values.
@@ -204,7 +186,6 @@ if (!function_exists('array_divide')) {
         return Arr::divide($array);
     }
 }
-
 if (!function_exists('array_dot')) {
     /**
      * Flatten a multi-dimensional associative array with dots.
@@ -219,7 +200,6 @@ if (!function_exists('array_dot')) {
         return Arr::dot($array, $prepend);
     }
 }
-
 if (!function_exists('array_except')) {
     /**
      * Get all of the given array except for a specified array of items.
@@ -234,7 +214,6 @@ if (!function_exists('array_except')) {
         return Arr::except($array, $keys);
     }
 }
-
 if (!function_exists('array_first')) {
     /**
      * Return the first element in an array passing a given truth test.
@@ -250,7 +229,6 @@ if (!function_exists('array_first')) {
         return Arr::first($array, $callback, $default);
     }
 }
-
 if (!function_exists('array_flatten')) {
     /**
      * Flatten a multi-dimensional array into a single level.
@@ -265,7 +243,6 @@ if (!function_exists('array_flatten')) {
         return Arr::flatten($array, $depth);
     }
 }
-
 if (!function_exists('array_forget')) {
     /**
      * Remove one or many array items from a given array using "dot" notation.
@@ -278,7 +255,6 @@ if (!function_exists('array_forget')) {
         return Arr::forget($array, $keys);
     }
 }
-
 if (!function_exists('array_get')) {
     /**
      * Get an item from an array using "dot" notation.
@@ -294,7 +270,6 @@ if (!function_exists('array_get')) {
         return Arr::get($array, $key, $default);
     }
 }
-
 if (!function_exists('array_has')) {
     /**
      * Check if an item exists in an array using "dot" notation.
@@ -309,7 +284,6 @@ if (!function_exists('array_has')) {
         return Arr::has($array, $key);
     }
 }
-
 if (!function_exists('array_last')) {
     /**
      * Return the last element in an array passing a given truth test.
@@ -325,7 +299,6 @@ if (!function_exists('array_last')) {
         return Arr::last($array, $callback, $default);
     }
 }
-
 if (!function_exists('array_only')) {
     /**
      * Get a subset of the items from the given array.
@@ -340,7 +313,6 @@ if (!function_exists('array_only')) {
         return Arr::only($array, $keys);
     }
 }
-
 if (!function_exists('array_pluck')) {
     /**
      * Pluck an array of values from an array.
@@ -356,7 +328,6 @@ if (!function_exists('array_pluck')) {
         return Arr::pluck($array, $value, $key);
     }
 }
-
 if (!function_exists('array_prepend')) {
     /**
      * Push an item onto the beginning of an array.
@@ -372,7 +343,6 @@ if (!function_exists('array_prepend')) {
         return Arr::prepend($array, $value, $key);
     }
 }
-
 if (!function_exists('array_pull')) {
     /**
      * Get a value from the array, and remove it.
@@ -388,7 +358,6 @@ if (!function_exists('array_pull')) {
         return Arr::pull($array, $key, $default);
     }
 }
-
 if (!function_exists('array_set')) {
     /**
      * Set an array item to a given value using "dot" notation.
@@ -406,7 +375,6 @@ if (!function_exists('array_set')) {
         return Arr::set($array, $key, $value);
     }
 }
-
 if (!function_exists('array_sort')) {
     /**
      * Sort the array using the given callback.
@@ -421,7 +389,6 @@ if (!function_exists('array_sort')) {
         return Arr::sort($array, $callback);
     }
 }
-
 if (!function_exists('array_sort_recursive')) {
     /**
      * Recursively sort an array by keys and values.
@@ -435,7 +402,6 @@ if (!function_exists('array_sort_recursive')) {
         return Arr::sortRecursive($array);
     }
 }
-
 if (!function_exists('array_where')) {
     /**
      * Filter the array using the given callback.
@@ -450,7 +416,6 @@ if (!function_exists('array_where')) {
         return Arr::where($array, $callback);
     }
 }
-
 if (!function_exists('camel_case')) {
     /**
      * Convert a value to camel case.
@@ -464,7 +429,6 @@ if (!function_exists('camel_case')) {
         return Str::camel($value);
     }
 }
-
 if (!function_exists('class_basename')) {
     /**
      * Get the class "basename" of the given object / class.
@@ -480,7 +444,6 @@ if (!function_exists('class_basename')) {
         return basename(str_replace('\\', '/', $class));
     }
 }
-
 if (!function_exists('class_uses_recursive')) {
     /**
      * Returns all traits used by a class, its subclasses and trait of their traits.
@@ -492,7 +455,6 @@ if (!function_exists('class_uses_recursive')) {
     function class_uses_recursive($class)
     {
         $results = [];
-
         foreach (array_merge([$class => $class], class_parents($class)) as $class) {
             $results += trait_uses_recursive($class);
         }
@@ -500,7 +462,6 @@ if (!function_exists('class_uses_recursive')) {
         return array_unique($results);
     }
 }
-
 if (!function_exists('collect')) {
     /**
      * Create a collection from the given value.
@@ -514,7 +475,6 @@ if (!function_exists('collect')) {
         return new Collection($value);
     }
 }
-
 if (!function_exists('data_fill')) {
     /**
      * Fill in data where it's missing.
@@ -530,7 +490,6 @@ if (!function_exists('data_fill')) {
         return data_set($target, $key, $value, false);
     }
 }
-
 if (!function_exists('data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
@@ -546,9 +505,7 @@ if (!function_exists('data_get')) {
         if (is_null($key)) {
             return $target;
         }
-
         $key = is_array($key) ? $key : explode('.', $key);
-
         while (($segment = array_shift($key)) !== null) {
             if ($segment === '*') {
                 if ($target instanceof Collection) {
@@ -556,12 +513,10 @@ if (!function_exists('data_get')) {
                 } elseif (!is_array($target)) {
                     return value($default);
                 }
-
                 $result = Arr::pluck($target, $key);
 
                 return in_array('*', $key) ? Arr::collapse($result) : $result;
             }
-
             if (Arr::accessible($target) && Arr::exists($target, $segment)) {
                 $target = $target[$segment];
             } elseif (is_object($target) && isset($target->{$segment})) {
@@ -574,7 +529,6 @@ if (!function_exists('data_get')) {
         return $target;
     }
 }
-
 if (!function_exists('data_set')) {
     /**
      * Set an item on an array or object using dot notation.
@@ -589,12 +543,10 @@ if (!function_exists('data_set')) {
     function data_set(&$target, $key, $value, $overwrite = true)
     {
         $segments = is_array($key) ? $key : explode('.', $key);
-
         if (($segment = array_shift($segments)) === '*') {
             if (!Arr::accessible($target)) {
                 $target = [];
             }
-
             if ($segments) {
                 foreach ($target as &$inner) {
                     data_set($inner, $segments, $value, $overwrite);
@@ -609,7 +561,6 @@ if (!function_exists('data_set')) {
                 if (!Arr::exists($target, $segment)) {
                     $target[$segment] = [];
                 }
-
                 data_set($target[$segment], $segments, $value, $overwrite);
             } elseif ($overwrite || !Arr::exists($target, $segment)) {
                 $target[$segment] = $value;
@@ -619,14 +570,12 @@ if (!function_exists('data_set')) {
                 if (!isset($target->{$segment})) {
                     $target->{$segment} = [];
                 }
-
                 data_set($target->{$segment}, $segments, $value, $overwrite);
             } elseif ($overwrite || !isset($target->{$segment})) {
                 $target->{$segment} = $value;
             }
         } else {
             $target = [];
-
             if ($segments) {
                 data_set($target[$segment], $segments, $value, $overwrite);
             } elseif ($overwrite) {
@@ -637,7 +586,6 @@ if (!function_exists('data_set')) {
         return $target;
     }
 }
-
 if (!function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.
@@ -649,11 +597,9 @@ if (!function_exists('dd')) {
         array_map(function ($x) {
             var_dump($x);
         }, func_get_args());
-
         die(1);
     }
 }
-
 if (!function_exists('e')) {
     /**
      * Escape HTML entities in a string.
@@ -667,7 +613,6 @@ if (!function_exists('e')) {
         return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 }
-
 if (!function_exists('ends_with')) {
     /**
      * Determine if a given string ends with a given substring.
@@ -682,7 +627,6 @@ if (!function_exists('ends_with')) {
         return Str::endsWith($haystack, $needles);
     }
 }
-
 if (!function_exists('head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
@@ -696,7 +640,6 @@ if (!function_exists('head')) {
         return reset($array);
     }
 }
-
 if (!function_exists('last')) {
     /**
      * Get the last element from an array.
@@ -710,7 +653,6 @@ if (!function_exists('last')) {
         return end($array);
     }
 }
-
 if (!function_exists('object_get')) {
     /**
      * Get an item from an object using "dot" notation.
@@ -726,19 +668,16 @@ if (!function_exists('object_get')) {
         if (is_null($key) || trim($key) == '') {
             return $object;
         }
-
         foreach (explode('.', $key) as $segment) {
             if (!is_object($object) || !isset($object->{$segment})) {
                 return value($default);
             }
-
             $object = $object->{$segment};
         }
 
         return $object;
     }
 }
-
 if (!function_exists('preg_replace_sub')) {
     /**
      * Replace a given pattern with each value in the array in sequentially.
@@ -758,7 +697,6 @@ if (!function_exists('preg_replace_sub')) {
         }, $subject);
     }
 }
-
 if (!function_exists('snake_case')) {
     /**
      * Convert a string to snake case.
@@ -773,7 +711,6 @@ if (!function_exists('snake_case')) {
         return Str::snake($value, $delimiter);
     }
 }
-
 if (!function_exists('starts_with')) {
     /**
      * Determine if a given string starts with a given substring.
@@ -788,7 +725,6 @@ if (!function_exists('starts_with')) {
         return Str::startsWith($haystack, $needles);
     }
 }
-
 if (!function_exists('str_contains')) {
     /**
      * Determine if a given string contains a given substring.
@@ -803,7 +739,6 @@ if (!function_exists('str_contains')) {
         return Str::contains($haystack, $needles);
     }
 }
-
 if (!function_exists('str_finish')) {
     /**
      * Cap a string with a single instance of a given value.
@@ -818,7 +753,6 @@ if (!function_exists('str_finish')) {
         return Str::finish($value, $cap);
     }
 }
-
 if (!function_exists('str_is')) {
     /**
      * Determine if a given string matches a given pattern.
@@ -833,7 +767,6 @@ if (!function_exists('str_is')) {
         return Str::is($pattern, $value);
     }
 }
-
 if (!function_exists('str_limit')) {
     /**
      * Limit the number of characters in a string.
@@ -849,7 +782,6 @@ if (!function_exists('str_limit')) {
         return Str::limit($value, $limit, $end);
     }
 }
-
 if (!function_exists('str_plural')) {
     /**
      * Get the plural form of an English word.
@@ -864,7 +796,6 @@ if (!function_exists('str_plural')) {
         return Str::plural($value, $count);
     }
 }
-
 if (!function_exists('str_random')) {
     /**
      * Generate a more truly "random" alpha-numeric string.
@@ -880,7 +811,6 @@ if (!function_exists('str_random')) {
         return Str::random($length);
     }
 }
-
 if (!function_exists('str_replace_array')) {
     /**
      * Replace a given value in the string sequentially with an array.
@@ -900,7 +830,6 @@ if (!function_exists('str_replace_array')) {
         return $subject;
     }
 }
-
 if (!function_exists('str_replace_first')) {
     /**
      * Replace the first occurrence of a given value in the string.
@@ -916,7 +845,6 @@ if (!function_exists('str_replace_first')) {
         return Str::replaceFirst($search, $replace, $subject);
     }
 }
-
 if (!function_exists('str_replace_last')) {
     /**
      * Replace the last occurrence of a given value in the string.
@@ -932,7 +860,6 @@ if (!function_exists('str_replace_last')) {
         return Str::replaceLast($search, $replace, $subject);
     }
 }
-
 if (!function_exists('str_singular')) {
     /**
      * Get the singular form of an English word.
@@ -946,7 +873,6 @@ if (!function_exists('str_singular')) {
         return Str::singular($value);
     }
 }
-
 if (!function_exists('str_slug')) {
     /**
      * Generate a URL friendly "slug" from a given string.
@@ -961,7 +887,6 @@ if (!function_exists('str_slug')) {
         return Str::slug($title, $separator);
     }
 }
-
 if (!function_exists('studly_case')) {
     /**
      * Convert a value to studly caps case.
@@ -975,7 +900,6 @@ if (!function_exists('studly_case')) {
         return Str::studly($value);
     }
 }
-
 if (!function_exists('title_case')) {
     /**
      * Convert a value to title case.
@@ -989,7 +913,6 @@ if (!function_exists('title_case')) {
         return Str::title($value);
     }
 }
-
 if (!function_exists('trait_uses_recursive')) {
     /**
      * Returns all traits used by a trait and its traits.
@@ -1001,7 +924,6 @@ if (!function_exists('trait_uses_recursive')) {
     function trait_uses_recursive($trait)
     {
         $traits = class_uses($trait);
-
         foreach ($traits as $trait) {
             $traits += trait_uses_recursive($trait);
         }
@@ -1009,7 +931,6 @@ if (!function_exists('trait_uses_recursive')) {
         return $traits;
     }
 }
-
 if (!function_exists('windows_os')) {
     /**
      * Determine whether the current environment is Windows based.
@@ -1021,7 +942,6 @@ if (!function_exists('windows_os')) {
         return strtolower(substr(PHP_OS, 0, 3)) === 'win';
     }
 }
-
 if (!function_exists('seconds2interval')) {
     /**
      * Return a DateInterval from seconds.
@@ -1033,14 +953,12 @@ if (!function_exists('seconds2interval')) {
     function seconds2interval($seconds)
     {
         $d1 = new \DateTime();
-
         $d2 = clone $d1;
         $d2->add(new \DateInterval('PT' . $seconds . 'S'));
 
         return $d1->diff($d2);
     }
 }
-
 if (!function_exists('getallheaders')) {
     /**
      * Return all http headers
@@ -1055,6 +973,7 @@ if (!function_exists('getallheaders')) {
                 $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
             }
         }
+
         return $headers;
     }
 }

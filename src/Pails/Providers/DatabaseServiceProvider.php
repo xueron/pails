@@ -24,11 +24,9 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                         'dbname'   => $database['name'],
                         'charset'  => $database['charset'],
                     ]);
-
                     // debug sql
                     if ($this->get('config')->get('app.debug', false)) {
                         $logger = new File($this->logPath() . '/db_query.log');
-
                         $this['eventsManager']->attach(
                             'db',
                             function ($event, $connection) use ($logger) {
@@ -37,7 +35,6 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                                     if (count($sqlVariables)) {
                                         $query = str_replace(['%', '?'], ['%%', "'%s'"], $connection->getSQLStatement());
                                         $query = vsprintf($query, $sqlVariables);
-
                                         $logger->log($query, \Phalcon\Logger::INFO);
                                     } else {
                                         $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
@@ -53,7 +50,6 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                 }
             }
         );
-
         if ((true === $this->config->get('db.use_slave')) && $this->config->get('db.slave')) {
             $this->di->set(
                 'dbRead',
@@ -66,6 +62,7 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                         'dbname'   => $this->config->get('db.slave.name'),
                         'charset'  => $this->config->get('db.slave.charset'),
                     ]);
+
                     return $dbRead;
                 }
             );

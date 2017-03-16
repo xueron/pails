@@ -1,12 +1,8 @@
 <?php
 /**
  * ModelManager.php
- *
  */
-
-
 namespace Pails\Mvc;
-
 
 use Phalcon\Mvc\Model\Manager;
 

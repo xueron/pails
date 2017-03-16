@@ -52,11 +52,9 @@ class Handler extends Injectable
             $file = addslashes($e->getFile());
             $line = addslashes($e->getLine());
             $time = date('c');
-
             // log locally
             $log = sprintf("[%s] [%s] %s thrown in %s on line %d\n", $time, $class, $message, $file, $line);
             error_log($log, 3, $this->di->logPath() . DIRECTORY_SEPARATOR . '/pails.error.log');
-
             // log to system
             $syslog = sprintf('[%s] %s thrown in %s on line %d', $class, $message, $file, $line);
             error_log($syslog);
@@ -85,7 +83,6 @@ class Handler extends Injectable
     protected function shouldntReport(Exception $e)
     {
         $dontReport = array_merge($this->dontReport, []);
-
         foreach ($dontReport as $type) {
             if ($e instanceof $type) {
                 return true;
@@ -174,6 +171,7 @@ class Handler extends Injectable
                 return true;
             }
         }
+
         return false;
     }
 }

@@ -35,7 +35,6 @@ class Topic extends Injectable
         $this->_topic = $this->mns->getTopicRef($topicName);
     }
 
-
     /**
      * @return string
      */
@@ -68,6 +67,7 @@ class Topic extends Injectable
         $request = new PublishMessageRequest($message, $tag);
         try {
             $res = $this->_topic->publishMessage($request);
+
             return $res->isSucceed();
         } catch (\Exception $e) {
             $this->logger->error('发送消息失败：' . $e->getMessage());
