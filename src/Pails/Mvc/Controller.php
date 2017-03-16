@@ -16,6 +16,7 @@ use Psr\Http\Message\ResponseInterface;
  * @package Pails\Mvc
  *
  * @property \Pails\Plugins\ApiResponse                     $apiResponse
+ * @property \Pails\Plugins\ApiClient                       $apiClient
  * @property \Pails\Plugins\Fractal                         $fractal
  * @property \Pails\Pluralizer                              $inflector
  * @property \Pails\Plugins\Config                          $config

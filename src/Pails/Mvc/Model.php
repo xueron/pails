@@ -32,6 +32,26 @@ abstract class Model extends PhalconModel
     }
 
     /**
+     * 表名前缀、是否自动复数化变得可配
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        $source = parent::getSource();
+
+        if (true === $this->getDI()->get('config')->get('db.use_plural')) {
+            $source = str_plural($source);
+        }
+
+        if ($prefix = $this->getDI()->get('config')->get('db.prefix')) {
+            return $prefix . $source;
+        }
+
+        return $source;
+    }
+
+    /**
      * @param array $data
      *
      * @return static

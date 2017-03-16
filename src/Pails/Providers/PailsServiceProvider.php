@@ -1,6 +1,7 @@
 <?php
 namespace Pails\Providers;
 
+use Pails\Mvc\ModelManager;
 use Pails\Plugins\VoltExtension;
 use Phalcon\Annotations\Adapter\Files as FileAnnotations;
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
@@ -162,6 +163,12 @@ class PailsServiceProvider extends AbstractServiceProvider
 
                 return $cookies;
             }
+        );
+
+        // modelsManagers
+        $di->setShared(
+            'modelsManager',
+            ModelManager::class
         );
 
         // modelsCache, 设置模型缓存服务, 默认使用fileCache，可以在使用中指定cacheService，使用前面定义的memCache or redisCache

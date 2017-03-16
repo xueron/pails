@@ -17,7 +17,7 @@ class Listener extends Injectable
     /**
      * @var Queue
      */
-    protected $queue;
+    protected $_queue;
 
     /**
      * @var Handler
@@ -46,7 +46,7 @@ class Listener extends Injectable
     public function __construct($queueName)
     {
         // 获得队列
-        $this->queue = $this->di->get(Queue::class, [$queueName]);
+        $this->_queue = $this->di->get('queue', [$queueName]);
 
         // 注册异常处理器
         $this->exceptions = $this->di->get(Handler::class);
@@ -155,7 +155,7 @@ class Listener extends Injectable
 
             $this->markJobAsFailedIfAlreadyExceedsMaxAttempts($job, (int) $options->maxTries);
 
-            $this->di->getShared('queue:' . $this->queue->getName())->process($job, $options);
+            $this->di->getShared('queue:' . $this->_queue->getName())->process($job, $options);
 
             $this->raiseAfterJobEvent($job);
         } catch (Exception $e) {
@@ -254,7 +254,7 @@ class Listener extends Injectable
         try {
             $this->eventsManager->fire('listener:beforeGetJob', $this);
 
-            $job = $this->queue->pop($options);
+            $job = $this->_queue->pop($options);
 
             $this->eventsManager->fire('listener:afterGetJob', $this, $job);
 
@@ -411,7 +411,7 @@ class Listener extends Injectable
     protected function getTimestampOfLastQueueRestart()
     {
         if ($this->cache) {
-            return $this->cache->get('pails:queue:restart:' . $this->queue->getName());
+            return $this->cache->get('pails:queue:restart:' . $this->_queue->getName());
         }
     }
 
