@@ -45,9 +45,9 @@ class ApiClient extends Injectable
      */
     public function request($method, $url, $options)
     {
-        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken());
 
-        return $this->httpClient->send($request);
+        return $this->httpClient->send($request, $options);
     }
 
     /**
@@ -59,9 +59,9 @@ class ApiClient extends Injectable
      */
     public function requestAsync($method, $url, $options)
     {
-        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken(), $options);
+        $request = $this->authClient->getAuthenticatedRequest($method, $url, $this->getAccessToken());
 
-        return $this->httpClient->sendAsync($request);
+        return $this->httpClient->sendAsync($request, $options);
     }
 
     /**
