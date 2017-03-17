@@ -13,7 +13,6 @@ class BatchPeekMessageRequest extends BaseRequest
     public function __construct($queueName, $numOfMessages)
     {
         parent::__construct('get', 'queues/' . $queueName . '/messages');
-
         $this->queueName = $queueName;
         $this->numOfMessages = $numOfMessages;
     }
@@ -30,12 +29,11 @@ class BatchPeekMessageRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return http_build_query(array("numOfMessages" => $this->numOfMessages, "peekonly" => "true"));
+        return http_build_query(["numOfMessages" => $this->numOfMessages, "peekonly" => "true"]);
     }
 }
-?>

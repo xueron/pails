@@ -10,11 +10,10 @@ class BatchReceiveMessageRequest extends BaseRequest
     private $numOfMessages;
     private $waitSeconds;
 
-    public function __construct($numOfMessages, $waitSeconds = NULL)
+    public function __construct($numOfMessages, $waitSeconds = null)
     {
-        parent::__construct('get', NULL);
-
-        $this->queueName = NULL;
+        parent::__construct('get', null);
+        $this->queueName = null;
         $this->numOfMessages = $numOfMessages;
         $this->waitSeconds = $waitSeconds;
     }
@@ -42,17 +41,16 @@ class BatchReceiveMessageRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        $params = array("numOfMessages" => $this->numOfMessages);
-        if ($this->waitSeconds != NULL)
-        {
+        $params = ["numOfMessages" => $this->numOfMessages];
+        if ($this->waitSeconds != null) {
             $params["waitseconds"] = $this->waitSeconds;
         }
+
         return http_build_query($params);
     }
 }
-?>

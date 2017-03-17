@@ -10,7 +10,6 @@ class GetTopicAttributeRequest extends BaseRequest
     public function __construct($topicName)
     {
         parent::__construct('get', 'topics/' . $topicName);
-
         $this->topicName = $topicName;
     }
 
@@ -21,12 +20,11 @@ class GetTopicAttributeRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

@@ -6,5 +6,3 @@ use AliyunMNS\Exception\MnsException;
 class TopicAlreadyExistException extends MnsException
 {
 }
-
-?>

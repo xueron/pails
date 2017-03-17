@@ -12,7 +12,6 @@ class SubscribeRequest extends BaseRequest
     public function __construct(SubscriptionAttributes $attributes)
     {
         parent::__construct('put', 'topics/' . $attributes->getTopicName() . '/subscriptions/' . $attributes->getSubscriptionName());
-
         $this->attributes = $attributes;
     }
 
@@ -26,17 +25,16 @@ class SubscribeRequest extends BaseRequest
         $xmlWriter = new \XMLWriter;
         $xmlWriter->openMemory();
         $xmlWriter->startDocument("1.0", "UTF-8");
-        $xmlWriter->startElementNS(NULL, "Subscription", Constants::MNS_XML_NAMESPACE);
+        $xmlWriter->startElementNS(null, "Subscription", Constants::MNS_XML_NAMESPACE);
         $this->attributes->writeXML($xmlWriter);
         $xmlWriter->endElement();
         $xmlWriter->endDocument();
+
         return $xmlWriter->outputMemory();
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-
-?>

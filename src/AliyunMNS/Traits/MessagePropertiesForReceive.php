@@ -29,5 +29,3 @@ trait MessagePropertiesForReceive
         $this->receiptHandle = $message->getReceiptHandle();
     }
 }
-
-?>

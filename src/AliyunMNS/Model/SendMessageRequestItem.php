@@ -9,7 +9,7 @@ class SendMessageRequestItem
 {
     use MessagePropertiesForSend;
 
-    public function __construct($messageBody, $delaySeconds = NULL, $priority = NULL)
+    public function __construct($messageBody, $delaySeconds = null, $priority = null)
     {
         $this->messageBody = $messageBody;
         $this->delaySeconds = $delaySeconds;
@@ -23,5 +23,3 @@ class SendMessageRequestItem
         $xmlWriter->endElement();
     }
 }
-
-?>

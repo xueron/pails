@@ -12,13 +12,13 @@ class ListSubscriptionResponse extends BaseResponse
 
     public function __construct()
     {
-        $this->SubscriptionNames = array();
-        $this->nextMarker = NULL;
+        $this->SubscriptionNames = [];
+        $this->nextMarker = null;
     }
 
     public function isFinished()
     {
-        return $this->nextMarker == NULL;
+        return $this->nextMarker == null;
     }
 
     public function getSubscriptionNames()
@@ -36,43 +36,34 @@ class ListSubscriptionResponse extends BaseResponse
         $this->statusCode = $statusCode;
         if ($statusCode != 200) {
             $this->parseErrorResponse($statusCode, $content);
+
             return;
         }
-
-        $this->succeed = TRUE;
+        $this->succeed = true;
         $xmlReader = $this->loadXmlContent($content);
-
         try {
-            while ($xmlReader->read())
-            {
-                if ($xmlReader->nodeType == \XMLReader::ELEMENT)
-                {
+            while ($xmlReader->read()) {
+                if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
                     switch ($xmlReader->name) {
-                    case 'SubscriptionURL':
-                        $xmlReader->read();
-                        if ($xmlReader->nodeType == \XMLReader::TEXT)
-                        {
-                            $subscriptionName = $this->getSubscriptionNameFromSubscriptionURL($xmlReader->value);
-                            $this->SubscriptionNames[] = $subscriptionName;
-                        }
-                        break;
-                    case 'NextMarker':
-                        $xmlReader->read();
-                        if ($xmlReader->nodeType == \XMLReader::TEXT)
-                        {
-                            $this->nextMarker = $xmlReader->value;
-                        }
-                        break;
+                        case 'SubscriptionURL':
+                            $xmlReader->read();
+                            if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                                $subscriptionName = $this->getSubscriptionNameFromSubscriptionURL($xmlReader->value);
+                                $this->SubscriptionNames[] = $subscriptionName;
+                            }
+                            break;
+                        case 'NextMarker':
+                            $xmlReader->read();
+                            if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                                $this->nextMarker = $xmlReader->value;
+                            }
+                            break;
                     }
                 }
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new MnsException($statusCode, $e->getMessage(), $e);
-        }
-        catch (\Throwable $t)
-        {
+        } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
     }
@@ -80,41 +71,29 @@ class ListSubscriptionResponse extends BaseResponse
     private function getSubscriptionNameFromSubscriptionURL($subscriptionURL)
     {
         $pieces = explode("/", $subscriptionURL);
-        if (count($pieces) == 7)
-        {
+        if (count($pieces) == 7) {
             return $pieces[6];
         }
+
         return "";
     }
 
-    public function parseErrorResponse($statusCode, $content, MnsException $exception = NULL)
+    public function parseErrorResponse($statusCode, $content, MnsException $exception = null)
     {
-        $this->succeed = FALSE;
+        $this->succeed = false;
         $xmlReader = $this->loadXmlContent($content);
-
-        try
-        {
+        try {
             $result = XMLParser::parseNormalError($xmlReader);
-
             throw new MnsException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
-        }
-        catch (\Exception $e)
-        {
-            if ($exception != NULL)
-            {
+        } catch (\Exception $e) {
+            if ($exception != null) {
                 throw $exception;
-            }
-            elseif ($e instanceof MnsException)
-            {
+            } elseif ($e instanceof MnsException) {
                 throw $e;
-            }
-            else
-            {
+            } else {
                 throw new MnsException($statusCode, $e->getMessage());
             }
-        }
-        catch (\Throwable $t)
-        {
+        } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
     }

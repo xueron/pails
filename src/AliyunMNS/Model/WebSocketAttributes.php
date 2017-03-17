@@ -25,9 +25,7 @@ class WebSocketAttributes
 
     public function writeXML(\XMLWriter $xmlWriter)
     {
-        $jsonArray = array(Constants::IMPORTANCE_LEVEL => $this->importanceLevel);
+        $jsonArray = [Constants::IMPORTANCE_LEVEL => $this->importanceLevel];
         $xmlWriter->writeElement(Constants::WEBSOCKET, json_encode($jsonArray));
     }
 }
-
-?>

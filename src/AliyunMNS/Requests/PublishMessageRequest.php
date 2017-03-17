@@ -11,11 +11,10 @@ class PublishMessageRequest extends BaseRequest
 
     private $topicName;
 
-    public function __construct($messageBody, $messageTag = NULL, $messageAttributes = NULL)
+    public function __construct($messageBody, $messageTag = null, $messageAttributes = null)
     {
-        parent::__construct('post', NULL);
-
-        $this->topicName = NULL;
+        parent::__construct('post', null);
+        $this->topicName = null;
         $this->messageBody = $messageBody;
         $this->messageTag = $messageTag;
         $this->messageAttributes = $messageAttributes;
@@ -37,16 +36,16 @@ class PublishMessageRequest extends BaseRequest
         $xmlWriter = new \XMLWriter;
         $xmlWriter->openMemory();
         $xmlWriter->startDocument("1.0", "UTF-8");
-        $xmlWriter->startElementNS(NULL, "Message", Constants::MNS_XML_NAMESPACE);
+        $xmlWriter->startElementNS(null, "Message", Constants::MNS_XML_NAMESPACE);
         $this->writeMessagePropertiesForPublishXML($xmlWriter);
         $xmlWriter->endElement();
         $xmlWriter->endDocument();
+
         return $xmlWriter->outputMemory();
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

@@ -6,4 +6,3 @@ use AliyunMNS\Exception\MnsException;
 class SubscriptionNotExistException extends MnsException
 {
 }
-?>

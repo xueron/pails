@@ -10,15 +10,12 @@ class CreateTopicRequest extends BaseRequest
     private $topicName;
     private $attributes;
 
-    public function __construct($topicName, TopicAttributes $attributes = NULL)
+    public function __construct($topicName, TopicAttributes $attributes = null)
     {
         parent::__construct('put', 'topics/' . $topicName);
-
-        if ($attributes == NULL)
-        {
+        if ($attributes == null) {
             $attributes = new TopicAttributes;
         }
-
         $this->topicName = $topicName;
         $this->attributes = $attributes;
     }
@@ -38,16 +35,16 @@ class CreateTopicRequest extends BaseRequest
         $xmlWriter = new \XMLWriter;
         $xmlWriter->openMemory();
         $xmlWriter->startDocument("1.0", "UTF-8");
-        $xmlWriter->startElementNS(NULL, "Topic", Constants::MNS_XML_NAMESPACE);
+        $xmlWriter->startElementNS(null, "Topic", Constants::MNS_XML_NAMESPACE);
         $this->attributes->writeXML($xmlWriter);
         $xmlWriter->endElement();
         $xmlWriter->endDocument();
+
         return $xmlWriter->outputMemory();
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

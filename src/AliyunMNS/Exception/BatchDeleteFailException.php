@@ -14,11 +14,10 @@ class BatchDeleteFailException extends MnsException
 {
     protected $deleteMessageErrorItems;
 
-    public function __construct($code, $message, $previousException = NULL, $requestId = NULL, $hostId = NULL)
+    public function __construct($code, $message, $previousException = null, $requestId = null, $hostId = null)
     {
         parent::__construct($code, $message, $previousException, Constants::BATCH_DELETE_FAIL, $requestId, $hostId);
-
-        $this->deleteMessageErrorItems = array();
+        $this->deleteMessageErrorItems = [];
     }
 
     public function addDeleteMessageErrorItem(DeleteMessageErrorItem $item)
@@ -31,5 +30,3 @@ class BatchDeleteFailException extends MnsException
         return $this->deleteMessageErrorItems;
     }
 }
-
-?>

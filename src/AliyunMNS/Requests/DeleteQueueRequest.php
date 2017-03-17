@@ -22,12 +22,11 @@ class DeleteQueueRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

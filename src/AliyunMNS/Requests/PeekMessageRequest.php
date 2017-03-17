@@ -11,7 +11,6 @@ class PeekMessageRequest extends BaseRequest
     public function __construct($queueName)
     {
         parent::__construct('get', 'queues/' . $queueName . '/messages?peekonly=true');
-
         $this->queueName = $queueName;
     }
 
@@ -22,12 +21,11 @@ class PeekMessageRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

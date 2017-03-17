@@ -12,7 +12,6 @@ class DeleteMessageRequest extends BaseRequest
     public function __construct($queueName, $receiptHandle)
     {
         parent::__construct('delete', 'queues/' . $queueName . '/messages');
-
         $this->queueName = $queueName;
         $this->receiptHandle = $receiptHandle;
     }
@@ -29,12 +28,11 @@ class DeleteMessageRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return http_build_query(array("ReceiptHandle" => $this->receiptHandle));
+        return http_build_query(["ReceiptHandle" => $this->receiptHandle]);
     }
 }
-?>

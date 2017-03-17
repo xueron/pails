@@ -87,15 +87,16 @@ class Topic extends Injectable
     /**
      * 接收消息，用于写 HTTP Endpoint
      *
-     * @return array|bool|\SimpleXMLElement|\stdClass|string
      * @throws \Pails\Exception
+     *
+     * @return array|bool|\SimpleXMLElement|\stdClass|string
      */
     public function receive()
     {
         if ($this->verify($this->getStringToSign(), $this->getSignature(), $this->getPublicKey())) {
             return $this->getData();
         }
-        throw Exception::serverException("MSN message verify failed");
+        throw Exception::serverException('MSN message verify failed');
     }
 
     /**
@@ -133,13 +134,14 @@ class Topic extends Injectable
         $tmpHeaders = [];
         $headers = $this->request->getHeaders();
         foreach ($headers as $key => $value) {
+            $key = strtolower($key);
             if (0 === strpos($key, 'x-mns-')) {
                 $tmpHeaders[$key] = $value;
             }
         }
         ksort($tmpHeaders);
         $canonicalizedMNSHeaders = implode("\n", array_map(function ($v, $k) {
-            return $k . ":" . $v;
+            return $k . ':' . $v;
         }, $tmpHeaders, array_keys($tmpHeaders)));
 
         return $canonicalizedMNSHeaders;
@@ -151,7 +153,7 @@ class Topic extends Injectable
     private function getStringToSign()
     {
         $method = $this->request->getMethod();
-        $contentMd5 = $this->request->getHeader('Content-md5');
+        $contentMd5 = $this->request->getHeader('Content-Md5');
         $contentType = $this->request->getHeader('Content-Type');
         $date = $this->request->getHeader('Date');
         $canonicalizedResource = $this->request->getURI();

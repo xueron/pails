@@ -43,6 +43,7 @@ class Topic
     {
         $request = new SetTopicAttributeRequest($this->topicName, $attributes);
         $response = new SetTopicAttributeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -50,6 +51,7 @@ class Topic
     {
         $request = new GetTopicAttributeRequest($this->topicName);
         $response = new GetTopicAttributeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -65,12 +67,9 @@ class Topic
 
     public function generateSmsEndpoint($phone = null)
     {
-        if ($phone)
-        {
+        if ($phone) {
             return "sms:directsms:" . $phone;
-        }
-        else
-        {
+        } else {
             return "sms:directsms:anonymous";
         }
     }
@@ -84,6 +83,7 @@ class Topic
     {
         $request->setTopicName($this->topicName);
         $response = new PublishMessageResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -92,6 +92,7 @@ class Topic
         $attributes->setTopicName($this->topicName);
         $request = new SubscribeRequest($attributes);
         $response = new SubscribeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -99,6 +100,7 @@ class Topic
     {
         $request = new UnsubscribeRequest($this->topicName, $subscriptionName);
         $response = new UnsubscribeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -106,6 +108,7 @@ class Topic
     {
         $request = new GetSubscriptionAttributeRequest($this->topicName, $subscriptionName);
         $response = new GetSubscriptionAttributeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
@@ -114,15 +117,15 @@ class Topic
         $attributes->setTopicName($this->topicName);
         $request = new SetSubscriptionAttributeRequest($attributes);
         $response = new SetSubscriptionAttributeResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 
-    public function listSubscription($retNum = NULL, $prefix = NULL, $marker = NULL)
+    public function listSubscription($retNum = null, $prefix = null, $marker = null)
     {
         $request = new ListSubscriptionRequest($this->topicName, $retNum, $prefix, $marker);
         $response = new ListSubscriptionResponse();
+
         return $this->client->sendRequest($request, $response);
     }
 }
-
-?>
