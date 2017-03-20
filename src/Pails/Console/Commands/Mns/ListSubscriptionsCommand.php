@@ -58,6 +58,7 @@ class ListSubscriptionsCommand extends Command
                     $attr = $topic->getSubscriptionAttribute($subscriptionName)->getSubscriptionAttributes();
 
                     $subscription['endpoint'] = $attr->getEndpoint();
+                    $subscription['filterTag'] = $attr->getFilterTag();
                     $subscription['strategy'] = $attr->getStrategy();
                     $subscription['contentFormat'] = $attr->getContentFormat();
                     $subscription['createTime'] = date('Y-m-d H:i:s', $attr->getCreateTime());
@@ -67,7 +68,7 @@ class ListSubscriptionsCommand extends Command
             }
 
 
-            $subscriptionHeaders = ['Name', 'Endpoint', 'Strategy', 'ContentFormat', 'CreateTime', 'UpdateTime'];
+            $subscriptionHeaders = ['Name', 'Endpoint', 'FilterTag', 'Strategy', 'ContentFormat', 'CreateTime', 'UpdateTime'];
             $this->line("List of Subscriptions for Topic: $topicName");
             $this->table($subscriptionHeaders, $data);
         } catch (\Exception $e) {
