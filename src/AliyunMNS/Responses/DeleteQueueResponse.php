@@ -15,24 +15,23 @@ class DeleteQueueResponse extends BaseResponse
     {
         $this->statusCode = $statusCode;
         if ($statusCode == 204) {
-            $this->succeed = TRUE;
+            $this->succeed = true;
         } else {
             $this->parseErrorResponse($statusCode, $content);
         }
     }
 
-    public function parseErrorResponse($statusCode, $content, MnsException $exception = NULL)
+    public function parseErrorResponse($statusCode, $content, MnsException $exception = null)
     {
-        $this->succeed = FALSE;
+        $this->succeed = false;
         $xmlReader = $this->loadXmlContent($content);
-
         try {
             $result = XMLParser::parseNormalError($xmlReader);
             throw new MnsException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
         } catch (\Exception $e) {
-            if ($exception != NULL) {
+            if ($exception != null) {
                 throw $exception;
-            } elseif($e instanceof MnsException) {
+            } elseif ($e instanceof MnsException) {
                 throw $e;
             } else {
                 throw new MnsException($statusCode, $e->getMessage());
@@ -42,5 +41,3 @@ class DeleteQueueResponse extends BaseResponse
         }
     }
 }
-
-?>

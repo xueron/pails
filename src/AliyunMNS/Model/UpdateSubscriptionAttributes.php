@@ -13,14 +13,13 @@ class UpdateSubscriptionAttributes
     private $topicName;
 
     public function __construct(
-        $subscriptionName = NULL,
-        $strategy = NULL)
+        $subscriptionName = null,
+        $strategy = null)
     {
         $this->subscriptionName = $subscriptionName;
-
         $this->strategy = $strategy;
     }
-    
+
     public function getStrategy()
     {
         return $this->strategy;
@@ -48,11 +47,8 @@ class UpdateSubscriptionAttributes
 
     public function writeXML(\XMLWriter $xmlWriter)
     {
-        if ($this->strategy != NULL)
-        {
+        if ($this->strategy != null) {
             $xmlWriter->writeElement(Constants::STRATEGY, $this->strategy);
         }
     }
 }
-
-?>

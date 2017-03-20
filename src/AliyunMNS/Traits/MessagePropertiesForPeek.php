@@ -59,5 +59,3 @@ trait MessagePropertiesForPeek
         $this->priority = $message->getPriority();
     }
 }
-
-?>

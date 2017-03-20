@@ -12,7 +12,7 @@ class Config
     public function __construct()
     {
         // $this->maxAttempts = 3;
-        $this->proxy = NULL;
+        $this->proxy = null;
         $this->requestTimeout = 35; // 35 seconds
         $this->connectTimeout = 3;  // 3 seconds
         $this->expectContinue = false;
@@ -29,7 +29,6 @@ class Config
         $this->maxAttempts = $maxAttempts;
     }
     */
-
     public function getProxy()
     {
         return $this->proxy;
@@ -70,5 +69,3 @@ class Config
         $this->expectContinue = $expectContinue;
     }
 }
-
-?>

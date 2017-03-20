@@ -17,7 +17,7 @@ class MailAttributes
     public $isHtml;
 
     public function __construct(
-        $subject, $accountName, $addressType=0, $replyToAddress=false, $isHtml = false)
+        $subject, $accountName, $addressType = 0, $replyToAddress = false, $isHtml = false)
     {
         $this->subject = $subject;
         $this->accountName = $accountName;
@@ -78,51 +78,34 @@ class MailAttributes
 
     public function writeXML(\XMLWriter $xmlWriter)
     {
-        $jsonArray = array();
-        if ($this->subject !== NULL)
-        {
+        $jsonArray = [];
+        if ($this->subject !== null) {
             $jsonArray[Constants::SUBJECT] = $this->subject;
         }
-        if ($this->accountName !== NULL)
-        {
+        if ($this->accountName !== null) {
             $jsonArray[Constants::ACCOUNT_NAME] = $this->accountName;
         }
-        if ($this->addressType !== NULL)
-        {
+        if ($this->addressType !== null) {
             $jsonArray[Constants::ADDRESS_TYPE] = $this->addressType;
-        }
-        else
-        {
+        } else {
             $jsonArray[Constants::ADDRESS_TYPE] = 0;
         }
-        if ($this->replyToAddress !== NULL)
-        {
-            if ($this->replyToAddress === TRUE)
-            {
+        if ($this->replyToAddress !== null) {
+            if ($this->replyToAddress === true) {
                 $jsonArray[Constants::REPLY_TO_ADDRESS] = "1";
-            }
-            else
-            {
+            } else {
                 $jsonArray[Constants::REPLY_TO_ADDRESS] = "0";
             }
         }
-        if ($this->isHtml !== NULL)
-        {
-            if ($this->isHtml === TRUE)
-            {
+        if ($this->isHtml !== null) {
+            if ($this->isHtml === true) {
                 $jsonArray[Constants::IS_HTML] = "1";
-            }
-            else
-            {
+            } else {
                 $jsonArray[Constants::IS_HTML] = "0";
             }
         }
-
-        if (!empty($jsonArray))
-        {
+        if (!empty($jsonArray)) {
             $xmlWriter->writeElement(Constants::DIRECT_MAIL, json_encode($jsonArray));
         }
     }
 }
-
-?>

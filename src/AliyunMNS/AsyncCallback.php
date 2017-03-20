@@ -25,5 +25,3 @@ class AsyncCallback
         return call_user_func($this->failedCallback, $e);
     }
 }
-
-?>

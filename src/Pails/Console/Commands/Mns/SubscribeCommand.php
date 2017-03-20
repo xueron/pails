@@ -61,7 +61,7 @@ class SubscribeCommand extends Command
             $endpoint = $topic->generateQueueEndpoint($endpoint);
         }
 
-        $attrs = new SubscriptionAttributes($name, $endpoint, $strategy, $contentFormat);
+        $attrs = new SubscriptionAttributes($name, $endpoint, $strategy, $contentFormat, $filter);
         try {
             $res = $topic->subscribe($attrs);
             if ($res->isSucceed()) {

@@ -12,7 +12,7 @@ class TopicAttributes
 {
     private $maximumMessageSize;
     private $messageRetentionPeriod;
-    private $LoggingEnabled;
+    private $loggingEnabled;
 
     # the following attributes cannot be changed
     private $topicName;
@@ -20,17 +20,16 @@ class TopicAttributes
     private $lastModifyTime;
 
     public function __construct(
-        $maximumMessageSize = NULL,
-        $messageRetentionPeriod = NULL,
-        $topicName = NULL,
-        $createTime = NULL,
-        $lastModifyTime = NULL,
-        $LoggingEnabled = NULL)
+        $maximumMessageSize = null,
+        $messageRetentionPeriod = null,
+        $topicName = null,
+        $createTime = null,
+        $lastModifyTime = null,
+        $loggingEnabled = null)
     {
         $this->maximumMessageSize = $maximumMessageSize;
         $this->messageRetentionPeriod = $messageRetentionPeriod;
-        $this->loggingEnabled = $LoggingEnabled;
-
+        $this->loggingEnabled = $loggingEnabled;
         $this->topicName = $topicName;
         $this->createTime = $createTime;
         $this->lastModifyTime = $lastModifyTime;
@@ -83,88 +82,72 @@ class TopicAttributes
 
     public function writeXML(\XMLWriter $xmlWriter)
     {
-        if ($this->maximumMessageSize != NULL)
-        {
+        if ($this->maximumMessageSize != null) {
             $xmlWriter->writeElement(Constants::MAXIMUM_MESSAGE_SIZE, $this->maximumMessageSize);
         }
-        if ($this->messageRetentionPeriod != NULL)
-        {
+        if ($this->messageRetentionPeriod != null) {
             $xmlWriter->writeElement(Constants::MESSAGE_RETENTION_PERIOD, $this->messageRetentionPeriod);
         }
-        if ($this->loggingEnabled !== NULL)
-        {
+        if ($this->loggingEnabled !== null) {
             $xmlWriter->writeElement(Constants::LOGGING_ENABLED, $this->loggingEnabled ? "True" : "False");
         }
     }
 
     static public function fromXML(\XMLReader $xmlReader)
     {
-        $maximumMessageSize = NULL;
-        $messageRetentionPeriod = NULL;
-        $topicName = NULL;
-        $createTime = NULL;
-        $lastModifyTime = NULL;
-        $loggingEnabled = NULL;
-
-        while ($xmlReader->read())
-        {
-            if ($xmlReader->nodeType == \XMLReader::ELEMENT)
-            {
+        $maximumMessageSize = null;
+        $messageRetentionPeriod = null;
+        $topicName = null;
+        $createTime = null;
+        $lastModifyTime = null;
+        $loggingEnabled = null;
+        while ($xmlReader->read()) {
+            if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
                 switch ($xmlReader->name) {
-                case 'MaximumMessageSize':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $maximumMessageSize = $xmlReader->value;
-                    }
-                    break;
-                case 'MessageRetentionPeriod':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $messageRetentionPeriod = $xmlReader->value;
-                    }
-                    break;
-                case 'TopicName':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $topicName = $xmlReader->value;
-                    }
-                    break;
-                case 'CreateTime':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $createTime = $xmlReader->value;
-                    }
-                    break;
-                case 'LastModifyTime':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $lastModifyTime = $xmlReader->value;
-                    }
-                    break;
-                case 'LoggingEnabled':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $loggingEnabled = $xmlReader->value;
-                        if ($loggingEnabled == "True")
-                        {
-                            $loggingEnabled = True;
+                    case 'MaximumMessageSize':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $maximumMessageSize = $xmlReader->value;
                         }
-                        else
-                        {
-                            $loggingEnabled = False;
+                        break;
+                    case 'MessageRetentionPeriod':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $messageRetentionPeriod = $xmlReader->value;
                         }
-                    }
-                    break;
+                        break;
+                    case 'TopicName':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $topicName = $xmlReader->value;
+                        }
+                        break;
+                    case 'CreateTime':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $createTime = $xmlReader->value;
+                        }
+                        break;
+                    case 'LastModifyTime':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $lastModifyTime = $xmlReader->value;
+                        }
+                        break;
+                    case 'LoggingEnabled':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $loggingEnabled = $xmlReader->value;
+                            if ($loggingEnabled == "True") {
+                                $loggingEnabled = true;
+                            } else {
+                                $loggingEnabled = false;
+                            }
+                        }
+                        break;
                 }
             }
         }
-
         $attributes = new TopicAttributes(
             $maximumMessageSize,
             $messageRetentionPeriod,
@@ -172,8 +155,8 @@ class TopicAttributes
             $createTime,
             $lastModifyTime,
             $loggingEnabled);
+
         return $attributes;
     }
 }
 
-?>

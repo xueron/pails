@@ -22,11 +22,10 @@ class PublishMessageResponse extends BaseResponse
     {
         $this->statusCode = $statusCode;
         if ($statusCode == 201) {
-            $this->succeed = TRUE;
+            $this->succeed = true;
         } else {
             $this->parseErrorResponse($statusCode, $content);
         }
-
         $xmlReader = $this->loadXmlContent($content);
         try {
             $this->readMessageIdAndMD5XML($xmlReader);
@@ -35,32 +34,28 @@ class PublishMessageResponse extends BaseResponse
         } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
-
     }
 
-    public function parseErrorResponse($statusCode, $content, MnsException $exception = NULL)
+    public function parseErrorResponse($statusCode, $content, MnsException $exception = null)
     {
-        $this->succeed = FALSE;
+        $this->succeed = false;
         $xmlReader = $this->loadXmlContent($content);
         try {
             $result = XMLParser::parseNormalError($xmlReader);
-            if ($result['Code'] == Constants::TOPIC_NOT_EXIST)
-            {
+            if ($result['Code'] == Constants::TOPIC_NOT_EXIST) {
                 throw new TopicNotExistException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
             }
-            if ($result['Code'] == Constants::INVALID_ARGUMENT)
-            {
+            if ($result['Code'] == Constants::INVALID_ARGUMENT) {
                 throw new InvalidArgumentException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
             }
-            if ($result['Code'] == Constants::MALFORMED_XML)
-            {
+            if ($result['Code'] == Constants::MALFORMED_XML) {
                 throw new MalformedXMLException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
             }
             throw new MnsException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
         } catch (\Exception $e) {
-            if ($exception != NULL) {
+            if ($exception != null) {
                 throw $exception;
-            } elseif($e instanceof MnsException) {
+            } elseif ($e instanceof MnsException) {
                 throw $e;
             } else {
                 throw new MnsException($statusCode, $e->getMessage());
@@ -70,5 +65,3 @@ class PublishMessageResponse extends BaseResponse
         }
     }
 }
-
-?>

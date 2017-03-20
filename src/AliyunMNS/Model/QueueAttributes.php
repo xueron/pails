@@ -15,7 +15,7 @@ class QueueAttributes
     private $messageRetentionPeriod;
     private $visibilityTimeout;
     private $pollingWaitSeconds;
-    private $LoggingEnabled;
+    private $loggingEnabled;
 
     # the following attributes cannot be changed
     private $queueName;
@@ -26,26 +26,25 @@ class QueueAttributes
     private $delayMessages;
 
     public function __construct(
-        $delaySeconds = NULL,
-        $maximumMessageSize = NULL,
-        $messageRetentionPeriod = NULL,
-        $visibilityTimeout = NULL,
-        $pollingWaitSeconds = NULL,
-        $queueName = NULL,
-        $createTime = NULL,
-        $lastModifyTime = NULL,
-        $activeMessages = NULL,
-        $inactiveMessages = NULL,
-        $delayMessages = NULL,
-        $LoggingEnabled = NULL)
+        $delaySeconds = null,
+        $maximumMessageSize = null,
+        $messageRetentionPeriod = null,
+        $visibilityTimeout = null,
+        $pollingWaitSeconds = null,
+        $queueName = null,
+        $createTime = null,
+        $lastModifyTime = null,
+        $activeMessages = null,
+        $inactiveMessages = null,
+        $delayMessages = null,
+        $loggingEnabled = null)
     {
         $this->delaySeconds = $delaySeconds;
         $this->maximumMessageSize = $maximumMessageSize;
         $this->messageRetentionPeriod = $messageRetentionPeriod;
         $this->visibilityTimeout = $visibilityTimeout;
         $this->pollingWaitSeconds = $pollingWaitSeconds;
-        $this->loggingEnabled = $LoggingEnabled;
-
+        $this->loggingEnabled = $loggingEnabled;
         $this->queueName = $queueName;
         $this->createTime = $createTime;
         $this->lastModifyTime = $lastModifyTime;
@@ -146,148 +145,123 @@ class QueueAttributes
 
     public function writeXML(\XMLWriter $xmlWriter)
     {
-        if ($this->delaySeconds != NULL)
-        {
+        if ($this->delaySeconds != null) {
             $xmlWriter->writeElement(Constants::DELAY_SECONDS, $this->delaySeconds);
         }
-        if ($this->maximumMessageSize != NULL)
-        {
+        if ($this->maximumMessageSize != null) {
             $xmlWriter->writeElement(Constants::MAXIMUM_MESSAGE_SIZE, $this->maximumMessageSize);
         }
-        if ($this->messageRetentionPeriod != NULL)
-        {
+        if ($this->messageRetentionPeriod != null) {
             $xmlWriter->writeElement(Constants::MESSAGE_RETENTION_PERIOD, $this->messageRetentionPeriod);
         }
-        if ($this->visibilityTimeout != NULL)
-        {
+        if ($this->visibilityTimeout != null) {
             $xmlWriter->writeElement(Constants::VISIBILITY_TIMEOUT, $this->visibilityTimeout);
         }
-        if ($this->pollingWaitSeconds != NULL)
-        {
+        if ($this->pollingWaitSeconds != null) {
             $xmlWriter->writeElement(Constants::POLLING_WAIT_SECONDS, $this->pollingWaitSeconds);
         }
-        if ($this->loggingEnabled !== NULL)
-        {
+        if ($this->loggingEnabled !== null) {
             $xmlWriter->writeElement(Constants::LOGGING_ENABLED, $this->loggingEnabled ? "True" : "False");
         }
     }
 
     static public function fromXML(\XMLReader $xmlReader)
     {
-        $delaySeconds = NULL;
-        $maximumMessageSize = NULL;
-        $messageRetentionPeriod = NULL;
-        $visibilityTimeout = NULL;
-        $pollingWaitSeconds = NULL;
-        $queueName = NULL;
-        $createTime = NULL;
-        $lastModifyTime = NULL;
-        $activeMessages = NULL;
-        $inactiveMessages = NULL;
-        $delayMessages = NULL;
-        $loggingEnabled = NULL;
-
-        while ($xmlReader->read())
-        {
-            if ($xmlReader->nodeType == \XMLReader::ELEMENT)
-            {
+        $delaySeconds = null;
+        $maximumMessageSize = null;
+        $messageRetentionPeriod = null;
+        $visibilityTimeout = null;
+        $pollingWaitSeconds = null;
+        $queueName = null;
+        $createTime = null;
+        $lastModifyTime = null;
+        $activeMessages = null;
+        $inactiveMessages = null;
+        $delayMessages = null;
+        $loggingEnabled = null;
+        while ($xmlReader->read()) {
+            if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
                 switch ($xmlReader->name) {
-                case 'DelaySeconds':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $delaySeconds = $xmlReader->value;
-                    }
-                    break;
-                case 'MaximumMessageSize':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $maximumMessageSize = $xmlReader->value;
-                    }
-                    break;
-                case 'MessageRetentionPeriod':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $messageRetentionPeriod = $xmlReader->value;
-                    }
-                    break;
-                case 'VisibilityTimeout':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $visibilityTimeout = $xmlReader->value;
-                    }
-                    break;
-                case 'PollingWaitSeconds':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $pollingWaitSeconds = $xmlReader->value;
-                    }
-                    break;
-                case 'QueueName':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $queueName = $xmlReader->value;
-                    }
-                    break;
-                case 'CreateTime':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $createTime = $xmlReader->value;
-                    }
-                    break;
-                case 'LastModifyTime':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $lastModifyTime = $xmlReader->value;
-                    }
-                    break;
-                case 'ActiveMessages':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $activeMessages = $xmlReader->value;
-                    }
-                    break;
-                case 'InactiveMessages':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $inactiveMessages = $xmlReader->value;
-                    }
-                    break;
-                case 'DelayMessages':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $delayMessages = $xmlReader->value;
-                    }
-                    break;
-                case 'LoggingEnabled':
-                    $xmlReader->read();
-                    if ($xmlReader->nodeType == \XMLReader::TEXT)
-                    {
-                        $loggingEnabled = $xmlReader->value;
-                        if ($loggingEnabled == "True")
-                        {
-                            $loggingEnabled = True;
+                    case 'DelaySeconds':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $delaySeconds = $xmlReader->value;
                         }
-                        else
-                        {
-                            $loggingEnabled = False;
+                        break;
+                    case 'MaximumMessageSize':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $maximumMessageSize = $xmlReader->value;
                         }
-                    }
-                    break;
+                        break;
+                    case 'MessageRetentionPeriod':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $messageRetentionPeriod = $xmlReader->value;
+                        }
+                        break;
+                    case 'VisibilityTimeout':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $visibilityTimeout = $xmlReader->value;
+                        }
+                        break;
+                    case 'PollingWaitSeconds':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $pollingWaitSeconds = $xmlReader->value;
+                        }
+                        break;
+                    case 'QueueName':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $queueName = $xmlReader->value;
+                        }
+                        break;
+                    case 'CreateTime':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $createTime = $xmlReader->value;
+                        }
+                        break;
+                    case 'LastModifyTime':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $lastModifyTime = $xmlReader->value;
+                        }
+                        break;
+                    case 'ActiveMessages':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $activeMessages = $xmlReader->value;
+                        }
+                        break;
+                    case 'InactiveMessages':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $inactiveMessages = $xmlReader->value;
+                        }
+                        break;
+                    case 'DelayMessages':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $delayMessages = $xmlReader->value;
+                        }
+                        break;
+                    case 'LoggingEnabled':
+                        $xmlReader->read();
+                        if ($xmlReader->nodeType == \XMLReader::TEXT) {
+                            $loggingEnabled = $xmlReader->value;
+                            if ($loggingEnabled == "True") {
+                                $loggingEnabled = true;
+                            } else {
+                                $loggingEnabled = false;
+                            }
+                        }
+                        break;
                 }
             }
         }
-
         $attributes = new QueueAttributes(
             $delaySeconds,
             $maximumMessageSize,
@@ -301,8 +275,7 @@ class QueueAttributes
             $inactiveMessages,
             $delayMessages,
             $loggingEnabled);
+
         return $attributes;
     }
 }
-
-?>

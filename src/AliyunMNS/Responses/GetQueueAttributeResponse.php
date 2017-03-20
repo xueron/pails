@@ -15,7 +15,7 @@ class GetQueueAttributeResponse extends BaseResponse
 
     public function __construct()
     {
-        $this->attributes = NULL;
+        $this->attributes = null;
     }
 
     public function getQueueAttributes()
@@ -27,13 +27,11 @@ class GetQueueAttributeResponse extends BaseResponse
     {
         $this->statusCode = $statusCode;
         if ($statusCode == 200) {
-            $this->succeed = TRUE;
+            $this->succeed = true;
         } else {
             $this->parseErrorResponse($statusCode, $content);
         }
-
         $xmlReader = $this->loadXmlContent($content);
-
         try {
             $this->attributes = QueueAttributes::fromXML($xmlReader);
         } catch (\Exception $e) {
@@ -41,25 +39,22 @@ class GetQueueAttributeResponse extends BaseResponse
         } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
-
     }
 
-    public function parseErrorResponse($statusCode, $content, MnsException $exception = NULL)
+    public function parseErrorResponse($statusCode, $content, MnsException $exception = null)
     {
-        $this->succeed = FALSE;
+        $this->succeed = false;
         $xmlReader = $this->loadXmlContent($content);
-
         try {
             $result = XMLParser::parseNormalError($xmlReader);
-            if ($result['Code'] == Constants::QUEUE_NOT_EXIST)
-            {
+            if ($result['Code'] == Constants::QUEUE_NOT_EXIST) {
                 throw new QueueNotExistException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
             }
             throw new MnsException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
         } catch (\Exception $e) {
-            if ($exception != NULL) {
+            if ($exception != null) {
                 throw $exception;
-            } elseif($e instanceof MnsException) {
+            } elseif ($e instanceof MnsException) {
                 throw $e;
             } else {
                 throw new MnsException($statusCode, $e->getMessage());
@@ -69,5 +64,3 @@ class GetQueueAttributeResponse extends BaseResponse
         }
     }
 }
-
-?>

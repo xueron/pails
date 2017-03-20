@@ -10,7 +10,6 @@ class GetQueueAttributeRequest extends BaseRequest
     public function __construct($queueName)
     {
         parent::__construct('get', 'queues/' . $queueName);
-
         $this->queueName = $queueName;
     }
 
@@ -21,12 +20,11 @@ class GetQueueAttributeRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return NULL;
+        return null;
     }
 }
-?>

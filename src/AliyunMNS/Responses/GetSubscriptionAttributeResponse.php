@@ -14,7 +14,7 @@ class GetSubscriptionAttributeResponse extends BaseResponse
 
     public function __construct()
     {
-        $this->attributes = NULL;
+        $this->attributes = null;
     }
 
     public function getSubscriptionAttributes()
@@ -25,64 +25,41 @@ class GetSubscriptionAttributeResponse extends BaseResponse
     public function parseResponse($statusCode, $content)
     {
         $this->statusCode = $statusCode;
-        if ($statusCode == 200)
-        {
-            $this->succeed = TRUE;
-        }
-        else
-        {
+        if ($statusCode == 200) {
+            $this->succeed = true;
+        } else {
             $this->parseErrorResponse($statusCode, $content);
         }
-
         $xmlReader = $this->loadXmlContent($content);
-
-        try
-        {
+        try {
             $this->attributes = SubscriptionAttributes::fromXML($xmlReader);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new MnsException($statusCode, $e->getMessage(), $e);
-        }
-        catch (\Throwable $t)
-        {
+        } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
     }
 
-    public function parseErrorResponse($statusCode, $content, MnsException $exception = NULL)
+    public function parseErrorResponse($statusCode, $content, MnsException $exception = null)
     {
-        $this->succeed = FALSE;
+        $this->succeed = false;
         $xmlReader = $this->loadXmlContent($content);
-
-        try
-        {
+        try {
             $result = XMLParser::parseNormalError($xmlReader);
-            if ($result['Code'] == Constants::SUBSCRIPTION_NOT_EXIST)
-            {
+            if ($result['Code'] == Constants::SUBSCRIPTION_NOT_EXIST) {
                 throw new SubscriptionNotExistException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
             }
             throw new MnsException($statusCode, $result['Message'], $exception, $result['Code'], $result['RequestId'], $result['HostId']);
-        }
-        catch (\Exception $e)
-        {
-            if ($exception != NULL)
-            {
+        } catch (\Exception $e) {
+            if ($exception != null) {
                 throw $exception;
-            }
-            elseif ($e instanceof MnsException)
-            {
+            } elseif ($e instanceof MnsException) {
                 throw $e;
-            }
-            else
-            {
+            } else {
                 throw new MnsException($statusCode, $e->getMessage());
             }
-        }
-        catch (\Throwable $t)
-        {
+        } catch (\Throwable $t) {
             throw new MnsException($statusCode, $t->getMessage());
         }
     }
 }
-?>

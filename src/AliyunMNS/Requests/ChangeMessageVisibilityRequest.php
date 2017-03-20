@@ -13,7 +13,6 @@ class ChangeMessageVisibilityRequest extends BaseRequest
     public function __construct($queueName, $receiptHandle, $visibilityTimeout)
     {
         parent::__construct('put', 'queues/' . $queueName . '/messages');
-
         $this->queueName = $queueName;
         $this->receiptHandle = $receiptHandle;
         $this->visibilityTimeout = $visibilityTimeout;
@@ -36,12 +35,11 @@ class ChangeMessageVisibilityRequest extends BaseRequest
 
     public function generateBody()
     {
-        return NULL;
+        return null;
     }
 
     public function generateQueryString()
     {
-        return http_build_query(array("receiptHandle" => $this->receiptHandle, "visibilityTimeout" => $this->visibilityTimeout));
+        return http_build_query(["receiptHandle" => $this->receiptHandle, "visibilityTimeout" => $this->visibilityTimeout]);
     }
 }
-?>
