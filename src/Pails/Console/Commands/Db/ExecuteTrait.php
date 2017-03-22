@@ -2,8 +2,6 @@
 /**
  * ExecuteTrait.php
  */
-
-
 namespace Pails\Console\Commands\Db;
 
 use Pails\InjectableTrait;
@@ -17,20 +15,25 @@ trait ExecuteTrait
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // set env through argument --env
-        $env = $this->di->environment();
-        if ($input->hasOption('env')) {
+        if ($input->getOption('env')) {
             $env = $input->getOption('env');
+        } else {
+            $env = $this->di->environment();
         }
 
-        putenv("APP_ENV=$env");
+        //
         if ($this->getDefinition()->hasOption('environment')) {
-            $input->setOption('environment', $env);
+            if (!($phinxEnv = $input->getOption('environment'))) {
+                $input->setOption('environment', $env);
+            } else {
+                $env = $phinxEnv;
+            }
         }
+        putenv("APP_ENV=$env");
 
         if ($this->getDefinition()->hasOption('configuration')) {
             $input->setOption('configuration', $this->di->configPath() . '/database.yml');
         }
-
         parent::execute($input, $output);
     }
 }
