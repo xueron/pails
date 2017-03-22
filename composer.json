@@ -22,9 +22,10 @@
   ],
   "require": {
     "php": ">=7.0",
+    "ext-phalcon": "^3.0.0",
     "ext-mbstring": "*",
     "ext-openssl": "*",
-    "ext-phalcon": "^3.0.0",
+    "ext-redis": "*",
     "aliyuncs/oss-sdk-php": "^2.2",
     "doctrine/inflector": "^1.1",
     "guzzlehttp/guzzle": "^6.2",
