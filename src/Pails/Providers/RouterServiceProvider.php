@@ -19,6 +19,7 @@ class RouterServiceProvider extends AbstractServiceProvider
         $this->di->setShared(
             $this->serviceName,
             function () {
+                /* @var \Pails\Container $this */
                 // 定义注解路由
                 $router = new Annotations(false);
                 $router->removeExtraSlashes(true);

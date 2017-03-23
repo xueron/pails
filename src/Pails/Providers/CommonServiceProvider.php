@@ -69,6 +69,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'oss',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('oss.enable', false)) {
                     throw new \LogicException('OSS is not enabled');
                 }
@@ -87,6 +88,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'mns',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('mns.enable', false)) {
                     throw new \LogicException('MNS is not enabled');
                 }
@@ -116,6 +118,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'ossFs',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('oss.enable', false)) {
                     throw new \LogicException('OSS is not enabled');
                 }
@@ -145,6 +148,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'filesystem',
             function () {
+                /* @var \Pails\Container $this */
                 $fsList = [
                     'local' => $this['localFs'],
                 ];
@@ -160,6 +164,7 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'redis',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('redis.enable', false)) {
                     throw new \LogicException('redis is not enabled');
                 }

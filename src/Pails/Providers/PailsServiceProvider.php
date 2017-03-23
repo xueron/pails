@@ -35,6 +35,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'annotations',
             function () {
+                /* @var \Pails\Container $this */
                 if ($this->environment() == 'production') {
                     $annotationsDir = $this->tmpPath() . '/cache/routes/';
                     if (!file_exists($annotationsDir)) {
@@ -54,6 +55,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'fileCache',
             function () {
+                /* @var \Pails\Container $this */
                 $frontCache = new DataFrontend([
                     'lifetime' => $this['config']->get('cache.file.lifetime', 86400),
                 ]);
@@ -78,6 +80,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'redisCache',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('cache.redis.enable', false)) {
                     throw new \LogicException('redis cache is not enabled');
                 }
@@ -107,6 +110,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'memcachedCache',
             function () {
+                /* @var \Pails\Container $this */
                 if (!$this['config']->get('cache.memcache.enable', false)) {
                     throw new \LogicException('memcache cache is not enabled');
                 }
@@ -140,6 +144,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'cache',
             function () {
+                /* @var \Pails\Container $this */
                 $backends = [
                     $this['fileCache'],
                 ];
@@ -175,6 +180,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->set(
             'modelsCache',
             function () {
+                /* @var \Pails\Container $this */
                 $frontCache = new DataFrontend([
                     'lifetime' => $this['config']->get('app.model.cache.lifetime', 3600),
                 ]);
@@ -198,6 +204,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->set(
             'modelsMetadata',
             function () {
+                /* @var \Pails\Container $this */
                 if ($this->environment() == 'production') {
                     $metaDataDir = $this->tmpPath() . '/cache/metadata';
                     if (!file_exists($metaDataDir)) {
@@ -217,6 +224,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'crypt',
             function () {
+                /* @var \Pails\Container $this */
                 $crypt = new Crypt();
                 $crypt->setKey($this['config']->get('app.key', '#1dj8$=dp?.ak//j1V$'));
 
@@ -243,6 +251,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'logger',
             function () {
+                /* @var \Pails\Container $this */
                 $date = date('Y-m-d');
                 $logFile = $this->logPath() . DIRECTORY_SEPARATOR . $date . '.log';
 
@@ -254,6 +263,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'errorLogger',
             function () {
+                /* @var \Pails\Container $this */
                 $logFile = $this->logPath() . DIRECTORY_SEPARATOR . 'error.log';
 
                 return new FileLogger($logFile);
@@ -270,6 +280,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'session',
             function () {
+                /* @var \Pails\Container $this */
                 $session = null;
 
                 if ($this['config']->get('session.adapter', 'file') == 'file') {
@@ -311,6 +322,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'view',
             function () {
+                /* @var \Pails\Container $this */
                 $view = new View();
                 $view->setViewsDir($this->viewsPath());
                 $view->registerEngines([
@@ -326,6 +338,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->set(
             'viewCache',
             function () {
+                /* @var \Pails\Container $this */
                 // Cache data for one day by default
                 $frontCache = new OutputFrontend(
                     [
@@ -352,6 +365,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'volt',
             function () {
+                /* @var \Pails\Container $this */
                 $compiledPath = $this->tmpPath() . '/cache/volt/';
                 if (!file_exists($compiledPath)) {
                     @mkdir($compiledPath, 0755, true);
@@ -373,6 +387,7 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'url',
             function () {
+                /* @var \Pails\Container $this */
                 $url = new Url();
                 if ($baseUrl = $this['config']->get('url.base_url')) {
                     $url->setBaseUri($baseUrl);

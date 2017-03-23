@@ -27,6 +27,8 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
             'authServer',
 
             function () {
+                /* @var \Pails\Container $this */
+
                 // Init repositories
                 $clientRepository = new ClientRepository();
                 $scopeRepository = new ScopeRepository();
@@ -110,6 +112,7 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
             'resourceServer',
 
             function () {
+                /* @var \Pails\Container $this */
                 $accessTokenRepository = new AccessTokenRepository();
                 $publicKey = $this['config']->get('oauth2.public_key');
 
@@ -123,6 +126,7 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
             'authClient',
 
             function () {
+                /* @var \Pails\Container $this */
                 $provider = new GenericProvider([
                     'clientId'                => $this['config']->get('oauth2.client.client_id'),
                     'clientSecret'            => $this['config']->get('oauth2.client.client_secret'),
