@@ -25,17 +25,18 @@ class DatabaseServiceProvider extends AbstractServiceProvider
                         'dbname'   => $database['name'],
                         'charset'  => $database['charset'],
                     ]);
-                    // debug sql
                     if ($this->get('config')->get('db.debug', false)) {
                         $logger = new File($this->logPath() . '/db_debug.log');
                         $this['eventsManager']->attach(
                             'db',
                             function ($event, $connection) use ($logger) {
                                 if ($event->getType() == 'beforeQuery') {
+                                    /* @var \Phalcon\Db\AdapterInterface $connection */
                                     $sqlVariables = $connection->getSQLVariables();
                                     if (count($sqlVariables)) {
-                                        $query = str_replace(['%', '?'], ['%%', "'%s'"], $connection->getSQLStatement());
-                                        $query = vsprintf($query, $sqlVariables);
+                                        $query = str_replace(array_map(function ($v) {
+                                            return ':' . $v;
+                                        }, array_keys($sqlVariables)), array_values($sqlVariables), $connection->getSQLStatement());
                                         $logger->log($query, \Phalcon\Logger::INFO);
                                     } else {
                                         $logger->log($connection->getSQLStatement(), \Phalcon\Logger::INFO);
