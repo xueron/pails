@@ -1,5 +1,4 @@
 <?php
-
 namespace Pails\Console;
 
 use Pails\InjectableTrait;
@@ -18,29 +17,52 @@ use Symfony\Component\Console\Question\Question;
 /**
  * Class Command
  *
- * @property \Pails\Container|\Phalcon\Di                   $di
- * @property \Pails\Plugins\ApiResponse                     $apiResponse
- * @property \Pails\Plugins\ApiClient                       $apiClient
- * @property \Pails\Plugins\Fractal                         $fractal
- * @property \Pails\Pluralizer                              $inflector
- * @property \Pails\Plugins\Config                          $config
- * @property \Pails\Exception\Handler                       $exceptionHandler
- * @property \Phalcon\Security\Random                       $random
- * @property \Phalcon\Cache\BackendInterface                $fileCache
- * @property \Phalcon\Cache\BackendInterface                $redisCache
- * @property \Phalcon\Cache\BackendInterface                $memcachedCache
- * @property \Phalcon\Cache\Multiple                        $cache
- * @property \Phalcon\Logger\Adapter\File                   $logger
- * @property \Phalcon\Logger\Adapter\File                   $errorLogger
- * @property \GuzzleHttp\Client                             $httpClient
- * @property \AliyunMNS\Client                              $mns
- * @property \OSS\OssClient                                 $oss
- * @property \League\Flysystem\FilesystemInterface          $localFs
- * @property \League\Flysystem\FilesystemInterface          $ossFs
- * @property \League\Flysystem\MountManager                 $filesystem
- * @property \League\OAuth2\Client\Provider\GenericProvider $authClient
- * @property \Redis                                         $redis
- * @property \Pails\Queue\Queue                             $queue
+ * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface                                  $dispatcher
+ * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface                                          $router
+ * @property \Phalcon\Mvc\Url|\Phalcon\Mvc\UrlInterface                                                $url
+ * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface                                      $request
+ * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface                                    $response
+ * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface                    $cookies
+ * @property \Phalcon\Filter|\Phalcon\FilterInterface                                                  $filter
+ * @property \Phalcon\Flash\Direct                                                                     $flash
+ * @property \Phalcon\Flash\Session                                                                    $flashSession
+ * @property \Phalcon\Session\Adapter\Files|\Phalcon\Session\Adapter|\Phalcon\Session\AdapterInterface $session
+ * @property \Phalcon\Events\Manager|\Phalcon\Events\ManagerInterface                                  $eventsManager
+ * @property \Phalcon\Db\AdapterInterface                                                              $db
+ * @property \Phalcon\Security                                                                         $security
+ * @property \Phalcon\Crypt|\Phalcon\CryptInterface                                                    $crypt
+ * @property \Phalcon\Tag                                                                              $tag
+ * @property \Phalcon\Escaper|\Phalcon\EscaperInterface                                                $escaper
+ * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter                          $annotations
+ * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface                            $modelsManager
+ * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface                   $modelsMetadata
+ * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface    $transactionManager
+ * @property \Phalcon\Assets\Manager                                                                   $assets
+ * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface                                        $persistent
+ * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface                                              $view
+ * @property \Pails\Container|\Phalcon\Di                                                              $di
+ * @property \Pails\Plugins\ApiResponse                                                                $apiResponse
+ * @property \Pails\Plugins\ApiClient                                                                  $apiClient
+ * @property \Pails\Plugins\Fractal                                                                    $fractal
+ * @property \Pails\Pluralizer                                                                         $inflector
+ * @property \Pails\Plugins\Config                                                                     $config
+ * @property \Pails\Exception\Handler                                                                  $exceptionHandler
+ * @property \Phalcon\Security\Random                                                                  $random
+ * @property \Phalcon\Cache\BackendInterface                                                           $fileCache
+ * @property \Phalcon\Cache\BackendInterface                                                           $redisCache
+ * @property \Phalcon\Cache\BackendInterface                                                           $memcachedCache
+ * @property \Phalcon\Cache\Multiple                                                                   $cache
+ * @property \Phalcon\Logger\Adapter\File                                                              $logger
+ * @property \Phalcon\Logger\Adapter\File                                                              $errorLogger
+ * @property \GuzzleHttp\Client                                                                        $httpClient
+ * @property \AliyunMNS\Client                                                                         $mns
+ * @property \OSS\OssClient                                                                            $oss
+ * @property \League\Flysystem\FilesystemInterface                                                     $localFs
+ * @property \League\Flysystem\FilesystemInterface                                                     $ossFs
+ * @property \League\Flysystem\MountManager                                                            $filesystem
+ * @property \League\OAuth2\Client\Provider\GenericProvider                                            $authClient
+ * @property \Redis                                                                                    $redis
+ * @property \Pails\Queue\Queue                                                                        $queue
  *
  * @package Pails\Console
  */
@@ -118,9 +140,7 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
         } else {
             parent::__construct($this->name);
         }
-
         $this->setDescription($this->description);
-
         if (!isset($this->signature)) {
             $this->specifyParameters();
         }
@@ -132,13 +152,10 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     protected function configureUsingFluentDefinition()
     {
         list($name, $arguments, $options) = Parser::parse($this->signature);
-
         parent::__construct($name);
-
         foreach ($arguments as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
-
         foreach ($options as $option) {
             $this->getDefinition()->addOption($option);
         }
@@ -155,7 +172,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
         foreach ($this->getArguments() as $arguments) {
             call_user_func_array([$this, 'addArgument'], $arguments);
         }
-
         foreach ($this->getOptions() as $options) {
             call_user_func_array([$this, 'addOption'], $options);
         }
@@ -172,7 +188,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function run(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
-
         $this->output = new OutputStyle($input, $output);
 
         return parent::run($input, $output);
@@ -209,7 +224,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function call($command, array $arguments = [])
     {
         $instance = $this->getApplication()->find($command);
-
         $arguments['command'] = $command;
 
         return $instance->run(new ArrayInput($arguments), $this->output);
@@ -226,7 +240,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function callSilent($command, array $arguments = [])
     {
         $instance = $this->getApplication()->find($command);
-
         $arguments['command'] = $command;
 
         return $instance->run(new ArrayInput($arguments), new NullOutput);
@@ -340,7 +353,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function askWithCompletion($question, array $choices, $default = null)
     {
         $question = new Question($question, $default);
-
         $question->setAutocompleterValues($choices);
 
         return $this->output->askQuestion($question);
@@ -357,7 +369,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function secret($question, $fallback = true)
     {
         $question = new Question($question);
-
         $question->setHidden(true)->setHiddenFallback($fallback);
 
         return $this->output->askQuestion($question);
@@ -377,7 +388,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
     {
         $question = new ChoiceQuestion($question, $choices, $default);
-
         $question->setMaxAttempts($attempts)->setMultiselect($multiple);
 
         return $this->output->askQuestion($question);
@@ -393,7 +403,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function table(array $headers, $rows, $style = 'default')
     {
         $table = new Table($this->output);
-
         $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
     }
 
@@ -418,7 +427,6 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     public function line($string, $style = null, $verbosity = null)
     {
         $styled = $style ? "<$style>$string</$style>" : $string;
-
         $this->output->writeln($styled, $this->parseVerbosity($verbosity));
     }
 
@@ -465,10 +473,8 @@ abstract class Command extends SymfonyCommand implements InjectionAwareInterface
     {
         if (!$this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
-
             $this->output->getFormatter()->setStyle('warning', $style);
         }
-
         $this->line($string, 'warning', $verbosity);
     }
 
