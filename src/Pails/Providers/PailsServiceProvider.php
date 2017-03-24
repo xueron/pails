@@ -311,6 +311,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                 }
 
                 if (is_object($session) && !$session->isStarted()) {
+                    $session->setName($this['config']->get('session.options.cookie', 'pails_session'));
                     $session->start();
                 }
 
