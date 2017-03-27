@@ -280,14 +280,14 @@ class PailsServiceProvider extends AbstractServiceProvider
 
         // flash
         $di->setShared(
-            "flash",
+            'flash',
             function () {
                 $flash = new FlashDirect(
                     [
-                        "error"   => "alert alert-danger",
-                        "success" => "alert alert-success",
-                        "notice"  => "alert alert-info",
-                        "warning" => "alert alert-warning",
+                        'error'   => 'alert alert-danger',
+                        'success' => 'alert alert-success',
+                        'notice'  => 'alert alert-info',
+                        'warning' => 'alert alert-warning',
                     ]
                 );
 
@@ -297,14 +297,14 @@ class PailsServiceProvider extends AbstractServiceProvider
 
         // flash
         $di->setShared(
-            "flashSession",
+            'flashSession',
             function () {
                 $flash = new FlashSession(
                     [
-                        "error"   => "alert alert-danger",
-                        "success" => "alert alert-success",
-                        "notice"  => "alert alert-info",
-                        "warning" => "alert alert-warning",
+                        'error'   => 'alert alert-danger',
+                        'success' => 'alert alert-success',
+                        'notice'  => 'alert alert-info',
+                        'warning' => 'alert alert-warning',
                     ]
                 );
 
