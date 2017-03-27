@@ -12,6 +12,8 @@ use Phalcon\Cache\Frontend\Data as DataFrontend;
 use Phalcon\Cache\Frontend\Output as OutputFrontend;
 use Phalcon\Cache\Multiple as MultipleCache;
 use Phalcon\Crypt;
+use Phalcon\Flash\Direct as FlashDirect;
+use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Mvc\Dispatcher;
@@ -274,6 +276,40 @@ class PailsServiceProvider extends AbstractServiceProvider
         $di->setShared(
             'random',
             Random::class
+        );
+
+        // flash
+        $di->setShared(
+            "flash",
+            function () {
+                $flash = new FlashDirect(
+                    [
+                        "error"   => "alert alert-danger",
+                        "success" => "alert alert-success",
+                        "notice"  => "alert alert-info",
+                        "warning" => "alert alert-warning",
+                    ]
+                );
+
+                return $flash;
+            }
+        );
+
+        // flash
+        $di->setShared(
+            "flashSession",
+            function () {
+                $flash = new FlashSession(
+                    [
+                        "error"   => "alert alert-danger",
+                        "success" => "alert alert-success",
+                        "notice"  => "alert alert-info",
+                        "warning" => "alert alert-warning",
+                    ]
+                );
+
+                return $flash;
+            }
         );
 
         // session
