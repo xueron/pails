@@ -69,7 +69,7 @@ class ApiClient extends Injectable
      *
      * @return \League\OAuth2\Client\Token\AccessToken
      */
-    protected function getAccessToken()
+    public function getAccessToken()
     {
         /** @var AccessToken $accessToken */
         if ($accessToken = $this->cache->get(static::SESSION_ACCESS_TOKEN_KEY)) {
