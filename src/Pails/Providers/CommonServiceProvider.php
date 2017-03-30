@@ -108,7 +108,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'localFs',
             function () {
-                $adapter = new LocalAdapter($this->storagePath());
+                /* @var \Pails\Container $this */
+                $root = $this['config']->get('storage.local.root', $this->storagePath());
+                if (!file_exists($root)) {
+                    @mkdir($root, 0755, true);
+                }
+                $adapter = new LocalAdapter($root);
 
                 return new Filesystem($adapter);
             }
@@ -157,6 +162,19 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
                 }
 
                 return new MountManager($fsList);
+            }
+        );
+
+        // storage
+        $di->setShared(
+            'storage',
+            function () {
+                /* @var \Pails\Container $this */
+                $storage = $this['config']->get('storage.filesystem', 'localFs'); // localFs or ossFs
+                if ($this->has($storage)) {
+                    return $this->get($storage);
+                }
+                throw new \RuntimeException("Filesystem $storage is not defined");
             }
         );
 

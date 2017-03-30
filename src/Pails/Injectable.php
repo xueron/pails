@@ -27,6 +27,7 @@ namespace Pails;
  * @property \GuzzleHttp\Client                             $httpClient
  * @property \AliyunMNS\Client                              $mns
  * @property \OSS\OssClient                                 $oss
+ * @property \League\Flysystem\FilesystemInterface          $storage
  * @property \League\Flysystem\FilesystemInterface          $localFs
  * @property \League\Flysystem\FilesystemInterface          $ossFs
  * @property \League\Flysystem\MountManager                 $filesystem
