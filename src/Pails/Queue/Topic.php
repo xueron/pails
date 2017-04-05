@@ -76,7 +76,7 @@ class Topic extends Injectable
         try {
             $res = $this->_topic->publishMessage($request);
 
-            return $res->isSucceed();
+            $result = $res->isSucceed();
         } catch (\Exception $e) {
             $this->logger->error('发送消息失败：' . $e->getMessage());
         } finally {
