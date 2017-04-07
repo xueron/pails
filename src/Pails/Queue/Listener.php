@@ -70,7 +70,6 @@ class Listener extends Injectable
             // if it is we will just pause this worker for a given amount of time and
             // make sure we do not need to kill this worker process off completely.
             if (!$this->daemonShouldRun($options)) {
-                echo "parsed\n";
                 $this->pauseWorker($options, $lastRestart);
 
                 continue;
