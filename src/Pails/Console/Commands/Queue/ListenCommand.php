@@ -5,6 +5,7 @@ use Pails\Console\Command;
 use Pails\Queue\Job;
 use Pails\Queue\Listener;
 use Pails\Queue\ListenerOptions;
+use Phalcon\Events\Event;
 
 class ListenCommand extends Command
 {
@@ -88,38 +89,26 @@ class ListenCommand extends Command
         //listener:afterGetJob
         //listener:stop
         //listener:afterDaemonLoop
+        $this->eventsManager->attach('listener', function (Event $event, $source, $data) {
+            $event = $event->getType();
+            $this->line('Got an event listener:' . $event);
+        });
 
         // -- Worker处理的事件
         //worker:beforeJobHandle
         //worker:afterJobHandle
         //worker:jobException
         //worker:jobFailed
-    }
-
-    /**
-     * Write the status output for the queue worker.
-     *
-     * @param string $payload
-     * @param bool   $failed
-     */
-    protected function writeOutput($payload, $failed)
-    {
-        if ($failed) {
-            $this->output->writeln('<error>[' . date('Y-m-d H:i:s') . '] Failed:</error> ' . $payload);
-        } else {
-            $this->output->writeln('<info>[' . date('Y-m-d H:i:s') . '] Processed:</info> ' . $payload);
-        }
-    }
-
-    /**
-     * Store a failed job event.
-     *
-     * @param Job $job
-     *
-     * @internal param $payload
-     */
-    protected function logFailedJob(Job $job)
-    {
-        //$this->logger->error($event->connectionName, $event->job->getQueue(), $event->job->getRawBody(), $event->exception);
+        $this->eventsManager->attach('worker', function (Event $event, $source, $data) {
+            $event = $event->getType();
+            if (is_array($data)) {
+                $job = $data[0];
+                $msg = $data[1]->getMessage();
+                $this->line('Got an event worker:' . $event . ', Worker:' . get_class($source) . ', Msg:' . $msg . ', Payload: ' . $job->getPayload());
+            } else {
+                $job = $data;
+                $this->line('Got an event worker:' . $event . ', Worker:' . get_class($source) . ', Payload: ' . $job->getPayload());
+            }
+        });
     }
 }
