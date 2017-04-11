@@ -167,8 +167,10 @@ class Handler extends Injectable
     public function wantJson()
     {
         foreach ($this->request->getAcceptableContent() as $accept) {
-            if (preg_match('/[\/\+]json/i', $accept)) {
-                return true;
+            foreach ($accept as $key => $val) {
+                if ($key === 'accept' && preg_match('/[\/\+]json/i', $val)) {
+                    return true;
+                }
             }
         }
 
