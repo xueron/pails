@@ -22,8 +22,8 @@ class ListenCommand extends Command
                             {--tries=0 : 尝试处理的次数，如果一个消息已经被取出超过该次数，则该消息将被当作失败消息记录，并从队列删除}
                             {--delay=0 : 失败的消息重新投入队列的延迟时间，默认是处理失败立刻重新可用。单位：秒}
                             {--memory=128 : 最大内存使用，单位：MB}
-                            {--sleep=30 : 没有新消息时最大等待时间。单位：秒}
-                            {--timeout=30 : 消息处理子进程超时时间，超过该时间，消息将重新放入队列。单位：秒}';
+                            {--sleep=30 : 当 Queue 中没有消息时，针对该 Queue 的 ReceiveMessage 请求最长的等待时间，0-30秒范围内的某个整数值，默认为30秒}
+                            {--timeout=30 : 消息处理子进程超时时间，超过该时间，消息将重新放入队列。这个时间要小于队列的VisibilityTimeout时间。单位：秒}';
 
     /**
      * The console command description.
@@ -70,6 +70,9 @@ class ListenCommand extends Command
      */
     protected function gatherListenerOptions()
     {
+        if ($this->option('sleep') > 30) {
+            throw new \LogicException('sleep 必须是0-30秒范围内的某个整数值');
+        }
         return new ListenerOptions(
             $this->option('delay'), $this->option('memory'),
             $this->option('timeout'), $this->option('sleep'),
