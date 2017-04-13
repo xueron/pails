@@ -89,8 +89,6 @@ class Queue extends Injectable
      * @param int    $pri     指定消息的优先级权值，优先级越高的消息，越容易更早被消费.取值范围1~16（其中1为最高优先级），默认优先级为8
      *
      * @return bool
-     * @internal param \Pails\Queue\ListenerOptions $options
-     *
      */
     public function push($payload, $delay = 0, $pri = 8)
     {

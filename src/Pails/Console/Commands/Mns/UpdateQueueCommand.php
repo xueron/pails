@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;

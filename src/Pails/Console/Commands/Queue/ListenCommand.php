@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Queue;
 
 use Pails\Console\Command;
@@ -95,7 +96,7 @@ class ListenCommand extends Command
         //listener:afterDaemonLoop
         //listener:stop
         $this->eventsManager->attach('listener', function (Event $event, $source, $data) {
-            $date  = date("Y-m-d H:i:s");
+            $date = date('Y-m-d H:i:s');
             $class = get_class($source);
             $event = $event->getType();
             $payload = '';

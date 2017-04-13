@@ -30,9 +30,9 @@ class DeleteTopicCommand extends Command
     {
         $name = trim($this->argument('name'));
 
-        $confirm = $this->ask("使用者必须谨慎使用此接口，一旦删除成功，主题内所有消息也一并删除，不可恢复；所有订阅该主题的 Subscription 也一并被删除，不可恢复。确认删除么？[y/N]", 'N');
+        $confirm = $this->ask('使用者必须谨慎使用此接口，一旦删除成功，主题内所有消息也一并删除，不可恢复；所有订阅该主题的 Subscription 也一并被删除，不可恢复。确认删除么？[y/N]', 'N');
         if ($confirm !== 'y') {
-            $this->line("操作取消");
+            $this->line('操作取消');
             return;
         }
 

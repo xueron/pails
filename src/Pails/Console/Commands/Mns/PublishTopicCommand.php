@@ -1,10 +1,9 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
-use AliyunMNS\Model\TopicAttributes;
 use AliyunMNS\Requests\PublishMessageRequest;
-use AliyunMNS\Requests\SendMessageRequest;
 use Pails\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,6 +42,7 @@ class PublishTopicCommand extends Command
         $client = $this->mns;
         if (!$client) {
             $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -52,7 +52,7 @@ class PublishTopicCommand extends Command
             $request = new PublishMessageRequest($message, $tag);
             $res = $topic->publishMessage($request);
             if ($res->isSucceed()) {
-                $this->line("Topic Message published");
+                $this->line('Topic Message published');
                 $this->output->newLine();
                 $this->call('mns:list-topic');
             }
@@ -60,7 +60,6 @@ class PublishTopicCommand extends Command
             $this->error($e->getMessage());
         }
     }
-
 
     /**
      * Get the console command arguments.

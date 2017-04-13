@@ -1,9 +1,8 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
-use AliyunMNS\Model\TopicAttributes;
-use AliyunMNS\Requests\PublishMessageRequest;
 use AliyunMNS\Requests\SendMessageRequest;
 use Pails\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -44,6 +43,7 @@ class SendQueueCommand extends Command
         $client = $this->mns;
         if (!$client) {
             $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
@@ -53,7 +53,7 @@ class SendQueueCommand extends Command
             $request = new SendMessageRequest($message, $delay, $pri);
             $res = $queue->sendMessage($request);
             if ($res->isSucceed()) {
-                $this->line("Queue Message send");
+                $this->line('Queue Message send');
                 $this->output->newLine();
                 $this->call('mns:list-queue');
             }
@@ -61,7 +61,6 @@ class SendQueueCommand extends Command
             $this->error($e->getMessage());
         }
     }
-
 
     /**
      * Get the console command arguments.

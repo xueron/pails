@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Model\UpdateSubscriptionAttributes;
@@ -14,7 +15,6 @@ class UpdateSubscriptionCommand extends Command
      * @var string
      */
     protected $name = 'mns:update-subscription';
-
 
     /**
      * The console command description.
@@ -41,6 +41,7 @@ class UpdateSubscriptionCommand extends Command
         $client = $this->mns;
         if (!$client) {
             $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
 
