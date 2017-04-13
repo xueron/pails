@@ -73,6 +73,7 @@ class ListenCommand extends Command
         if ($this->option('sleep') > 30) {
             throw new \LogicException('sleep 必须是0-30秒范围内的某个整数值');
         }
+
         return new ListenerOptions(
             $this->option('delay'), $this->option('memory'),
             $this->option('timeout'), $this->option('sleep'),
