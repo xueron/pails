@@ -2,6 +2,7 @@
 
 namespace Pails\Queue;
 
+use AliyunMNS\Exception\MessageNotExistException;
 use AliyunMNS\Requests\SendMessageRequest;
 use Pails\Injectable;
 
@@ -119,6 +120,8 @@ class Queue extends Injectable
             if ($res->isSucceed()) {
                 $result = new Job($this, $res);
             }
+        } catch (MessageNotExistException $e) {
+            // 正常的异常，不做LOG
         } catch (\Exception $e) {
             $this->logger->error('获取消息队列失败：' . $e->getMessage());
         } finally {
@@ -137,6 +140,8 @@ class Queue extends Injectable
             if ($res->isSucceed()) {
                 $result = new Job($this, $res);
             }
+        } catch (MessageNotExistException $e) {
+            // 正常的异常，不做LOG
         } catch (\Exception $e) {
             $this->logger->error('获取消息队列失败：' . $e->getMessage());
         } finally {
