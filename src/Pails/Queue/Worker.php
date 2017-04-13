@@ -12,7 +12,7 @@ abstract class Worker extends Injectable
 
         // delete handled job if successfully handled
         if ($res !== false && !$job->isDeleted()) {
-            $this->logger->debug('Job handled, delete it: ' . $job->getId() . ", Payload=" . $job->getPayload());
+            $this->logger->debug('Job handled, delete it: ' . $job->getId() . ', Payload=' . $job->getPayload());
             $job->delete();
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
@@ -36,13 +37,13 @@ class UpdateTopicCommand extends Command
         $maxSize = trim($this->option('max-size'));
         $enableLogging = trim($this->option('enable-logging'));
 
-
         /**
          * @var Client
          */
         $client = $this->mns;
         if (!$client) {
             $this->error('请先配置阿里云MSN服务，并在DI里面注册');
+
             return;
         }
         //
