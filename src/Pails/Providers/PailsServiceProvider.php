@@ -255,7 +255,35 @@ class PailsServiceProvider extends AbstractServiceProvider
             function () {
                 /* @var \Pails\Container $this */
                 $date = date('Y-m-d');
-                $logFile = $this->logPath() . DIRECTORY_SEPARATOR . $date . '.log';
+                if ($this['config']->get('app.logger_split_dir', false)) {
+                    $logPath = $this->logPath() . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    if (!@file_exists($logPath)) {
+                        @mkdir($logPath, 0755);
+                    }
+                    $logFile = $logPath . 'app.log';
+                } else {
+                    $logPath = $this->logPath() . DIRECTORY_SEPARATOR;
+                    $logFile = $logPath . $date . '.log';
+                }
+
+                return new FileLogger($logFile);
+            }
+        );
+
+        $di->setShared(
+            'commandLogger',
+            function () {
+                /* @var \Pails\Container $this */
+                $date = date('Y-m-d');
+                if ($this['config']->get('app.logger_split_dir', false)) {
+                    $logPath = $this->logPath() . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    if (!@file_exists($logPath)) {
+                        @mkdir($logPath, 0755);
+                    }
+                    $logFile = $logPath . 'command.log';
+                } else {
+                    $logFile = $this->logPath() . DIRECTORY_SEPARATOR . 'command.log';
+                }
 
                 return new FileLogger($logFile);
             }

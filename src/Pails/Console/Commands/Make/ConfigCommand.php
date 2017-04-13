@@ -8,7 +8,7 @@ class ConfigCommand extends Command
     protected $signature = 'make:config
         {name : 配置文件的名称，小写字母}';
 
-    protected $description = '创建配置文件模板';
+    protected $description = '创建Config';
 
     public function handle()
     {

@@ -53,8 +53,11 @@ class ListTopicCommand extends Command
                 foreach ($res->getTopicNames() as $topicName) {
                     $topic['name'] = $topicName;
                     $topicRef = $client->getTopicRef($topicName);
+
+                    /* @var \AliyunMNS\Model\TopicAttributes $attr */
                     $attr = $topicRef->getAttribute()->getTopicAttributes();
 
+                    $topic['msgCount'] = $attr->getMessageCount();
                     $topic['maxSize'] = $attr->getMaximumMessageSize();
                     $topic['ttl'] = $attr->getMessageRetentionPeriod();
                     $topic['createTime'] = date('Y-m-d H:i:s', $attr->getCreateTime());
@@ -65,7 +68,7 @@ class ListTopicCommand extends Command
             }
 
 
-            $topicHeaders = ['Name', 'MaxSize', 'TTL', 'CreateTime', 'UpdateTime', 'EnableLog'];
+            $topicHeaders = ['Name', 'MsgCount', 'MaxSize', 'TTL', 'CreateTime', 'UpdateTime', 'EnableLog'];
             $this->line('List of Topics:');
             $this->table($topicHeaders, $data);
         } catch (\Exception $e) {

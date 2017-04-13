@@ -15,7 +15,14 @@ abstract class Worker extends Injectable
             $job->delete();
         }
 
+        // 清除计时器
+
         return $res;
+    }
+
+    public function log($message)
+    {
+        $this->eventsManager->fire('listener:logger', $this, $message);
     }
 
     abstract public function handle(Job $job, ListenerOptions $options);

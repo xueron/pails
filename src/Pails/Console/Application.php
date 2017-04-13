@@ -69,6 +69,11 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         Commands\Mns\ListSubscriptionsCommand::class,
         Commands\Mns\SubscribeCommand::class,
         Commands\Mns\UnSubscribeCommand::class,
+        Commands\Mns\UpdateTopicCommand::class,
+        Commands\Mns\UpdateQueueCommand::class,
+        Commands\Mns\UpdateSubscriptionCommand::class,
+        Commands\Mns\PublishTopicCommand::class,
+        Commands\Mns\SendQueueCommand::class,
 
         Commands\Model\ClearCommand::class,
         Commands\Model\ClearMetaCommand::class,
