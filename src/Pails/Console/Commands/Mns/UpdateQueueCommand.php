@@ -1,19 +1,19 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
 use AliyunMNS\Model\QueueAttributes;
-use AliyunMNS\Requests\CreateQueueRequest;
 use Pails\Console\Command;
 
-class CreateQueueCommand extends Command
+class UpdateQueueCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'mns:create-queue
+    protected $signature = 'mns:update-queue
                             {name : 队列名称}
                             {--delay-seconds=0 : 发送到该 Queue 的所有消息默认将以DelaySeconds参数指定的秒数延后可被消费，单位为秒。0~604800内的整数}
                             {--max-size=65536 : 发送到该 Queue 的消息体的最大长度，单位为byte。1024(1KB)-65536（64KB）范围内的某个整数值，默认值为65536（64KB）。}
@@ -27,7 +27,7 @@ class CreateQueueCommand extends Command
      *
      * @var string
      */
-    protected $description = '创建队列Queue';
+    protected $description = '设置队列属性';
 
     /**
      * Execute the console command.
@@ -51,14 +51,22 @@ class CreateQueueCommand extends Command
 
             return;
         }
-        $queueAttr = new QueueAttributes($delaySeconds, $maxSize, $ttl, $visibilityTimeout, $poolingWait);
+
+        $queueAttr = new QueueAttributes();
+        $queueAttr->setMaximumMessageSize($maxSize);
+        $queueAttr->setDelaySeconds($delaySeconds);
+        $queueAttr->setMessageRetentionPeriod($ttl);
+        $queueAttr->setVisibilityTimeout($visibilityTimeout);
+        $queueAttr->setPollingWaitSeconds($poolingWait);
         $queueAttr->setLoggingEnabled($enableLogging);
 
-        $request = new CreateQueueRequest($name, $queueAttr);
+        $queue = $client->getQueueRef($name);
         try {
-            $res = $client->createQueue($request);
+            $res = $queue->setAttribute($queueAttr);
             if ($res->isSucceed()) {
-                $this->line("Queue $name created");
+                $this->line("Queue $name updated");
+                $this->output->newLine();
+                $this->call('mns:list-queue');
             }
         } catch (\Exception $e) {
             $this->error($e->getMessage());

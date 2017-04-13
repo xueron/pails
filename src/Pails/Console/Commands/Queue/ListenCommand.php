@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Queue;
 
 use Pails\Console\Command;
@@ -21,7 +22,7 @@ class ListenCommand extends Command
                             {--tries=0 : 尝试处理的次数，如果一个消息已经被取出超过该次数，则该消息将被当作失败消息记录，并从队列删除}
                             {--delay=0 : 失败的消息重新投入队列的延迟时间，默认是处理失败立刻重新可用。单位：秒}
                             {--memory=128 : 最大内存使用，单位：MB}
-                            {--sleep=3 : 没有新消息时最大等待时间。单位：秒}
+                            {--sleep=30 : 没有新消息时最大等待时间。单位：秒}
                             {--timeout=30 : 消息处理子进程超时时间，超过该时间，消息将重新放入队列。单位：秒}';
 
     /**
@@ -83,32 +84,48 @@ class ListenCommand extends Command
      */
     protected function listenForEvents()
     {
-        // -- Listener的事件
+        // -- Worker处理的事件
         //listener:beforeDaemonLoop
         //listener:beforeGetJob
         //listener:afterGetJob
-        //listener:stop
+        //listener:beforeJobHandle
+        //listener:logger
+        //listener:afterJobHandle
+        //listener:jobException
+        //listener:jobFailed
         //listener:afterDaemonLoop
+        //listener:stop
         $this->eventsManager->attach('listener', function (Event $event, $source, $data) {
+            $date = date('Y-m-d H:i:s');
+            $class = get_class($source);
             $event = $event->getType();
-            $this->line('Got an event listener:' . $event);
-        });
-
-        // -- Worker处理的事件
-        //worker:beforeJobHandle
-        //worker:afterJobHandle
-        //worker:jobException
-        //worker:jobFailed
-        $this->eventsManager->attach('worker', function (Event $event, $source, $data) {
-            $event = $event->getType();
+            $payload = '';
+            $message = '';
             if (is_array($data)) {
                 $job = $data[0];
-                $msg = $data[1]->getMessage();
-                $this->line('Got an event worker:' . $event . ', Worker:' . get_class($source) . ', Msg:' . $msg . ', Payload: ' . $job->getPayload());
+                $e = $data[1];
+                if ($job instanceof Job) {
+                    $payload = $job->getPayload();
+                } elseif (is_scalar($data)) {
+                    $payload = $data;
+                } else {
+                    $payload = serialize($job);
+                }
+                if ($e instanceof \Exception) {
+                    $message = $data[1]->getMessage();
+                } else {
+                    $message = serialize($job);
+                }
             } else {
-                $job = $data;
-                $this->line('Got an event worker:' . $event . ', Worker:' . get_class($source) . ', Payload: ' . $job->getPayload());
+                if ($data instanceof Job) {
+                    $payload = $data->getPayload();
+                } elseif (is_scalar($data)) {
+                    $message = $data;
+                } else {
+                    $message = serialize($data);
+                }
             }
+            $this->line('[' . $date . '] Event=listener:' . $event . ', Class=' . $class . ', Msg=' . $message . ', Payload=' . $payload);
         });
     }
 }

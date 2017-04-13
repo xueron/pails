@@ -107,7 +107,7 @@ class Job
      */
     public function timeout()
     {
-        return $this->instance->getNextVisibleTime() - time();
+        return $this->queue->getAttribute()->getVisibilityTimeout();
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Mns;
 
 use AliyunMNS\Client;
@@ -29,6 +30,13 @@ class DeleteQueueCommand extends Command
     public function handle()
     {
         $name = trim($this->argument('name'));
+
+        $confirm = $this->ask('使用者必须谨慎使用此接口，一旦删除队列成功，队列内所有消息也一并删除，不可恢复。确认删除么？[y/N]', 'N');
+        if ($confirm !== 'y') {
+            $this->line('操作取消');
+
+            return;
+        }
 
         /**
          * @var Client

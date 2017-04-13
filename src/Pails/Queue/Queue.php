@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Queue;
 
 use AliyunMNS\Requests\SendMessageRequest;
@@ -22,6 +23,11 @@ class Queue extends Injectable
     protected $_queue;
 
     /**
+     * @var \AliyunMNS\Model\QueueAttributes;
+     */
+    protected $attr;
+
+    /**
      * Queue constructor.
      *
      * @param string $queueName
@@ -30,6 +36,7 @@ class Queue extends Injectable
     {
         $this->name = $queueName;
         $this->_queue = $this->mns->getQueueRef($queueName, false);
+        $this->attr = $this->_queue->getAttribute()->getQueueAttributes();
     }
 
     /**
@@ -46,6 +53,14 @@ class Queue extends Injectable
     public function getQueue()
     {
         return $this->_queue;
+    }
+
+    /**
+     * @return \AliyunMNS\Model\QueueAttributes|null
+     */
+    public function getAttribute()
+    {
+        return $this->attr;
     }
 
     /**
@@ -69,15 +84,16 @@ class Queue extends Injectable
     /**
      * 发送一个消息
      *
-     * @param                 $payload
-     * @param ListenerOptions $options
+     * @param string $payload 消息正文, UTF-8字符集
+     * @param int    $delay   DelaySeconds 指定的秒数延后可被消费，单位为秒,0-604800秒（7天）范围内某个整数值，默认值为0
+     * @param int    $pri     指定消息的优先级权值，优先级越高的消息，越容易更早被消费.取值范围1~16（其中1为最高优先级），默认优先级为8
      *
      * @return bool
      */
-    public function push($payload, ListenerOptions $options)
+    public function push($payload, $delay = 0, $pri = 8)
     {
         $result = false;
-        $request = new SendMessageRequest($payload, $options->delay);
+        $request = new SendMessageRequest($payload, $delay, $pri);
         try {
             $res = $this->_queue->sendMessage($request);
             $result = $res->isSucceed();
@@ -91,15 +107,15 @@ class Queue extends Injectable
     /**
      * 取出一个消息
      *
-     * @param ListenerOptions $options
+     * @param null|int $waitSeconds 本次 ReceiveMessage 请求最长的Polling等待时间，单位为秒。null则使用队列默认的PollingWait参数
      *
-     * @return Job
+     * @return \Pails\Queue\Job
      */
-    public function pop(ListenerOptions $options)
+    public function pop($waitSeconds = null)
     {
         $result = null;
         try {
-            $res = $this->_queue->receiveMessage($options->timeout);
+            $res = $this->_queue->receiveMessage($waitSeconds);
             if ($res->isSucceed()) {
                 $result = new Job($this, $res);
             }

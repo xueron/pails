@@ -71,24 +71,19 @@ class Listener extends Injectable
             // make sure we do not need to kill this worker process off completely.
             if (!$this->daemonShouldRun($options)) {
                 $this->pauseWorker($options, $lastRestart);
-
                 continue;
             }
 
-            // First, we will attempt to get the next job off of the queue. We will also
-            // register the timeout handler and reset the alarm for this job so it is
-            // not stuck in a frozen state forever. Then, we can fire off this job.
+            // 尝试使用长轮询的方式获取消息，如果当前没有，则休眠sleep时间。
             $job = $this->getNextJob($options);
 
-            // If the daemon should run (not in maintenance mode, etc.), then we can run
-            // fire off this job for processing. Otherwise, we will need to sleep the
-            // worker so no more jobs are processed until they should be processed.
+            // 如果成功取到一个消息，则进入处理，并且设置超时时间
             if ($job) {
                 $this->registerTimeoutHandler($job, $options);
 
                 $this->runJob($job, $options);
-            } else {
-                $this->sleep($options->sleep);
+
+                $this->clearTimeoutAlarm($options);
             }
 
             // Finally, we will check to see if we have exceeded our memory limits or if
@@ -154,7 +149,7 @@ class Listener extends Injectable
 
             $this->markJobAsFailedIfAlreadyExceedsMaxAttempts($job, (int) $options->maxTries);
 
-            $this->di->getShared('queue:' . $this->_queue->getName())->process($job, $options);
+            $res = $this->di->getShared('queue:' . $this->_queue->getName())->process($job, $options);
 
             $this->raiseAfterJobEvent($job);
         } catch (Exception $e) {
@@ -176,11 +171,24 @@ class Listener extends Injectable
             // We will register a signal handler for the alarm signal so that we can kill this
             // process if it is running too long because it has frozen. This uses the async
             // signals supported in recent versions of PHP to accomplish it conveniently.
-            pcntl_signal(SIGALRM, function () {
+            pcntl_signal(SIGALRM, function () use ($job) {
+                $this->raiseWhenTimeout($job);
                 $this->kill(1);
             });
 
-            pcntl_alarm($this->timeoutForJob($job, $options) + $options->sleep);
+            pcntl_alarm($this->timeoutForJob($job, $options));
+        }
+    }
+
+    /**
+     * Clear timeout alarm
+     *
+     * @param \Pails\Queue\ListenerOptions $options
+     */
+    protected function clearTimeoutAlarm(ListenerOptions $options)
+    {
+        if ($options->timeout > 0 && $this->supportsAsyncSignals()) {
+            pcntl_alarm(0);
         }
     }
 
@@ -253,7 +261,7 @@ class Listener extends Injectable
         try {
             $this->eventsManager->fire('listener:beforeGetJob', $this);
 
-            $job = $this->_queue->pop($options);
+            $job = $this->_queue->pop($options->sleep);
 
             $this->eventsManager->fire('listener:afterGetJob', $this, $job);
 
@@ -349,13 +357,23 @@ class Listener extends Injectable
     }
 
     /**
+     * Raise when worker timeout.
+     *
+     * @param Job $job
+     */
+    protected function raiseWhenTimeout(Job $job)
+    {
+        $this->getEventsManager()->fire('listener:timeout', $this, $job);
+    }
+
+    /**
      * Raise the before queue job event.
      *
      * @param Job $job
      */
     protected function raiseBeforeJobEvent(Job $job)
     {
-        $this->getEventsManager()->fire('worker:beforeJobHandle', $this, $job);
+        $this->getEventsManager()->fire('listener:beforeJobHandle', $this, $job);
     }
 
     /**
@@ -365,7 +383,7 @@ class Listener extends Injectable
      */
     protected function raiseAfterJobEvent(Job $job)
     {
-        $this->getEventsManager()->fire('worker:afterJobHandle', $this, $job);
+        $this->getEventsManager()->fire('listener:afterJobHandle', $this, $job);
     }
 
     /**
@@ -376,7 +394,7 @@ class Listener extends Injectable
      */
     protected function raiseExceptionOccurredJobEvent(Job $job, $e)
     {
-        $this->getEventsManager()->fire('worker:jobException', $this, [$job, $e]);
+        $this->getEventsManager()->fire('listener:jobException', $this, [$job, $e]);
     }
 
     /**
@@ -387,7 +405,7 @@ class Listener extends Injectable
      */
     protected function raiseFailedJobEvent(Job $job, $e)
     {
-        $this->getEventsManager()->fire('worker:jobFailed', $this, [$job, $e]);
+        $this->getEventsManager()->fire('listener:jobFailed', $this, [$job, $e]);
     }
 
     /**
