@@ -38,7 +38,7 @@ class PailsServiceProvider extends AbstractServiceProvider
             'annotations',
             function () {
                 /* @var \Pails\Container $this */
-                if ($this->environment() == 'production') {
+                if ($this['config']->get('router.use_cache')) {
                     $annotationsDir = $this->tmpPath() . '/cache/routes/';
                     if (!file_exists($annotationsDir)) {
                         @mkdir($annotationsDir, 0755, true);
