@@ -263,7 +263,7 @@ class PailsServiceProvider extends AbstractServiceProvider
                     $logFile = $logPath . 'app.log';
                 } else {
                     $logPath = $this->logPath() . DIRECTORY_SEPARATOR;
-                    $logFile = $logPath . $date . '.log';
+                    $logFile = $logPath . $date . '-app.log';
                 }
 
                 return new FileLogger($logFile);
@@ -282,7 +282,8 @@ class PailsServiceProvider extends AbstractServiceProvider
                     }
                     $logFile = $logPath . 'command.log';
                 } else {
-                    $logFile = $this->logPath() . DIRECTORY_SEPARATOR . 'command.log';
+                    $logPath = $this->logPath() . DIRECTORY_SEPARATOR;
+                    $logFile = $logPath . $date . '-command.log';
                 }
 
                 return new FileLogger($logFile);
