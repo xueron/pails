@@ -207,8 +207,8 @@ class PailsServiceProvider extends AbstractServiceProvider
             'modelsMetadata',
             function () {
                 /* @var \Pails\Container $this */
-                if ($this->environment() == 'production') {
-                    $metaDataDir = $this->tmpPath() . '/cache/metadata';
+                if ($this['config']->get('app.model.cache_meta')) {
+                    $metaDataDir = $this->tmpPath() . '/cache/metadata/';
                     if (!file_exists($metaDataDir)) {
                         @mkdir($metaDataDir, 0755, true);
                     }
