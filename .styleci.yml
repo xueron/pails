@@ -3,8 +3,3 @@ preset: psr2
 finder:
   exclude:
     - "src/AliyunMNS"
-
-enabled:
-  - strict
-  - strict_param
-  - ordered_use
