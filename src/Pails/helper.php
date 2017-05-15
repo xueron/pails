@@ -416,6 +416,19 @@ if (!function_exists('array_where')) {
         return Arr::where($array, $callback);
     }
 }
+if (!function_exists('array_wrap')) {
+    /**
+     * If the given value is not an array, wrap it in one.
+     *
+     * @param  mixed $value
+     *
+     * @return array
+     */
+    function array_wrap($value)
+    {
+        return !is_array($value) ? [$value] : $value;
+    }
+}
 if (!function_exists('camel_case')) {
     /**
      * Convert a value to camel case.
