@@ -111,7 +111,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         return call_user_func_array(static::$macros[$method], $parameters);
     }
 
-
     /**
      * Create a new collection.
      *
@@ -1676,7 +1675,8 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     /**
      * Add a method to the list of proxied methods.
      *
-     * @param  string  $method
+     * @param  string $method
+     *
      * @return void
      */
     public static function proxy($method)
