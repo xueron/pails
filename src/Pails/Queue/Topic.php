@@ -2,6 +2,7 @@
 /**
  * Topic.
  */
+
 namespace Pails\Queue;
 
 use AliyunMNS\Requests\PublishMessageRequest;
@@ -78,7 +79,7 @@ class Topic extends Injectable
 
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error('发送消息失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '发送Topic消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -96,6 +97,7 @@ class Topic extends Injectable
         if ($this->verify($this->getStringToSign(), $this->getSignature(), $this->getPublicKey())) {
             return $this->getData();
         }
+        $this->eventsManager->fire('listener:logger', $this, '接受Topic消息异常, 消息验证失败');
         throw Exception::serverException('MSN message verify failed');
     }
 
@@ -107,6 +109,7 @@ class Topic extends Injectable
         if ($this->_contentType == 'JSON') {
             return $this->request->getJsonRawBody();
         }
+
         $content = $this->request->getRawBody();
         if ($this->_contentType == 'XML') {
             return new \SimpleXMLElement($content);
@@ -121,7 +124,7 @@ class Topic extends Injectable
     private function getSignature()
     {
         $signature = $this->request->getHeader('Authorization');
-        $this->debug('MNS:signature=' . $signature);
+        $this->eventsManager->fire('listener:logger', $this, '调试信息：MNS:signature=' . $signature);
 
         return $signature;
     }
@@ -159,7 +162,8 @@ class Topic extends Injectable
         $canonicalizedResource = $this->request->getURI();
         $canonicalizedMNSHeaders = $this->getCanonicalizedMNSHeaders();
         $stringToSign = strtoupper($method) . "\n" . $contentMd5 . "\n" . $contentType . "\n" . $date . "\n" . $canonicalizedMNSHeaders . "\n" . $canonicalizedResource;
-        $this->debug('MNS:stringToSign=' . $stringToSign);
+
+        $this->eventsManager->fire('listener:logger', $this, '调试信息：MNS:stringToSign=' . $stringToSign);
 
         return $stringToSign;
     }
@@ -170,7 +174,8 @@ class Topic extends Injectable
     private function getPublicKey()
     {
         $url = base64_decode($this->request->getHeader('x-mns-signing-cert-url'));
-        $this->debug('MNS:publicKeyUrl=' . $url);
+        $this->eventsManager->fire('listener:logger', $this, '调试信息：MNS:publicKeyUrl=' . $url);
+
         $cacheKey = 'MNS_TOPIC_PUBLIC_KEY_' . md5($url);
         if ($publicKey = $this->cache->get($cacheKey)) {
             return $publicKey;

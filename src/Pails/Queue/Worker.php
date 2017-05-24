@@ -14,11 +14,11 @@ abstract class Worker extends Injectable
      */
     public function process(Job $job, ListenerOptions $options)
     {
-        $this->logger->debug('[' . get_class($this) . '] MessageId=' . $job->getId() . ', Payload=' . $job->getPayload());
+        $this->log('[' . get_class($this) . '] MessageId=' . $job->getId() . ', Payload=' . $job->getPayload());
 
         $res = $this->handle($job, $options);
 
-        $this->logger->debug('[' . get_class($this) . '] MessageId=' . $job->getId() . ', Result=' . serialize($res));
+        $this->log('[' . get_class($this) . '] MessageId=' . $job->getId() . ', Result=' . serialize($res));
 
         // delete handled job if successfully handled
         if ($res !== false && !$job->isDeleted()) {

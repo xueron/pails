@@ -57,7 +57,6 @@ class OAuth2ServiceProvider extends AbstractServiceProvider
                     );
                 }
 
-
                 if ($this['config']->get('oauth2.password.enabled')) {
                     // passwordGrant
                     $passwordGrant = new PasswordGrant(
