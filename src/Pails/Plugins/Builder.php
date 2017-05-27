@@ -7,7 +7,7 @@ namespace Pails\Plugins;
 
 class Builder extends \Phalcon\Mvc\Model\Query\Builder
 {
-    public function getPaginator($page = 1, $limit = 10)
+    public function getPage($page = 1, $limit = 10)
     {
         $options = [
             'builder' => $this,
