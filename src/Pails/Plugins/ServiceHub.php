@@ -27,7 +27,7 @@ class ServiceHub extends Injectable
     /**
      * @param mixed $params
      *
-     * @return \Phalcon\Mvc\Model\Query\BuilderInterface
+     * @return \Pails\Plugins\Builder
      */
     public static function builder($params = null)
     {
