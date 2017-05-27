@@ -2,6 +2,7 @@
 /**
  * Model.php
  */
+
 namespace Pails\Mvc;
 
 use Phalcon\Di;
@@ -75,9 +76,9 @@ abstract class Model extends PhalconModel
     /**
      * 跟find()类似, 包含总数、页数、上一页、下一页等信息
      *
-     * @param     $parameters
-     * @param int $limit
-     * @param int $page
+     * @param mixed $parameters
+     * @param int   $limit
+     * @param int   $page
      *
      * @return \Pails\Plugins\Paginator
      */
@@ -88,18 +89,21 @@ abstract class Model extends PhalconModel
         $manager = $di->getShared('modelsManager');
 
         //
-        if (!is_array($parameters)) {
-            $params[] = $parameters;
+        if ($parameters instanceof PhalconModel\Query\BuilderInterface) {
+            $builder = $parameters;
         } else {
-            $params = $parameters;
-        }
+            if (!is_array($parameters)) {
+                $params[] = $parameters;
+            } else {
+                $params = $parameters;
+            }
+            //
+            $builder = $manager->createBuilder($params);
+            $builder->from(get_called_class());
 
-        //
-        $builder = $manager->createBuilder($params);
-        $builder->from(get_called_class());
-
-        if (isset($params['limit'])) {
-            $limit = $params['limit'];
+            if (isset($params['limit'])) {
+                $limit = $params['limit'];
+            }
         }
 
         $options = [
