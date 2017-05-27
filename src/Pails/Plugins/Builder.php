@@ -3,6 +3,7 @@
  * Builder.php
  *
  */
+
 namespace Pails\Plugins;
 
 /**
@@ -51,7 +52,7 @@ class Builder extends \Phalcon\Mvc\Model\Query\Builder
         } else {
             if ($groups = $builder->getGroupBy()) {
                 if (!is_array($groups)) {
-                    $groups = [ $groups ];
+                    $groups = [$groups];
                 }
                 $columns = implode(', ', $groups) . ', ' . $functionName . '(' . $groupColumn . ') AS ' . $alias;
             } else {
@@ -69,6 +70,7 @@ class Builder extends \Phalcon\Mvc\Model\Query\Builder
         }
 
         $firstRow = $resultset->getFirst();
+
         return $firstRow->{$alias};
     }
 
@@ -111,7 +113,6 @@ class Builder extends \Phalcon\Mvc\Model\Query\Builder
     public function min($column)
     {
         return $this->_groupResult('MIN', 'minimum', ['column' => $column]);
-
     }
 
     /**
@@ -122,7 +123,6 @@ class Builder extends \Phalcon\Mvc\Model\Query\Builder
     public function max($column)
     {
         return $this->_groupResult('MAX', 'maximum', ['column' => $column]);
-
     }
 
     /**
@@ -137,6 +137,7 @@ class Builder extends \Phalcon\Mvc\Model\Query\Builder
 
         $query = $builder->getQuery();
         $resultset = $query->execute();
+
         return $resultset->getFirst();
     }
 }
