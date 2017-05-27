@@ -76,7 +76,7 @@ class Queue extends Injectable
             $res = $this->_queue->deleteMessage($job->getInstance()->getReceiptHandle());
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error('删除消息失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '删除Queue消息失败:' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -99,7 +99,7 @@ class Queue extends Injectable
             $res = $this->_queue->sendMessage($request);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error('发送消息失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '发送Queue消息失败:' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -121,9 +121,9 @@ class Queue extends Injectable
                 $result = new Job($this, $res);
             }
         } catch (MessageNotExistException $e) {
-            // 正常的异常，不做LOG
+            $this->eventsManager->fire('listener:logger', $this, '暂时没有消息');
         } catch (\Exception $e) {
-            $this->logger->error('获取消息队列失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '获取Queue消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -141,9 +141,9 @@ class Queue extends Injectable
                 $result = new Job($this, $res);
             }
         } catch (MessageNotExistException $e) {
-            // 正常的异常，不做LOG
+            $this->eventsManager->fire('listener:logger', $this, '暂时没有消息');
         } catch (\Exception $e) {
-            $this->logger->error('获取消息队列失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '获取Queue消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }
@@ -165,7 +165,7 @@ class Queue extends Injectable
             $res = $this->_queue->changeMessageVisibility($job->getInstance()->getReceiptHandle(), $delay);
             $result = $res->isSucceed();
         } catch (\Exception $e) {
-            $this->logger->error('获取消息队列失败：' . $e->getMessage());
+            $this->eventsManager->fire('listener:logger', $this, '释放Queue消息失败：' . $e->getMessage());
         } finally {
             return $result;
         }

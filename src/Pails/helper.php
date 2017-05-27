@@ -990,3 +990,17 @@ if (!function_exists('getallheaders')) {
         return $headers;
     }
 }
+if (!function_exists('shorten')) {
+    /**
+     * Shorten a string. used as volt extension.
+     *
+     * @return string
+     */
+    function shorten($str, $len = 12)
+    {
+        if (strlen($str) > $len) {
+            return substr($str, 0, 8) . '...' . substr($str, -4);
+        }
+        return $str;
+    }
+}
