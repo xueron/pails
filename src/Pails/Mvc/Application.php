@@ -33,8 +33,15 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
 
         // register listeners from listeners.php
         $listeners = (array) $this->di->getConfig('listeners', null, []);
-        foreach ($listeners as $event => $listener) {
-            $this->eventsManager->attach($event, $this->di->getShared($listener));
+        foreach ($listeners as $eventId => $listener) {
+            if (is_array($listener)) {
+                $event = $listener['event'];
+                $class = $listener['class'];
+                $pri   = $listener['pri'];
+                $this->eventsManager->attach($event, $this->di->getService($class), $pri);
+            } else {
+                $this->eventsManager->attach($eventId, $this->di->getShared($listener));
+            }
         }
 
         return $this;
