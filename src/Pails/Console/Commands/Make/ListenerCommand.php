@@ -38,7 +38,12 @@ class ListenerCommand extends Command
         @file_put_contents($fileName, $stub);
 
         // rewrite listeners.php config
-        $listeners = (array) $this->di->getConfig('listeners', null, []);
+        $listeners = $this->di->getConfig('listeners', null);
+        if ($listeners && count($listeners)) {
+            $listeners = $listeners->toArray();
+        } else {
+            $listeners = [];
+        }
         $listeners[] = ['class' => 'App\\Listeners\\' . $className, 'event' => $event, 'pri' => $pri];
         @file_put_contents($this->di->configPath() . '/listeners.php', '<?php return ' . var_export($listeners, true) . ';');
 

@@ -203,7 +203,12 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
         }
 
         // register listeners from listeners.php
-        $listeners = (array) $this->di->getConfig('listeners', null, []);
+        $listeners = $this->di->getConfig('listeners', null);
+        if ($listeners && count($listeners)) {
+            $listeners = $listeners->toArray();
+        } else {
+            $listeners = [];
+        }
         foreach ($listeners as $eventId => $listener) {
             if (is_string($listener)) {
                 $this->eventsManager->attach($eventId, $this->di->getShared($listener));
