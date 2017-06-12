@@ -210,7 +210,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
                 $event = $listener['event'];
                 $class = $listener['class'];
                 $pri   = $listener['pri'];
-                $this->eventsManager->attach($event, $this->di->getService($class), $pri);
+                $this->eventsManager->attach($event, $this->di->getShared($class), $pri);
             }
         }
 

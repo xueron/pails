@@ -40,7 +40,7 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
                 $event = $listener['event'];
                 $class = $listener['class'];
                 $pri   = $listener['pri'];
-                $this->eventsManager->attach($event, $this->di->getService($class), $pri);
+                $this->eventsManager->attach($event, $this->di->getShared($class), $pri);
             }
         }
 
