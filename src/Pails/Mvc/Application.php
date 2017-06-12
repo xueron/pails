@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Mvc;
 
 use Pails\ApplicationInterface;
@@ -39,7 +40,7 @@ abstract class Application extends \Phalcon\Mvc\Application implements Applicati
             } else {
                 $event = $listener['event'];
                 $class = $listener['class'];
-                $pri   = $listener['pri'];
+                $pri = (int) $listener['pri'];
                 $this->eventsManager->attach($event, $this->di->getShared($class), $pri);
             }
         }

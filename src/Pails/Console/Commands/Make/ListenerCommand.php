@@ -17,7 +17,10 @@ class ListenerCommand extends Command
         //
         $name = trim($this->argument('name'));
         $event = trim($this->option('event'));
-        $pri = trim($this->option('pri'));
+        $pri = intval(trim($this->option('pri')));
+        if ($pri < 0) {
+            $pri = 0;
+        }
 
         // create file
         $className = $name . 'Listener';
