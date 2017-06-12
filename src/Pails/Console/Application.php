@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console;
 
 use Pails\ApplicationInterface;
@@ -209,7 +210,7 @@ abstract class Application extends ApplicationBase implements InjectionAwareInte
             } else {
                 $event = $listener['event'];
                 $class = $listener['class'];
-                $pri   = $listener['pri'];
+                $pri = (int) $listener['pri'];
                 $this->eventsManager->attach($event, $this->di->getShared($class), $pri);
             }
         }
