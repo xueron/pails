@@ -1,4 +1,5 @@
 <?php
+
 namespace Pails\Console\Commands\Make;
 
 use Pails\Console\Command;
@@ -16,6 +17,7 @@ class ListenerCommand extends Command
         //
         $name = trim($this->argument('name'));
         $event = trim($this->option('event'));
+        $pri = trim($this->option('pri'));
 
         // create file
         $className = $name . 'Listener';
@@ -34,7 +36,7 @@ class ListenerCommand extends Command
 
         // rewrite listeners.php config
         $listeners = (array) $this->di->getConfig('listeners', null, []);
-        $listeners[$event] = 'App\\Listeners\\' . $className;
+        $listeners[] = ['class' => 'App\\Listeners\\' . $className, 'event' => $event, 'pri' => $pri];
         @file_put_contents($this->di->configPath() . '/listeners.php', '<?php return ' . var_export($listeners, true) . ';');
 
         $this->info("$name created at $fileName");
@@ -61,6 +63,7 @@ class ListenerCommand extends Command
     {
         return [
             ['event', null, InputOption::VALUE_REQUIRED, '事件的名称（如 db，或者 db:beforeQuery）', null],
+            ['pri', null, InputOption::VALUE_OPTIONAL, '处理器的优先级，整数，越大优先级越高', 10],
         ];
     }
 }
