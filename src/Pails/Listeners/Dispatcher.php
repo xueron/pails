@@ -12,7 +12,6 @@ class Dispatcher extends Injectable
 {
     public function beforeDispatchLoop($event, $dispatcher)
     {
-
     }
 
     public function beforeDispatch($event, $dispatcher)

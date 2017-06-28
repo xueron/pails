@@ -12,6 +12,5 @@ class ModelsManager extends Injectable
 {
     public function afterInitialize($event, $modelsManager, $model)
     {
-
     }
 }

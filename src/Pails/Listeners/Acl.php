@@ -12,11 +12,9 @@ class Acl extends Injectable
 {
     public function beforeCheckAccess($event, $acl)
     {
-
     }
 
     public function afterCheckAccess($event, $acl)
     {
-
     }
 }
