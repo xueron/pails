@@ -13,6 +13,7 @@ use Pails\Plugins\ApiClient;
 use Pails\Plugins\ApiResponse;
 use Pails\Plugins\Config;
 use Pails\Plugins\Fractal;
+use Pails\Plugins\Swagger;
 use Pails\Pluralizer;
 use Pails\Queue\Queue;
 use Pails\Queue\Topic;
@@ -63,6 +64,12 @@ class CommonServiceProvider extends AbstractServiceProvider implements ServicePr
         $di->setShared(
             'exceptionHandler',
             Handler::class
+        );
+
+        // swagger
+        $di->setShared(
+            'swagger',
+            Swagger::class
         );
 
         // oss
